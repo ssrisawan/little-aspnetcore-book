@@ -1,7 +1,7 @@
 # Summary
 
 * [Your first application](chapters/your-first-application/README.md)
-    * [Get the SDK](chapters/your-first-application/get-the-sdk.md)
+    * [ดาวน์โหลด SDK](chapters/your-first-application/get-the-sdk.md)
     * [Hello World in C#](chapters/your-first-application/hello-world-in-csharp.md)
     * [Create an ASP.NET Core project](chapters/your-first-application/create-aspnetcore-project.md)
 * [MVC basics](chapters/mvc-basics/README.md)
