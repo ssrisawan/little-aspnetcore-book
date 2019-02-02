@@ -19,7 +19,7 @@ dotnet new console -o CsharpHelloWorld
 cd CsharpHelloWorld
 ```
 
-คำสั่ง `dotnet new console` สร้างโปรแกรมภาษา C# ง่าย ๆ ที่แสดงข้อความ `Hello World!` ขึ้นบนจอภาพ โปรแกรมนี้มีสองไฟล์: ไฟล์โปรเจกต์ (มีส่วนขยายเป็น `.csproj`) และไฟล์โค้ดภาษา C# (ที่มีส่วนขยาย `.cs`) หากคุณเปิดไฟล์แรกในโปรแกรมแก้ไขข้อความหรือแก้ไขโค้ด คุณจะพบข้อความดังนี้:
+คำสั่ง `dotnet new console` สร้างโปรแกรมภาษา C# ง่าย ๆ ที่แสดงข้อความ `Hello World!` ขึ้นบนจอภาพ โดยโปรแกรมนี้ประกอบด้วยสองไฟล์: ไฟล์โปรเจกต์ (มีส่วนขยายเป็น `.csproj`) และไฟล์โค้ดภาษา C# (ที่มีส่วนขยาย `.cs`) หากคุณเปิดไฟล์แรกในโปรแกรมแก้ไขข้อความหรือแก้ไขโค้ด คุณจะพบข้อความดังนี้:
 
 **CsharpHelloWorld.csproj**
 
@@ -34,7 +34,7 @@ cd CsharpHelloWorld
 </Project>
 ```
 
-ไฟล์โปรเจกต์มีพื้นฐานมาจาก XML ทำหน้าที่กำหนดนิยามของข้อมูล (metadata) เกี่ยวกับโปรเจกต์ หลังจากนี้ หากคุณอ้างอิงถึงแพคเกจอื่น ๆ ก็จะปรากฎในนี้ (ลักษณะเดียวกันกับไฟล์ `package.json` สำหรับ npm) You won't have to edit this file by hand very often.
+ไฟล์โปรเจกต์มีพื้นฐานมาจาก XML ทำหน้าที่กำหนดนิยามของข้อมูล (metadata) เกี่ยวกับโปรเจกต์ หากคุณอ้างอิงถึงแพคเกจอื่น ๆ ในภายหลัง รายการเหล่านั้นก็จะปรากฏอยู่ในนี้ (ลักษณะเดียวกันกับไฟล์ `package.json` สำหรับ npm) โดยคุณไม่จำเป็นต้องแก้ไขไฟล์นี้ด้วยตนเองบ่อยครั้งนัก
 
 **Program.cs**
 
@@ -53,9 +53,9 @@ namespace CsharpHelloWorld
 }
 ```
 
-`static void Main` is the entry point method of a C# program, and by convention it's placed in a class (a type of code structure or module) called `Program`. The `using` statement at the top imports the built-in `System` classes from .NET and makes them available to the code in your class.
+`static void Main` เป็นเมธอดเริ่มต้นของโปรแกรมภาษา C# ซึ่งตามหลักแล้วจะอยู่ในคลาส (โครงสร้างของโค้ดหรือโมดูลชนิดหนึ่ง) ที่ถูกตั้งชื่อว่า `Program` และคำสั่ง `using` ที่อยู่ด้านบนจะนำเข้าคลาส `System` ซึ่งเป็นคลาสที่มาพร้อมกับ .NET เพื่อให้สามารถใช้งานได้จากโค้ดในคลาสของคุณ
 
-From inside the project directory, use `dotnet run` to run the program. You'll see the output written to the console after the code compiles:
+เมื่อใช้คำสั่ง `dotnet run` ขณะที่อยู่ในไดเรกทอรีของโปรเจกต์เพื่อรันโปรแกรม ก็จะปรากฏผลลัพธ์บนคอนโซลหลังจากที่โค้ดถูกคอมไพล์แล้วดังนี้:
 
 ```
 dotnet run
@@ -63,4 +63,4 @@ dotnet run
 Hello World!
 ```
 
-That's all it takes to scaffold and run a .NET program! Next, you'll do the same thing for an ASP.NET Core application.
+นั่นคือทั้งหมดที่ต้องทำเพื่อขึ้นโครงและรันโปรแกรม .NET! ในลำดับถัดไป เราจะทำแบบเดียวกันนี้กับแอปพลิเคชัน ASP.NET Core

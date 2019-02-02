@@ -12,18 +12,18 @@ mkdir AspNetCoreTodo
 cd AspNetCoreTodo
 ```
 
-เสร็จแล้วให้สร้างโปรเจกต์ใหม่ด้วยคำสั่ง  `dotnet new`, this time with some extra options:
+เสร็จแล้วให้สร้างโปรเจกต์ใหม่ด้วยคำสั่ง  `dotnet new` โดยระบุตัวเลือกเพิ่มเติมดังนี้:
 
 ```
 dotnet new mvc --auth Individual -o AspNetCoreTodo
 cd AspNetCoreTodo
 ```
 
-This creates a new project from the `mvc` template, and adds some additional authentication and security bits to the project. (I'll cover security in the *Security and identity* chapter.)
+คำสั่งนี้จะสร้างโปรเจกต์ใหม่จากเทมเพลต `mvc` พร้อมทั้งเพิ่มส่วนของการพิสูจน์ตัวตนและความปลอดภัยเข้าไปในโปรเจกต์ (รายละเอียดด้านการรักษาความปลอดภัยจะถูกกล่าวถึงต่อไปในบท *Security and identity*)
 
->  คุณอาจแปลกใจว่าทำไมต้องมีไดเรกทอรีชื่อ `AspNetCoreTodo` ภายใต้ไดเรกทอรี `AspNetCoreTodo` อีกชั้น The top-level or "root" directory can contain one or more project directories. The root directory is sometimes called a **solution directory**. Later, you'll add more project directories side-by-side with the `AspNetCoreTodo` project directory, all within a single root solution directory.
+>  คุณอาจแปลกใจว่าทำไมต้องมีไดเรกทอรีชื่อ `AspNetCoreTodo` ภายใต้ไดเรกทอรี `AspNetCoreTodo` อีกชั้น ไดเรกทอรีชั้นบนสุดหรือ "ราก" สามารถเก็บไดเรกทอรีอื่น ๆ ของโปรเจกต์ได้หลายไดเรกทอรี ในบางครั้งจะเรียกไดเรกทอรีรากนี้ว่า **solution directory** ซึ่งหลังจากนี้ คุณจะได้เพิ่มไดเรกทอรีอื่น ๆ ของโปรเจกต์ไว้ในระดับเดียวกันกับไดเรกทอรี `AspNetCoreTodo` โดยทั้งหมดนี้จะอยู่รวมกันภายใต้ไดเรกทอรีรากของโซลูชันเพียงไดเรกทอรีเดียว
 
-You'll see quite a few files show up in the new project directory. Once you `cd` into the new directory, all you have to do is run the project:
+คุณจะพบว่ามีไฟล์ต่าง ๆ หลายไฟล์ปรากฏขึ้นในไดเรกทอรีของโปรเจกต์ หลังจาก `cd` เข้าไปในไดเรกทอรีใหม่นี้แล้ว ก็สามารถรันโปรเจกต์ได้ด้วยคำสั่งนี้:
 
 ```
 dotnet run
@@ -32,48 +32,48 @@ Now listening on: http://localhost:5000
 Application started. Press Ctrl+C to shut down.
 ```
 
-Instead of printing to the console and exiting, this program starts a web server and waits for requests on port 5000.
+โปรแกรมนี้จะเริ่มการทำงานของเว็บเซอร์ฟเวอร์และรอรับการเชื่อมต่อที่พอร์ต 5000 แทนการแสดงผลออกไปยังคอนโซล
 
-Open your web browser and navigate to `http://localhost:5000`. You'll see the default ASP.NET Core splash page, which means your project is working! When you're done, press Ctrl-C in the terminal window to stop the server.
+เมื่อเปิดเว็บเบราว์เซอร์แล้วเปิดไปที่ `http://localhost:5000` คุณจะพบกับหน้าต้อนรับ (splash page) ซึ่งหมายความว่าโปรเจกต์ของคุณใช้งานได้! จากนั้นให้กด Ctrl-C ในหน้าต่างเทอร์มินัลเพื่อหยุดการทำงานของเซอร์ฟเวอร์
 
-### The parts of an ASP.NET Core project
-The `dotnet new mvc` template generates a number of files and directories for you. Here are the most important things you get out of the box:
+### ส่วนประกอบของโปรเจกต์ ASP.NET Core
+เทมเพลต `dotnet new mvc` จะสร้างไฟล์และไดเรกทอรีขึ้นมาจำนวนมาก โดยไฟล์และไดเรกทอรีที่จำเป็นต่อการทำงานในขั้นต่อไปมีดังนี้:
 
-* The **Program.cs** and **Startup.cs** files set up the web server and ASP.NET Core pipeline. The `Startup` class is where you can add middleware that handles and modifies incoming requests, and serves things like static content or error pages. It's also where you add your own services to the dependency injection container (more on this later).
+* ไฟล์ **Program.cs** และ **Startup.cs** จะตั้งค่าเว็บเซอร์ฟเวอร์และไปป์ไลน์ของ ASP.NET Core โดยคลาส `Startup` คือส่วนที่คุณสามารถเพิ่มมิดเดิลแวร์เพื่อรองรับและแก้ไขคำขอที่เข้ามา รวมถึงให้บริการเนื้อหาคงที่ (static content) และหน้าแสดงข้อผิดพลาด และยังเป็นจุดที่ใช้เพิ่มบริการต่าง ๆ ของคุณเข้าไปยังคอนเทนเนอร์สำหรับ dependency injection (ซึ่งจะอธิบายเพิ่มเติมในภายหลัง)
 
-* The **Models**, **Views**, and **Controllers** directories contain the components of the Model-View-Controller (MVC) architecture. You'll explore all three in the next chapter.
+* ไดเรกทอรี **Models**, **Views** และ **Controllers** ใช้เก็บส่วนประกอบต่าง ๆ อขงสถาปัตยกรรม Model-View-Controller (MVC) ซึ่งจะถูกกล่าวถึงในบทต่อไป
 
-* The **wwwroot** directory contains static assets like CSS, JavaScript, and image files. Files in `wwwroot` will be served as static content, and can be bundled and minified automatically.
+* ไดเรกทอรี **wwwroot** ใช้เก็บทรัพยากรคงที่ต่าง ๆ เช่นไฟล์ CSS, JavaScript และไฟล์รูปภาพ โดยไฟล์ต่าง ๆ ใน `wwwroot` จะให้บริการเป็นเนื้อหาคงที่ และสามารถถูกบันเดิลและลดขนาดได้โดยอัตโนมัติ 
 
-* The **appsettings.json** file contains configuration settings ASP.NET Core will load on startup. You can use this to store database connection strings or other things that you don't want to hard-code.
+* ไฟล์ **appsettings.json** ใช้เก็บการกำหนดค่าต่าง ๆ ที่ ASP.NET Core จะโหลดขึ้นมาขณะเริ่มการทำงาน คุณสามารถจัดเก็บสตริงสำหรับการเชื่อมต่อฐานข้อมูลและรายการต่าง ๆ ที่ไม่ต้องการระบุไว้โดยตรงในโค้ด
 
-### Tips for Visual Studio Code
+### เคล็ดลับสำหรับ Visual Studio Code
 
-If you're using Visual Studio Code for the first time, here are a couple of helpful tips to get you started:
+หากคุณเพิ่งเริ่มใช้ Visual Studio Code เป็นครั้งแรก เคล็ดลับต่อไปนี้อาจช่วยให้คุณเริ่มใช้งานได้ง่ายขึ้น:
 
-* **Open the project root folder**: In Visual Studio Code, choose File - Open or File - Open Folder. Open the `AspNetCoreTodo` folder (the root directory), not the inner project directory. If Visual Studio Code prompts you to install missing files, click Yes to add them.
+* **เปิดโฟลเดอร์รากของโปรเจกต์**: ใน Visual Studio Code เลือก File - Open หรือ File - Open Folder แล้วเปิดโฟลเดอร์ `AspNetCoreTodo` (ไดเรกทอรีราก) ไม่ใช่ไดเรกทอรีที่อยู่ด้านในโปรเจกต์ หาก Visual Studio Code มีข้อความบอกให้ติดตั้งไฟล์ที่ขาดหายไป ให้คลิก Yes เพื่อเพิ่มไฟล์เหล่านั้น
 
-* **F5 to run (and debug breakpoints)**: With your project open, press F5 to run the project in debug mode. This is the same as `dotnet run` on the command line, but you have the benefit of setting breakpoints in your code by clicking on the left margin:
+* **กด F5 เพื่อรัน (และดีบักจุดพัก)**: เมื่อโปรเจกต์ถูกเปิดอยู่ การกด F5 จะรันโปรเจกต์ในโหมดดีบัก ซึ่งมีผลเช่นเดียวกับการรัน `dotnet run` บนบรรทัดคำสั่ง แต่มีข้อดีที่สามารถกำหนดจุดพัก (breakpoint) ในโค้ดได้ด้วยการคลิกที่ขอบด้านซ้าย:
 
-![Breakpoint in Visual Studio Code](breakpoint.png)
+![จุดพัก (breakpoint) ใน Visual Studio Code](breakpoint.png)
 
-* **Lightbulb to fix problems**: If your code contains red squiggles (compiler errors), put your cursor on the code that's red and look for the lightbulb icon on the left margin. The lightbulb menu will suggest common fixes, like adding a missing `using` statement to your code:
+* **หลอดไฟแก้ปัญหา**: ถ้าโค้ดของคุณมีเส้นหยักสีแดง (มีข้อผิดพลาดจากการคอมไพล์) ให้วางเคอร์เซอร์ตรงโค้ดที่มีสีแดงและมองหาไอคอนหลอดไฟบนขอบซ้ายของจอภาพ เมนูหลอดไฟจะแนะนำการแก้ไขที่พบบ่อย เช่นการเพิ่มคำสั่ง `using` ที่ขาดหายไปจากโค้ดของคุณ:
 
-![Lightbulb suggestions](lightbulb.png)
+![คำแนะนำของเมนูหลอดไฟ](lightbulb.png)
 
-* **Compile quickly**: Use the shortcut `Command-Shift-B` or `Control-Shift-B` to run the Build task, which does the same thing as `dotnet build`.
+* **คอมไพล์อย่างรวดเร็ว**: ใช้แป้นทางลัด `Command-Shift-B` หรือ `Control-Shift-B` เพื่อเริ่มการบิลท์ ซึ่งจะมีผลเช่นเดียวกับคำสั่ง `dotnet build`
 
-> These tips apply to Visual Studio (not Code) on Windows too. If you're using Visual Studio, you'll need to open the `.csproj` project file directly. Visual Studio will later prompt you to save the Solution file, which you should save in the root directory (the first `AspNetCoreTodo` folder). You can also create an ASP.NET Core project directly within Visual Studio using the templates in File - New Project.
+> เคล็ดลับเหล่านี้สามารถประยุกต์ใช้กับ Visual Studio (ที่ไม่ใช่ Code) บนวินโดวส์ได้เช่นกัน สำหรับ Visual Studio คุณจะต้องเปิดไฟล์โปรเจกต์ `.csproj` โดยตรง หลังจากนั้น Visual Studio จะขอให้บันทึกไฟล์ Solution ซึ่งควรบันทึกไว้ในไดเรกทอรีราก (ไดเรกทอรี `AspNetCoreTodo` ที่สร้างตอนแรก) หรือคุณสามารถสร้างโปรเจกต์ ASP.NET Core โดยตรงภายใต้ Visual Studio ก็ได้โดยใช้เทมเพลตในเมนู File - New Project.
 
-### A note about Git
+### หมายเหตุเกี่ยวกับ Git
 
-If you use Git or GitHub to manage your source code, now is a good time to do `git init` and initialize a Git repository in the project root directory:
+หากคุณใช้ Git หรือ GitHub เพื่อจัดการซอร์สโค้ด ตอนนี้เป็นเวลาที่ดีที่จะรัน `git init` เพื่อสร้าง Git repository ไว้ในไดเรกทอรีรากของโปรเจกต์:
 
 ```
 cd ..
 git init
 ```
 
-Make sure you add a `.gitignore` file that ignores the `bin` and `obj` directories. The Visual Studio template on GitHub's gitignore template repo (https://github.com/github/gitignore) works great.
+โปรดตรวจสอบให้แน่ใจว่าคุณได้เพิ่มไฟล์ `.gitignore` ให้ละเว้นไดเรกทอรี `bin` และ `obj` ทั้งนี้ repo เทมเพลต gitignore สำหรับ Visual Studio บน GitHub (https://github.com/github/gitignore) ก็สามารถใช้งานได้ดี
 
-There's plenty more to explore, so let's dive in and start building an application!
+ยังมีสิ่งต่าง ๆ ให้สำรวจอีกมากมาย มาเริ่มลงมือและสร้างแอปพลิเคชันกันเถอะ!
