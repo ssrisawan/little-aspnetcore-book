@@ -1,5 +1,6 @@
-## Get the SDK
-Search for "download .net core" and follow the instructions on Microsoft's download page to get the .NET Core SDK. After the SDK has finished installing, open up the Terminal (or PowerShell on Windows) and use the `dotnet` command line tool (also called a **CLI**) to make sure everything is working:
+## ดาวน์โหลด SDK
+ ค้นหาด้วย "download .net core" แล้วทำตามขั้นตอนที่ระบุบนหน้าดาวน์โหลดของไมโครซอฟต์เพื่อดาวน์โหลด .NET Core SDK หลังจากติดตั้ง SDK เสร็จแล้ว ให้เปิดเทอร์มินัล (หรือเพาเวอร์เชลล์บนวินโดวส์) แล้วใช้เครื่องมือบนบรรทัดคำสั่ง (เรียกอีกอย่างว่า **CLI**) 
+ `dotnet` เพื่อให้มั่นใจว่าทุกอย่างทำงานได้:
 
 ```
 dotnet --version
@@ -7,7 +8,7 @@ dotnet --version
 2.1.104
 ```
 
-You can get more information about your platform with the `--info` flag:
+คุณสามารถเรียกดูข้อมูลเพิ่มเติมเกี่ยวกับแพลตฟอร์มของคุณได้ด้วยแฟลก `--info`:
 
 ```
 dotnet --info
@@ -25,4 +26,4 @@ Runtime Environment:
 (more details...)
 ```
 
-If you see output like the above, you're ready to go!
+ถ้าผลลัพธ์เป็นดังที่แสดงอยู่ด้านบน แสดงว่าคุณพร้อมไปต่อแล้ว!

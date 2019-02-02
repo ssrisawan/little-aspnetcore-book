@@ -1,25 +1,25 @@
-## Hello World in C# #
-Before you dive into ASP.NET Core, try creating and running a simple C# application.
+## Hello World ในภาษา C# #
+ก่อนที่เราจะลงลึกไปกับ ASP.NET Core เรามาลองสร้างและรันแอปพลิเคชัน C# ง่าย ๆ กันก่อน
 
-You can do this all from the command line. First, open up the Terminal (or PowerShell on Windows). Navigate to the location you want to store your projects, such as your Documents directory:
+คุณสามารถดำเนินการทั้งหมดนี้ได้จากบรรทัดคำสั่ง อันดับแรกให้เปิดเทอร์มินัล (หรือเพาเวอร์เชลล์บนวินโดวส์) จากนั้นให้ไปที่ตำแหน่งที่ต้องการใช้เพื่อเก็บโปรเจกต์ของคุณ เช่นที่ไดเรกทอรี Documents:
 
 ```
 cd Documents
 ```
 
-Use the `dotnet` command to create a new project:
+ใช้คำสั่ง `dotnet` เพื่อสร้างโปรเจกต์ใหม่:
 
 ```
 dotnet new console -o CsharpHelloWorld
 ```
 
-The `dotnet new` command creates a new .NET project in C# by default. The `console` parameter selects a template for a console application (a program that outputs text to the screen). The `-o CsharpHelloWorld` parameter tells `dotnet new` to create a new directory called `CsharpHelloWorld` for all the project files. Move into this new directory:
+โดยทั่วไป คำสั่ง `dotnet new` จะสร้างโปรเจกต์ .NET ขึ้นมาใหม่ในภาษา C# และพารามิเตอร์ `console` จะเลือกเทมเพลตสำหรับแอปพลิเคชันแบบคอนโซล (โปรแกรมที่แสดงผลออกทางจอภาพ) พารามิเตอร์ `-o CsharpHelloWorld` บอก `dotnet new` ให้สร้างไดเรกทอรีใหม่ในชื่อ `CsharpHelloWorld` สำหรับไฟล์ทั้งหมดของโปรเจกต์ จากนั้นให้เข้าไปในไดเรกทอรีนี้:
 
 ```
 cd CsharpHelloWorld
 ```
 
-`dotnet new console` creates a basic C# program that writes the text `Hello World!` to the screen. The program is comprised of two files: a project file (with a `.csproj` extension) and a C# code file (with a `.cs` extension). If you open the former in a text or code editor, you'll see this:
+คำสั่ง `dotnet new console` สร้างโปรแกรมภาษา C# ง่าย ๆ ที่แสดงข้อความ `Hello World!` ขึ้นบนจอภาพ โปรแกรมนี้มีสองไฟล์: ไฟล์โปรเจกต์ (มีส่วนขยายเป็น `.csproj`) และไฟล์โค้ดภาษา C# (ที่มีส่วนขยาย `.cs`) หากคุณเปิดไฟล์แรกในโปรแกรมแก้ไขข้อความหรือแก้ไขโค้ด คุณจะพบข้อความดังนี้:
 
 **CsharpHelloWorld.csproj**
 
@@ -34,7 +34,7 @@ cd CsharpHelloWorld
 </Project>
 ```
 
-The project file is XML-based and defines some metadata about the project. Later, when you reference other packages, those will be listed here (similar to a `package.json` file for npm). You won't have to edit this file by hand very often.
+ไฟล์โปรเจกต์มีพื้นฐานมาจาก XML ทำหน้าที่กำหนดนิยามของข้อมูล (metadata) เกี่ยวกับโปรเจกต์ หลังจากนี้ หากคุณอ้างอิงถึงแพคเกจอื่น ๆ ก็จะปรากฎในนี้ (ลักษณะเดียวกันกับไฟล์ `package.json` สำหรับ npm) You won't have to edit this file by hand very often.
 
 **Program.cs**
 

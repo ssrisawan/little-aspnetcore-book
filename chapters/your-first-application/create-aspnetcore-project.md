@@ -1,18 +1,18 @@
-## Create an ASP.NET Core project
-If you're still in the directory you created for the Hello World sample, move back up to your Documents or home directory:
+## สร้างโปรเจกต์ ASP.NET Core
+ถ้าคุณยังอยู่ในไดเรกทอรีที่ถูกสร้างขึ้นสำหรับตัวอย่าง Hello World ให้ย้อนกลับไปยังไดเรกทอรี Documents หรือโฮมไดเรกทอรีของคุณ:
 
 ```
 cd ..
 ```
 
-Next, create a new directory to store your entire project, and move into it:
+จากนั้น ให้สร้างไดเรกทอรีใหม่แล้วเข้าไปในไดเรกทอรีนั้น:
 
 ```
 mkdir AspNetCoreTodo
 cd AspNetCoreTodo
 ```
 
-Next, create a new project with `dotnet new`, this time with some extra options:
+เสร็จแล้วให้สร้างโปรเจกต์ใหม่ด้วยคำสั่ง  `dotnet new`, this time with some extra options:
 
 ```
 dotnet new mvc --auth Individual -o AspNetCoreTodo
@@ -21,7 +21,7 @@ cd AspNetCoreTodo
 
 This creates a new project from the `mvc` template, and adds some additional authentication and security bits to the project. (I'll cover security in the *Security and identity* chapter.)
 
-> You might be wondering why you have a directory called `AspNetCoreTodo` inside another directory called `AspNetCoreTodo`. The top-level or "root" directory can contain one or more project directories. The root directory is sometimes called a **solution directory**. Later, you'll add more project directories side-by-side with the `AspNetCoreTodo` project directory, all within a single root solution directory.
+>  คุณอาจแปลกใจว่าทำไมต้องมีไดเรกทอรีชื่อ `AspNetCoreTodo` ภายใต้ไดเรกทอรี `AspNetCoreTodo` อีกชั้น The top-level or "root" directory can contain one or more project directories. The root directory is sometimes called a **solution directory**. Later, you'll add more project directories side-by-side with the `AspNetCoreTodo` project directory, all within a single root solution directory.
 
 You'll see quite a few files show up in the new project directory. Once you `cd` into the new directory, all you have to do is run the project:
 
