@@ -1,25 +1,25 @@
-# MVC basics
-In this chapter, you'll explore the MVC system in ASP.NET Core. **MVC** (Model-View-Controller) is a pattern for building web applications that's used in almost every web framework (Ruby on Rails and Express are popular examples), plus frontend JavaScript frameworks like Angular. Mobile apps on iOS and Android use a variation of MVC as well.
+# พื้นฐานของ MVC
+ในบทนี้ คุณจะได้ศึกษาเกี่ยวกับระบบ MVC ใน ASP.NET Core. **MVC** (Model-View-Controller) เป็นแบบแผนสำหรับการสร้างเว็บแอปพลิเคชันที่ใช้อยู่ในเว็บเฟรมเวิร์กเกือบทั้งหมด (ดังตัวอย่างที่ดีเช่น Ruby on Rails และ Express) รวมทั้งเฟรมเวิร์กจาวาสคริปต์ที่ทำงานเบื้องหน้าเช่น Angular นอกจากนี้ โมบายแอปบน iOS และแอนดรอยด์ต่างก็ใช้รูปแบบใดรูปแบบหนึ่งของ MVC เช่นกัน
 
-As the name suggests, MVC has three components: models, views, and controllers. **Controllers** handle incoming requests from a client or web browser and make decisions about what code to run. **Views** are templates (usually HTML plus a templating language like Handlebars, Pug, or Razor) that get data added to them and then are displayed to the user. **Models** hold the data that is added to views, or data that is entered by the user.
+MVC มีองค์ประกอบสามส่วนดังที่ปรากฏอยู่ในชื่อ: models, views และ controllers โดย **Controllers** ทำหน้าที่รองรับคำขอต่าง ๆ ที่มาจากไคลเอนต์หรือเว็บเบราว์เซอร์ แล้วตัดสินใจว่าจะให้โค้ดส่วนใดทำงาน  **Views** เป็นเทมเพลต (โดยทั่วไปจะเป็น HTML ที่ทำงานร่วมกับภาษาเทมเพลตเช่น Handlebars, Pug และ Razor) ที่นำข้อมูลต่าง ๆ เข้ามารวมไว้ด้วยกันแล้วจึงแสดงผลไปยังผู้ใช้ และ **Models** ที่คอยเก็บข้อมูลที่จะถูกเพิ่งเข้าไปใน view รวมถึงข้อมูลที่ถูกป้อนเข้ามาโดยผู้ใช้ด้วย
 
-A common pattern for MVC code is:
+แบบแผนโดยทั่วไปของโค้ด MVC เป็นดังนี้:
 
-* The controller receives a request and looks up some information in a database
-* The controller creates a model with the information and attaches it to a view
-* The view is rendered and displayed in the user's browser
-* The user clicks a button or submits a form, which sends a new request to the controller, and the cycle repeats
+* Controller รับคำขอเข้ามา แล้วค้นหาข้อมูลขึ้นมาจากฐานข้อมูล
+* Controller สร้าง model ที่มีข้อมูลดังกล่าวแล้วจึงนำไปเชื่อมกับ view
+* View ถูกสร้างขึ้น แล้วถูกแสดงผลบนเบราว์เซอร์ของผู้ใช้
+* ผู้ใช้กดปุ่มหรือส่งข้อมูลบนฟอร์ม ซึ่งจะส่งคำขอใหม่ไปให้กับ controller แล้วจึงเริ่มวงจรนี้อีกครั้ง
 
-If you've worked with MVC in other languages, you'll feel right at home in ASP.NET Core MVC. If you're new to MVC, this chapter will teach you the basics and will help get you started.
+หากคุณเคยทำงานกับ MVC ในภาษาอื่นมาแล้ว คุณจะรู้สึกคุ้นเคยกับ MVC ใน ASP.NET Core ได้ทันที หากคุณยังใหม่กับ MVC บทนี้จะช่วยให้คุณทราบถึงหลักการพื้นฐานและช่วยให้คุณเริ่มงานต่อไปได้
 
-## What you'll build
-The "Hello World" exercise of MVC is building a to-do list application. It's a great project since it's small and simple in scope, but it touches each part of MVC and covers many of the concepts you'd use in a larger application.
+## เรากำลังจะสร้างอะไร
+แบบฝึกหัดในแบบ "Hello World" ของ MVC นี้จะเป็นการสร้างแอปพลิเคชันรายการสิ่งที่ต้องทำ (to-do list) ซึ่งเป็นโปรเจกต์ที่ดีเนื่องจากมีขอบเขตที่เล็กและไม่ซับซ้อน แต่ขณะเดียวกับก็ครอบคลุมถึงหลักการและองค์ประกอบแต่ละด้านของ MVC ที่ประยุกต์ใช้ในแอปพลิเคชันใหญ่ ๆ ได้
 
-In this book, you'll build a to-do app that lets the user add items to their to-do list and check them off once complete. More specifically, you'll be creating:
+ในหนังสือเล่มนี้ คุณจะได้สร้างแอปสิ่งที่ต้องทำที่ผู้ใช้สามารถเพิ่มกิจกรรมต่าง ๆ ลงในรายการสิ่งที่ต้องทำของตน พร้อมทั้งสามารถทำสัญลักษณ์รายการเมื่อกิจกรรมแล้วเสร็จได้ ซึ่งโดยรายละเอียดแล้ว สิ่งที่คุณจะสร้างมีดังนี้:
 
-* A web application server (sometimes called the "backend") using ASP.NET Core, C#, and the MVC pattern
-* A database to store the user's to-do items using the SQLite database engine and a system called Entity Framework Core
-* Web pages and an interface that the user will interact with via their browser, using HTML, CSS, and JavaScript (called the "frontend")
-* A login form and security checks so each user's to-do list is kept private
+* เว็บแอปพลิเคชันเซอร์ฟเวอร์ (บางครั้งเรียกว่า "ส่วนหลัง") โดยใช้ ASP.NET Core ภาษา C# และแบบแผน MVC
+* ฐานข้อมูลสำหรับใช้เก็บรายการกิจกรรมสิ่งที่ต้องทำของผู้ใช้ด้วยระบบฐานข้อมูล SQLite และระบบที่เรียกว่า Entity Framework Core
+* หน้าเว็บต่าง ๆ และส่วนต่อประสานผู้ใช้ที่จะโต้ตอบกับผู้ใช้ผ่านทางเว็บเบราว์เซอร์ด้วย HTML, CSS และ JavaScript (เรียกว่าเป็น "ส่วนหน้า")
+* แบบฟอร์มล็อกอินและตรวจสอบการรักษาความปลอดภัยเพื่อรให้ผู้ใช้แต่ละคนสามารถเก็ํบรายการสิ่งที่ต้องทำของตนไว้เป็นส่วนตัวได้
 
-Sound good? Let's built it! If you haven't already created a new ASP.NET Core project using `dotnet new mvc`, follow the steps in the previous chapter. You should be able to build and run the project and see the default welcome screen.
+ดูดีใช่ไหม? มาเริ่มสร้างกันเลย! ถ้าคุณยังไม่ได้สร้างโปรเจกต์ ASP.NET Core ขึ้นมาใหม่ด้วยคำสั่ง `dotnet new mvc` ขอให้กลับไปทำตามขั้นตอนในบทที่แล้วเสียก่อน เมื่อเสร็จแล้วคุณควรสามารถสร้างและรันโปรเจกต์ให้แสดงหน้าต้อนรับตั้งต้นขึ้นมาได้
