@@ -1,8 +1,8 @@
-## Create a controller
+## สร้าง controller
 
-There are already a few controllers in the project's Controllers directory, including the `HomeController` that renders the default welcome screen you see when you visit `http://localhost:5000`. You can ignore these controllers for now.
+ขณะนี้ โปรเจกต์ของเรามี controller บางตัวอยู่ในไดเรกทอรี Controllers อยู่แล้ว เช่น `HomeController` ที่ทำหน้าที่สร้างหน้าเว็บตั้งต้นที่แสดงให้เห็นเมื่อเข้าไปที่ `http://localhost:5000` ในเบื้องต้น เราจะยังไม่ดำเนินการใด ๆ กับ controller ที่มีอยู่แล้วเหล่านี้
 
-Create a new controller for the to-do list functionality, called `TodoController`, and add the following code:
+สร้าง controller ใหม่สำหรับปฏิบัติการกับรายการสิ่งที่ต้องทำ โดยให้ตั้งชื่อว่า `TodoController` แล้วให้เพิ่มโค้ดต่อไปนี้:
 
 **Controllers/TodoController.cs**
 
@@ -22,7 +22,7 @@ namespace AspNetCoreTodo.Controllers
 }
 ```
 
-Routes that are handled by controllers are called **actions**, and are represented by methods in the controller class. For example, the `HomeController` includes three action methods (`Index`, `About`, and `Contact`) which are mapped by ASP.NET Core to these route URLs:
+เส้นทางต่าง ๆ (route) ที่รองรับโดย controller เรียกว่า **action** และถูกแทนด้วยเมธอดในคลาส controller ตัวอย่างเช่น `HomeController` มีสามเมธอด action (`Index`, `About` และ `Contact`) ที่ ASP.NET Core จับคู่เข้ากับเส้นทาง URL ต่อไปนี้:
 
 ```
 localhost:5000/Home         -> Index()
@@ -30,9 +30,9 @@ localhost:5000/Home/About   -> About()
 localhost:5000/Home/Contact -> Contact()
 ```
 
-There are a number of conventions (common patterns) used by ASP.NET Core, such as the pattern that `FooController` becomes `/Foo`, and the `Index` action name can be left out of the URL. You can customize this behavior if you'd like, but for now, we'll stick to the default conventions.
+ใน ASP.NET Core มีธรรมเนียมปฏิบัติ (รูปแบบต่าง ๆ ที่ใช้บ่อย) อยู่จำนวนหนึ่ง เช่นจากชื่อ `FooController` จะกลายเป็น `/Foo` และชื่อ action `Index` สามารถละไว้จาก URL ได้ เป็นต้น โดยผู้ใช้สามารถปรับแต่งพฤติกรรมเหล่านี้ได้ตามต้องการ อย่างไรก็ตาม ในขั้นตอนนี้ เราจะใช้ธรรมเนียมปฏิบัติดังกล่าวข้างต้นกันก่อน
 
-Add a new action called `Index` to the `TodoController`, replacing the  `// Actions go here` comment:
+ให้เพิ่ม action ในชื่อ `Index` เข้าไปยัง `TodoController` และแทนที่หมายเหตุ  `// Actions go here` ด้วยโค้ดต่อไปนี้:
 
 ```csharp
 public class TodoController : Controller
@@ -48,8 +48,8 @@ public class TodoController : Controller
 }
 ```
 
-Action methods can return views, JSON data, or HTTP status codes like `200 OK` and `404 Not Found`. The `IActionResult` return type gives you the flexibility to return any of these from the action.
+เมธอด action สามารถคืนค่าเป็น view, ข้อมูล JSON หรือรหัสสถานะ HTTP เช่น `200 OK` และ `404 Not Found` ซึ่งชนิดของค่าที่ถูกส่งคืนจาก `IActionResult` มีความยืดหยุ่นและสามารถส่งคืนค่าต่าง ๆ ดังกล่าวข้างต้นได้
 
-It's a best practice to keep controllers as lightweight as possible. In this case, the controller will be responsible for getting the to-do items from the database, putting those items into a model the view can understand, and sending the view back to the user's browser.
+ตามแนวปฏิบัติที่ดีแล้ว controller ต่าง ๆ ควรทำงานน้อยที่สุดที่เป็นไปได้ เช่นในกรณีนี้ controller จะมีหน้าที่รับผิดชอบต่อการนำรายการสิ่งที่ต้องทำมาจากฐานข้อมูล แล้วนำรายการต่าง ๆ มาอยู่ใน model ที่สามารถเข้าใจได้โดย view จากนั้นจึงส่ง view กลับไปยังเบราว์เซอร์ของผู้ใช้
 
-Before you can write the rest of the controller code, you need to create a model and a view.
+ก่อนที่จะเริ่มเขียนโค้ดส่วนที่เหลือของ controller ได้นั้น คุณจำเป็นต้องสร้าง model and และ view ขึ้นมาเสียก่อน
