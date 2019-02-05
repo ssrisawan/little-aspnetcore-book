@@ -1,7 +1,7 @@
-## Create models
-There are two separate model classes that need to be created: a model that represents a to-do item stored in the database (sometimes called an **entity**), and the model that will be combined with a view (the **MV** in MVC) and sent back to the user's browser. Because both of them can be referred to as "models", I'll refer to the latter as a **view model**.
+## สร้าง model
+มีคลาส model สองคลาสที่จำเป็นต้องถูกสร้างขึ้นมา: คลาสแรก คือ model ที่ใช้แทนรายการสิ่งที่ต้องทำที่ถูกจัดเก็บอยู่ในฐานข้อมูล (บางครั้งเรียกว่า **entity**) และอีกหนึ่ง model ที่จะถูกนำไปรวมเข้ากับ view (นั่นคือส่วนของ **MV** ใน MVC) และถูกส่งกลับไปยังเบราว์เซอร์ของผู้ใช้ แต่เนื่องจากทั้งสองส่วนนี้ถูกเรียกได้ว่าเป็น "model" ทั้งคู่ ดังนั้นจากนี้ไปจะเรียก model ในแบบที่สองว่า **view model**
 
-First, create a class called `TodoItem` in the Models directory:
+อันดับแรก ให้สร้างคลาสในชื่อ `TodoItem` ไว้ในไดเรกทอรี Models:
 
 **Models/TodoItem.cs**
 
@@ -25,29 +25,29 @@ namespace AspNetCoreTodo.Models
 }
 ```
 
-This class defines what the database will need to store for each to-do item: an ID, a title or name, whether the item is complete, and what the due date is. Each line defines a property of the class:
+คลาสนี้ทำหน้าที่กำหนดว่าฐานข้อมูลจะต้องจัดเก็บข้อมูลสำหรับสิ่งที่ต้องทำแต่ละรายการอย่างไร ซึ่งในที่นี้ได้แก่: ID, หัวข้อหรือชื่อ, รายการดังกล่าวเสร็จสิ้นแล้วหรือยัง และวันครบกำหนดของรายการสิ่งที่ต้องทำ โดยแต่ละบรรทัดจะกำหนดหนึ่งคุณสมบัติ (property) ของคลาสดังนี้:
 
-* The **Id** property is a guid, or a **g**lobally **u**nique **id**entifier. Guids (or GUIDs) are long strings of letters and numbers, like `43ec09f2-7f70-4f4b-9559-65011d5781bb`. Because guids are random and are extremely unlikely to be accidentally duplicated, they are commonly used as unique IDs. You could also use a number (integer) as a database entity ID, but you'd need to configure your database to always increment the number when new rows are added to the database. Guids are generated randomly, so you don't have to worry about auto-incrementing.
+* คุณสมบัติ **Id** เป็น guid ซึ่งย่อมาจาก **g**lobally **u**nique **id**entifier ค่า Guid (หรือ GUID) เป็นสตริงของตัวเลขและตัวอักษรยาว ๆ เช่น `43ec09f2-7f70-4f4b-9559-65011d5781bb` และเนื่องจากค่า guid ถูกสุ่มขึ้นมาและมีความเป็นไปได้น้อยมากที่จะเกิดซ้ำกัน ค่าเหล่านี้จึงมักถูกใช้เป็นหมายเลขเฉพาะของแต่ละรายการ ข้อมูลตัวเลข (จำนวนเต็ม) ก็สามารถถูกใช้เป็นหมายเลขแสดงอัตลักษณ์ของฐานข้อมูลได้เช่นกัน แต่จะต้องกำหนดให้ฐานข้อมูลเพิ่มค่าตัวเลขดังกล่าวเมื่อข้อมูลแถวใหม่ถูกเพิ่มเข้าไปในฐานข้อมูล ในขณะที่ค่า guid ถูกสร้างขึ้นมาแบบสุ่ม จึงไม่ต้องคำนึงถึงการเพิ่มค่าตัวเลขโดยอัตโนมัติเช่นนี้
 
-* The **IsDone** property is a boolean (true/false value). By default, it will be `false` for all new items. Later you'll use write code to switch this property to `true` when the user clicks an item's checkbox in the view.
+* คุณสมบัติ **IsDone** เป็นค่าบูลีน (ค่าจริง/เท็จ) ที่มีค่าตั้งต้นเป็นเท็จหรือ `false` สำหรับรายการที่สร้างขึ้นมาใหม่ทั้งหมด โดยคุณจะได้เขียนโค้ดให้สลับคุณสมบัตินี้ให้เป็นจริงหรือ `true` เมื่อผู้ใช้คลิกที่กล่องเลือกของรายการนั้น ๆ ใน view
 
-* The **Title** property is a string (text value). This will hold the name or description of the to-do item. The `[Required]` attribute tells ASP.NET Core that this string can't be null or empty.
+* คุณสมบัติ **Title** เป็นสตริง (ค่าตัวอักษร) สำหรับเก็บชื่อหรือคำอธิบายของรายการสิ่งที่ต้องทำ โดยคุณลักษณะ `[Required]` บอกให้ ASP.NET Core รู้ว่าสตริงนี้จำเป็นต้องมีข้อมูลและไม่สามารถเป็นค่าว่าง (null) ได้
 
-* The **DueAt** property is a `DateTimeOffset`, which is a C# type that stores a date/time stamp along with a timezone offset from UTC. Storing the date, time, and timezone offset together makes it easy to render dates accurately on systems in different timezones.
+* คุณสมบัติ **DueAt** เป็นค่า `DateTimeOffset` ซึ่งเป็นชนิดตัวแปรในภาษา C# ที่ใช้เก็บค่าประทับวันที่/เวลาพร้อมกับออฟเซตโซนเวลาจาก UTC ซึ่งการเก็บค่าวันที่ เวลา และออฟเซตโซนเวลาไว้ด้วยกันเช่นนี้ จะช่วยให้สามารถประเมินวันที่ได้อย่างถูกต้องบนระบบที่อยู่ในโซนเวลาที่แตกต่างกันได้
 
-Notice the `?` question mark after the `DateTimeOffset` type? That marks the DueAt property as **nullable**, or optional. If the `?` wasn't included, every to-do item would need to have a due date. The `Id` and `IsDone` properties aren't marked as nullable, so they are required and will always have a value (or a default value).
+สังเกตเห็นเครื่องหมายคำถาม `?` ที่อยู่ด้านหลังชนิดตัวแปร `DateTimeOffset` ไหม? นั่นเป็นการกำหนดให้คุณสมบัติ DueAt สามารถเป็นค่าว่าง **nullable** ได้ หรือไม่จำเป็นต้องระบุนั่นเอง หากไม่ได้ระบุเครื่องหมาย `?` ไว้ สิ่งที่ต้องทำทุกรายการจะต้องมีวันครบกำหนด  ทั้งนี้ คุณสมบัติ `Id` และ `IsDone` ไม่ได้ถูกกำหนดให้สามารถเป็นค่าว่างได้ ดังนั้นจึงต้องกำหนดค่าให้เสมอ (หรือใช้ค่าตั้งต้นก็ได้)
 
-> Strings in C# are always nullable, so there's no need to mark the Title property as nullable. C# strings can be null, empty, or contain text.
+> สตริงในภาษา C# สามารถเป็นค่าว่างได้เสมอ ดังนั้นจึงไม่จำเป็นต้องกำหนดคุณสมบัติ Title ให้สามารถเป็นค่าว่างได้ ทั้งนี้ สตริงของ C# สามารถเป็นได้ทั้งค่าว่าง (null) เป็นสตริงว่างเปล่า (empty) หรือมีข้อความก็ได้
 
-Each property is followed by `get; set;`, which is a shorthand way of saying the property is read/write (or, more technically, it has a getter and setter methods).
+แต่ละคุณสมบัติข้างต้นจะตามด้วย `get; set;` ซึ่งเป็นข้อความสั้น ๆ ที่ระบุว่าคุณสมบัติดังกล่าวสามารถอ่าน/เขียนได้ (หรือในทางเทคนิคสามารถกล่าวได้ว่ามีเมธอด getter และ setter สำหรับการรับค่าและการกำหนดค่านั่นเอง)
 
-At this point, it doesn't matter what the underlying database technology is. It could be SQL Server, MySQL, MongoDB, Redis, or something more exotic. This model defines what the database row or entry will look like in C# so you don't have to worry about the low-level database stuff in your code. This simple style of model is sometimes called a "plain old C# object" or POCO.
+ณ จุดนี้ เทคโนโลยีฐานข้อมูลที่จะถูกนำมาใช้สามารถเป็นอะไรก้ได้ ซึ่งอาจเป็น SQL Server, MySQL, MongoDB, Redis หรืออื่น ๆ ที่แตกต่างจากนี้ เนื่องจาก model นี้จะกำหนดว่าแถวของฐานข้อมูลหรือรายการหนึ่ง ๆ จะมีลักษณะอย่างไรใน C# จึงไม่ต้องกังวลเกี่ยวกับการทำงานที่เฉพาะเจาะจงกับฐานข้อมูลในโค้ดของคุณ ลักษณะของ model ที่ดูเรียบง่ายเช่นนี้ บางครั้งก็เรียกว่า "plain old C# object" หรือ POCO
 
-### The view model
+### View model
 
-Often, the model (entity) you store in the database is similar but not *exactly* the same as the model you want to use in MVC (the view model). In this case, the `TodoItem` model represents a single item in the database, but the view might need to display two, ten, or a hundred to-do items (depending on how badly the user is procrastinating).
+ในบางครั้ง model (เอนทิตี) ที่จัดเก็บอยู่ในฐานข้อมูลอาจคล้ายคลึงแต่ *ไม่เหมือนเสียทีเดียว* กับ model ที่คุณต้องการใช้ใน MVC (view model) ซึ่งในกรณีนี้ model `TodoItem` ถูกใช้แทนหนึ่งรายการในฐานข้อมูล แต่ view อาจจำเป็นต้องแสดงรายการสิ่งที่ต้องทำจำนวนสองรายการ สิบรายการ หรือหนึ่งร้อยรายการ (ขึ้นอยู่กับผู้ใช้ว่าได้ปล่อยให้งานค้างเป็นดินพอกหางหมูแค่ไหน)
 
-Because of this, the view model should be a separate class that holds an array of `TodoItem`s:
+ด้วยเหตุผลนี้ view model จึงควรถูกแยกออกเป็นอีกหนึ่งคลาสเพื่อเก็บค่าอาเรย์ของ `TodoItem`:
 
 **Models/TodoViewModel.cs**
 
@@ -61,4 +61,4 @@ namespace AspNetCoreTodo.Models
 }
 ```
 
-Now that you have some models, it's time to create a view that will take a `TodoViewModel` and render the right HTML to show the user their to-do list.
+ในตอนนี้เมื่อเรามี model ต่าง ๆ แล้ว ก็ถึงเวลาที่เราจะสร้าง view ที่จะรับค่า `TodoViewModel` แล้วสร้างโค้ด HTML ได้อย่างถูกต้องเพื่อแสดงรายการสิ่งที่ต้องทำของผู้ใช้
