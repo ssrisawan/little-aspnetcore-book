@@ -1,5 +1,5 @@
-## Use dependency injection
-Back in the `TodoController`, add some code to work with the `ITodoItemService`:
+## การฉีด dependency
+ย้อนกลับไปที่ `TodoController` เพื่อเพิ่มโค้ดสำหรับทำงานกับ `ITodoItemService` ดังนี้:
 
 ```csharp
 public class TodoController : Controller
@@ -22,17 +22,17 @@ public class TodoController : Controller
 }
 ```
 
-Since `ITodoItemService` is in the `Services` namespace, you'll also need to add a `using` statement at the top:
+เนื่องจาก `ITodoItemService` อยู่ในเนมสเปซ `Services` เราจึงต้องเพิ่มคำสั่ง `using` ไว้ตอนต้นของไฟล์ดังนี้:
 
 ```csharp
 using AspNetCoreTodo.Services;
 ```
 
-The first line of the class declares a private variable to hold a reference to the `ITodoItemService`. This variable lets you use the service from the `Index` action method later (you'll see how in a minute).
+บรรทัดแรกของคลาสเป็นการประกาศตัวแปรแบบ private เพื่อเก็บการอ้างอิงไปยัง `ITodoItemService` ซึ่งตัวแปรนี้ช่วยให้สามารถใช้บริการจากเมธอดแอคชัน `Index` ได้ในภายหลัง (คุณจะได้เห็นวิธีการในไม่กี่นาทีนี้)
 
-The `public TodoController(ITodoItemService todoItemService)` line defines a **constructor** for the class. The constructor is a special method that is called when you want to create a new instance of a class (the `TodoController` class, in this case). By adding an `ITodoItemService` parameter to the constructor, you've declared that in order to create the `TodoController`, you'll need to provide an object that matches the `ITodoItemService` interface.
+บรรทัด `public TodoController(ITodoItemService todoItemService)` เป็นการกำหนด **คอนสตรัคเตอร์ (constructor)** ให้กับคลาส โดยคอนสตรัคเตอร์คือเมธอดพิเศษที่จะถูกเรียกเมื่อต้องการสร้างอินสแตนซ์ของคลาสขึ้นมาใหม่ (ในกรณีนี้คือคลาส `TodoController`) การระบุพารามิเตอร์ `ITodoItemService` ให้กับคอนสตรัคเตอร์นั้นเป็นการประกาศว่าหากต้องการสร้าง `TodoController` คุณจะต้องป้อนวัตถุที่เข้ากันได้กับอินเตอร์เฟส `ITodoItemService` เท่านั้น
 
-> Interfaces are awesome because they help decouple (separate) the logic of your application. Since the controller depends on the `ITodoItemService` interface, and not on any *specific* class, it doesn't know or care which class it's actually given. It could be the `FakeTodoItemService`, a different one that talks to a live database, or something else! As long as it matches the interface, the controller can use it. This makes it really easy to test parts of your application separately. I'll cover testing in detail in the *Automated testing* chapter.
+> อินเตอร์เฟสเป็นสิ่งที่ยอดเยี่ยมมากเพราะสามารถช่วยให้แยกส่วนของตรรกะในแอปพลิเคชันของคุณออกมาได้ เนื่องจาก controller ต้องพึ่งพาหรือขึ้นอยู่กับอินเตอร์เฟส `ITodoItemService` โดยไม่ได้ระบุว่าต้องเป็นคลาสใด*โดยเฉพาะ* ดังนั้นจึงไม่จำเป็นต้องรู้ว่าคลาสที่ถูกป้อนเข้าไปคือคลาสใด ซึ่งอาจเป็นคลาส `FakeTodoItemService`, คลาสอื่นที่สื่อสารกับฐานข้อมูลจริง ๆ หรืออาจเป็นอย่างอื่นโดยสิ้นเชิง! ขอเพียงแค่ให้เข้ากันได้กับอินเตอร์เฟสที่กำหนดเท่านั้น controller ก็จะสามารถใช้คลาสดังกล่าวได้ จึงช่วยให้สามารถทดสอบส่วนต่าง ๆ ของแอปพลิเคชันแยกจากกันได้โดยง่าย โดยการทดสอบดเช่นนี้จะถูกกล่าวถึงโดยละเอียดอีกครั้งในบท *การทดสอบโดยอัตโนมัติ*
 
 Now you can finally use the `ITodoItemService` (via the private variable you declared) in your action method to get to-do items from the service layer:
 
