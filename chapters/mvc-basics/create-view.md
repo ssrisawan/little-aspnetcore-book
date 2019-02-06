@@ -1,11 +1,11 @@
-## Create a view
-Views in ASP.NET Core are built using the Razor templating language, which combines HTML and C# code. (If you've written pages using Handlebars moustaches, ERB in Ruby on Rails, or Thymeleaf in Java, you've already got the basic idea.)
+## สร้าง view
+View ใน ASP.NET Core ถูกสร้างขึ้นโดยใช้ Razor ซึ่งเป็นภาษาสำหรับจัดเตรียมเทมเพลต ซึ่งควบรวมโค้ด HTML และภาษา C# เข้าด้วยกัน (ถ้าคุณเคยเขียนหน้าเอกสารโดยใช้ Handlebars moustaches, ERB ใน Ruby on Rails หรือ Thymeleaf ใน Java นั่นคือคุณได้คุ้นเคยกับแนวคิดพื้นฐานนี้เรียบร้อยแล้ว)
 
-Most view code is just HTML, with the occasional C# statement added in to pull data out of the view model and turn it into text or HTML. The C# statements are prefixed with the `@` symbol.
+โค้ดส่วนใหญ่ของ view เป็นเพียง HTML ที่เพิ่มคำสั่งภาษา C# เข้าไปเป็นครั้งคราวเพื่อดึงข้อมูลออกมาจาก view model แล้วแปลงให้เป็นข้อความหรือ HTML โดยคำสั่งภาษา C# เหล่านี้จะมีสัญลักษณ์ `@` วางไว้ด้านหน้า
 
-The view rendered by the `Index` action of the `TodoController` needs to take the data in the view model (a sequence of to-do items) and display it in a nice table for the user. By convention, views are placed in the `Views` directory, in a subdirectory corresponding to the controller name. The file name of the view is the name of the action with a `.cshtml` extension.
+View ที่ถูกจัดเตรียมขึ้นโดย action `Index` ของ `TodoController` ต้องนำข้อมูลที่อยู่ใน view model (ลำดับของรายการสิ่งที่ต้องทำ) ออกมาแสดงให้อยู่ในรูปแบบตารางที่สวยงามสำหรับผู้ใช้ ตามหลักการแล้ว view ต่าง ๆ จะถูกวางไว้ในไดเรกทอรี `Views` โดยจะถูกวางไว้ใต้ไดเรกทอรีย่อยที่สอดคล้องกับชื่อของ controller อีกชั้น ชื่อไฟล์ของ view ก็คือชื่อของ action ที่มีส่วนขยาย `.cshtml` นั่นเอง
 
-Create a `Todo` directory inside the `Views` directory, and add this file:
+ให้สร้างไดเรกทอรี `Todo` ไว้ภายใต้ไดเรกทอรี `Views` แล้วเพิ่มไฟล์นี้:
 
 **Views/Todo/Index.cshtml**
 
@@ -46,18 +46,18 @@ Create a `Todo` directory inside the `Views` directory, and add this file:
 </div>
 ```
 
-At the very top of the file, the `@model` directive tells Razor which model to expect this view to be bound to. The model is accessed through the `Model` property.
+ไดเรกทีฟ `@model` ที่ตอนต้นของไฟล์ บอกให้ Razor ทราบว่า model ใดที่จะนำมาผูกเข้าด้วยกันกับ view โดย model นี้จะถูกเข้าถึงผ่านคุณสมบัติ `Model`
 
-Assuming there are any to-do items in `Model.Items`, the `foreach` statement will loop over each to-do item and render a table row (`<tr>` element) containing the item's name and due date. A checkbox is also rendered that will let the user mark the item as complete.
+เมื่อมีรายการสิ่งที่ต้องทำต่าง ๆ อยู่ใน `Model.Items` แล้ว คำสั่ง `foreach` จะวนลูปผ่านสิ่งที่ต้องทำแต่ละรายการแล้วจึงสร้างแถวของตาราง (ด้วยส่วนย่อย `<tr>`) ที่ประกอบไปด้วยชื่อของรายการและวันครบกำหนดรวมถึงกล่องเลือกที่ถูกสร้างขึ้นมาเพื่อให้ผู้ใช้สามารถเลือกได้เมื่อได้ดำเนินการตามรายการนั้น ๆ เสร็จสิ้นแล้ว
 
-### The layout file
-You might be wondering where the rest of the HTML is: what about the `<body>` tag, or the header and footer of the page? ASP.NET Core uses a layout view that defines the base structure that every other view is rendered inside of. It's stored in `Views/Shared/_Layout.cshtml`.
+### ไฟล์เลย์เอาต์
+คุณอาจสงสัยว่าแล้วส่วนอื่น ๆ ของ HTML อยู่ที่ไหน: เช่นแท็ก `<body>` รวมทั้งส่วนหัวและส่วนท้ายของหน้า? ASP.NET Core ใช้ view เลย์เอาต์เพื่อกำหนดโครงสร้างพื้นฐานที่  view อื่น ๆ จะถูกสร้างขึ้นภายในนั้นโดยจะถูกเก็บไว้ใน `Views/Shared/_Layout.cshtml`
 
-The default ASP.NET Core template includes Bootstrap and jQuery in this layout file, so you can quickly create a web application. Of course, you can use your own CSS and JavaScript libraries if you'd like.
+เทมเพลตตั้งต้นของ ASP.NET Core ได้รวมเอา Bootstrap และ jQuery ไว้ในไฟล์เลย์เอาต์นี้แล้ว ดังนั้นผู้ใช้จึงสามารถสร้างเว็บแอปพลิเคชันได้อย่างรวดเร็ว แน่นอนว่าคุณสามารถใช้ไลบรารี CSS และ JavaScript ของคุณเองได้ตามต้องการ
 
-### Customizing the stylesheet
+### ปรับแต่งสไตล์ชีต
 
-The default template also includes a stylesheet with some basic CSS rules. The stylesheet is stored in the `wwwroot/css` directory. Add a few new CSS style rules to the bottom of the `site.css` file:
+ในเทมเพลตตั้งต้นได้รวมสไตล์ชีตที่มีกฎ CSS พื้นฐานบางส่วนเอาไว้แล้ว โดยสไตล์ชีตนี้ถูกเก็บอยู่ในไดเรกทอรี `wwwroot/css` ให้เพิ่มกฎสำหรับสไตล์ CSS ต่อไปนี้ลงไปที่ส่วนท้ายของไฟล์ `site.css`:
 
 **wwwroot/css/site.css**
 
@@ -72,6 +72,6 @@ table tr.done {
 }
 ```
 
-You can use CSS rules like these to completely customize how your pages look and feel.
+คุณสามารถใช้กฎ CSS เช่นนี้เพื่อปรับแต่งรูปลักษณ์และการใช้งานหน้าเว็บต่าง ๆ ของคุณได้ตามต้องการ
 
-ASP.NET Core and Razor can do much more, such as partial views and server-rendered view components, but a simple layout and view is all you need for now. The official ASP.NET Core documentation (at https://docs.asp.net) contains a number of examples if you'd like to learn more.
+ASP.NET Core และ Razor สามารถทำอะไรต่าง ๆ ได้อีกมากมาย เช่นการสร้าง view ขึ้นมาบางส่วนและส่วนประกอบต่าง ๆ ของ view ที่สร้างขึ้นทางฝั่งเซอร์ฟเวอร์ แต่แค่ view และเลย์เอาต์เบื้องต้นก็เพียงพอแล้วสำหรับการใช้งานของเราในตอนนี้ อย่างไรก็ตาม คุณสามารถเรียนรู้เพิ่มเติมได้จากตัวอย่างในเอกสารอย่างเป็นทางการของ ASP.NET Core  (ที่ https://docs.asp.net)
