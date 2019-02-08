@@ -1,16 +1,16 @@
-## Connect to a database
+## การเชื่อมต่อกับฐานข้อมูล
 
-There are a few things you need to use Entity Framework Core to connect to a database. Since you used `dotnet new` and the MVC + Individual Auth template to set your project, you've already got them:
+เราจำเป็นต้องเตรียมการบางอย่างก่อนใช้ Entity Framework Core เพื่อเชื่อมต่อกับฐานข้อมูล แต่เนื่องจากเราใช้คำสั่ง `dotnet new` ร่วมกับเทมเพลต MVC + Individual Auth เพื่อจัดเตรียมโปรเจกต์ เราจึงมีทุกอย่างพร้อมแล้ว:
 
-* **The Entity Framework Core packages**. These are included by default in all ASP.NET Core projects.
+* **แพคเกจของ Entity Framework Core** ซึ่งรวมอยู่ในโปรเจกต์ ASP.NET Core ทั้งหมดมาตั้งแต่แรก
 
-* **A database** (naturally). The `app.db` file in the project root directory is a small SQLite database created for you by `dotnet new`. SQLite is a lightweight database engine that can run without requiring you to install any extra tools on your machine, so it's easy and quick to use in development.
+* **ฐานข้อมูล** (ก็แน่อยู่แล้ว) ไฟล์ `app.db` ที่อยู่ในไดเรกทอรีรากของโปรเจกต์เป็นไฟล์ฐานข้อมูล SQLite ที่ถูกสร้างขึ้นหลังจากเรียกใช้คำสั่ง `dotnet new` โดย SQLite คือกลไกฐานข้อมูลขนาดเล็กที่สามารถทำงานได้โดยไม่จำเป็นต้องติดตั้งเครื่องมือใด ๆ เพิ่มเติมลงในเครื่อง ดังนั้นจึงทำให้ใช้ในการพัฒนาได้อย่างสะดวกและรวดเร็ว
 
-* **A database context class**. The database context is a C# class that provides an entry point into the database. It's how your code will interact with the database to read and save items. A basic context class already exists in the `Data/ApplicationDbContext.cs` file.
+* **คลาสบริบทฐานข้อมูล (database context class)** บริบทฐานข้อมูลคือคลาสในภาษา C# ที่จัดเตรียมจุดเริ่มต้นไว้สำหรับเข้าสู่ฐานข้อมูล และเป็นสิ่งที่ระบุว่าโค้ดของคุณจะสื่อสารกับฐานข้อมูลเพื่ออ่านและเขียนรายการต่าง ๆ อย่างไร โดยคลาสบริบทอย่างง่ายนั้นมีอยู่แล้วในไฟล์ `Data/ApplicationDbContext.cs`
 
-* **A connection string**. Whether you are connecting to a local file database (like SQLite) or a database hosted elsewhere, you'll define a string that contains the name or address of the database to connect to. This is already set up for you in the `appsettings.json` file: the connection string for the SQLite database is `DataSource=app.db`.
+* **สตริงเชื่อมต่อ (connection string)** ไม่ว่าคุณจะเชื่อมต่อไปยังฐานข้อมูลที่เป็นไฟล์ในเครื่องเดียวกัน (เช่น SQLite) หรือฐานข้อมูลบนเครื่องอื่น คุณจะต้องกำหนดสตริงที่มีชื่อหรือที่อยู่ของฐานข้อมูลที่ต้องการเชื่อมต่อ ซึ่งขั้นตอนนี้ได้ถูกจัดเตรียมไว้เรียบร้อยแล้วในไฟล์ `appsettings.json`: โดยสตริงเชื่อมต่อสำหรับฐานข้อมูล SQLite ในที่นี้คือ `DataSource=app.db`.
 
-Entity Framework Core uses the database context, together with the connection string, to establish a connection to the database. You need to tell Entity Framework Core which context, connection string, and database provider to use in the `ConfigureServices` method of the `Startup` class. Here's what's defined for you, thanks to the template:
+Entity Framework Core ใช้บริบทฐานข้อมูลร่วมกันกับสตริงเชื่อมต่อเพื่อสร้างการเชื่อมต่อไปยังฐานข้อมูล คุณจำเป็นต้องบอก Entity Framework Core ว่าจะให้ใช้บริบท, สตริงเชื่อมต่อ และผู้ให้บริการฐานข้อมูลรายใด โดยระบุไว้ในเมธอด `ConfigureServices` ของคลาส `Startup` ซึ่งในที่นี้ได้ถูกกำหนดไว้ให้เรียบร้อยแล้วจากการใช้เทมเพลต:
 
 ```csharp
 services.AddDbContext<ApplicationDbContext>(options =>
@@ -18,6 +18,6 @@ services.AddDbContext<ApplicationDbContext>(options =>
         Configuration.GetConnectionString("DefaultConnection")));
 ```
 
-This code adds the `ApplicationDbContext` to the service container, and tells Entity Framework Core to use the SQLite database provider, with the connection string from configuration (`appsettings.json`).
+โค้ดนี้จะเพิ่ม `ApplicationDbContext` เข้าไปในที่เก็บบริการ แล้วบอก Entity Framework Core ให้ใช้ผู้ให้บริการฐานข้อมูล SQLite พร้อมทั้งใช้สตริงเชื่อมต่อจากโครงแบบ (`appsettings.json`)
 
-As you can see, `dotnet new` creates a lot of stuff for you! The database is set up and ready to be used. However, it doesn't have any tables for storing to-do items. In order to store your `TodoItem` entities, you'll need to update the context and migrate the database.
+As you can see,คำสั่ง `dotnet new` ช่วยสร้างหลายอย่างให้คุณไว้ล่วงหน้าแล้ว! ฐานข้อมูลก็ถูกจัดเตรียมไว้ให้แล้ว แต่ยังไม่มีตารางใด ๆ ไว้สำหรับจัดเก็บรายการสิ่งที่ต้องทำ เพื่อให้สามารถจัดเก็บเอนทิตี `TodoItem` ของคุณได้ คุณจำเป็นต้องปรับบริบทและย้ายฐานข้อมูล

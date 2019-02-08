@@ -14,7 +14,7 @@
     * [ปรับแต่งเลย์เอาต์](chapters/mvc-basics/update-the-layout.md)
 * [การเพิ่มแพคเกจภายนอก](chapters/add-external-packages/README.md)
 * [การใช้ฐานข้อมูล](chapters/use-a-database/README.md)
-    * [Connect to a database](chapters/use-a-database/connect-to-a-database.md)
+    * [การเชื่อมต่อกับฐานข้อมูล](chapters/use-a-database/connect-to-a-database.md)
     * [Update the context](chapters/use-a-database/update-context.md)
     * [Create a migration](chapters/use-a-database/create-migration.md)
     * [Create a new service class](chapters/use-a-database/create-service-class.md)
