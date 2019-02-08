@@ -1,8 +1,8 @@
-## Update the layout
+## ปรับแต่งเลย์เอาต์
 
-The layout file at `Views/Shared/_Layout.cshtml` contains the "base" HTML for each view. This includes the navbar, which is rendered at the top of each page.
+ไฟล์เลย์เอาต์ที่ `Views/Shared/_Layout.cshtml` มีโค้ด HTML "พื้นฐาน" สำหรับแต่ละ view ซึ่งรวมทั้งแถบนำทางหรือ navbar ที่ถูกวางตำแหน่งไว้ที่ด้านบนของแต่ละหน้าด้วย
 
-To add a new item to the navbar, find the HTML code for the existing navbar items:
+ในการเพิ่มรายการใหม่ลงในแถบนำทาง ให้หาโค้ด HTML สำหรับรายการของ navbar ที่มีอยู่แล้ว:
 
 **Views/Shared/_Layout.cshtml**
 
@@ -20,7 +20,7 @@ To add a new item to the navbar, find the HTML code for the existing navbar item
 </ul>
 ```
 
-Add your own item that points to the `Todo` controller instead of `Home`:
+เพิ่มรายการของคุณขึ้นมาใหม่โดยให้ชี้ไปที่ controller `Todo` แทนที่จะเป็น `Home`:
 
 ```html
 <li>
@@ -28,6 +28,6 @@ Add your own item that points to the `Todo` controller instead of `Home`:
 </li>
 ```
 
-The `asp-controller` and `asp-action` attributes on the `<a>` element are called **tag helpers**. Before the view is rendered, ASP.NET Core replaces these tag helpers with real HTML attributes. In this case, a URL to the `/Todo/Index` route is generated and added to the `<a>` element as an `href` attribute. This means you don't have to hard-code the route to the `TodoController`. Instead, ASP.NET Core generates it for you automatically.
+แอตทริบิวต์ `asp-controller` และ `asp-action` ในส่วนย่อย `<a>` เรียกว่า **ตัวช่วยแท็ก (tag helper)** ก่อนที่ view จะถูกสร้างขึ้นมา ASP.NET Core จะแทนที่ตัวช่วยแท็กเหล่านี้ให้ด้วยแอตทริบิวต์ของ HTML  ซึ่งในที่นี้ ค่า URL ที่จะไปยังเส้นทาง `/Todo/Index` จะถูกสร้างขึ้นมาและเพิ่มไปยังส่วนย่อย `<a>` เป็นแอตทริบิวต์ `href` นั่นหมายความว่าคุณไม่ต้องกำหนดเส้นทางไปยัง `TodoController` ลงไปโดยตรงในโค้ด แต่ ASP.NET Core จะช่วยสร้างขึ้นมาให้คุณโดยอัตโนมัติ
 
-> If you've used Razor in ASP.NET 4.x, you'll notice some syntax changes. Instead of using `@Html.ActionLink()` to generate a link to an action, tag helpers are now the recommended way to create links in your views. Tag helpers are useful for forms, too (you'll see why in a later chapter). You can learn about other tag helpers in the documentation at https://docs.asp.net.
+> หากคุณเคยใช้ Razor ใน ASP.NET 4.x มาก่อนหน้านี้ อาจสังเกตว่ามีไวยากรณ์บางส่วนเปลี่ยนไป แทนที่จะใช้ `@Html.ActionLink()` เพื่อสร้างลิงก์ไปยังแอคชัน ในตอนนี้ ตัวช่วยแท็กเป็นวิธีที่แนะนำสำหรับการสร้างลิงก์ต่าง ๆ ใน view ของคุณ นอกจากนี้ ตัวช่วยแท็กยังมีประโยชน์สำหรับการทำงานกับฟอร์มอีกด้วย (ดังที่จะได้เห็นในบทต่อ ๆ ไป) คุณสามารถเรียนรู้เพิ่มเติมเกี่ยวกับตัวช่วยแท็กได้จากเอกสารที่ https://docs.asp.net
