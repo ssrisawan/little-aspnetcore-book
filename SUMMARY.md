@@ -12,7 +12,7 @@
     * [การทำ dependency injection](chapters/mvc-basics/use-dependency-injection.md)
     * [ทำ controller ให้แล้วเสร็จ](chapters/mvc-basics/finish-controller.md)
     * [ปรับแต่งเลย์เอาต์](chapters/mvc-basics/update-the-layout.md)
-* [Add external packages](chapters/add-external-packages/README.md)
+* [การเพิ่มแพคเกจภายนอก](chapters/add-external-packages/README.md)
 * [การใช้ฐานข้อมูล](chapters/use-a-database/README.md)
     * [Connect to a database](chapters/use-a-database/connect-to-a-database.md)
     * [Update the context](chapters/use-a-database/update-context.md)

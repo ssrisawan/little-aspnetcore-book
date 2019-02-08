@@ -1,32 +1,32 @@
-# Add external packages
-One of the big advantages of using a mature ecosystem like .NET is that the number of third-party packages and plugins is huge. Just like other package systems, you can download and install .NET packages that help with almost any task or problem you can imagine.
+# การเพิ่มแพคเกจภายนอก
+หนึ่งในข้อดีของการใช้ระบบนิเวศ (ecosystem) ที่เติบโตเต็มที่แล้วเช่น .NET คือการมีแพคเกจและปลั๊กอินจากภายนอกเป็นจำนวนมาก และเช่นเดียวกับระบบจัดการแพคเกจอื่น ๆ คุณสามารถดาวน์โหลดและติดตั้งแพคเกจ .NET ต่าง ๆ สำหรับงานแต่ละด้านหรือสำหรับปัญหาใด ๆ ที่คุณต้องแก้ไขได้เกือบทั้งหมด
 
-NuGet is both the package manager tool and the official package repository (at https://www.nuget.org). You can search for NuGet packages on the web, and install them from your local machine through the terminal (or the GUI, if you're using Visual Studio).
+NuGet เป็นทั้งเครื่องมือจัดการแพคเกจและเป็นคลังเก็บแพคเกจอย่างเป็นทางการอีกด้วย (อยู่ที่ https://www.nuget.org) คุณสามารถค้นหาแพคเกจ NuGet ที่ต้องการได้จากบนเว็บแล้วติดตั้งลงในเครื่องของคุณผ่านทางเทอร์มินัล (หรือ GUI หากใช้ Visual Studio)
 
-## Install the Humanizer package
-At the end of the last chapter, the to-do application displayed to-do items like this:
+## ติดตั้งแพคเกจ Humanizer
+ในตอนท้ายของบทที่แล้ว แอปพลิเคชันสิ่งที่ต้องทำแสดงรายการสิ่งที่ต้องทำดังนี้:
 
 ![Dates in ISO 8601 format](iso8601.png)
 
-The due date column is displaying dates in a format that's good for machines (called ISO 8601), but clunky for humans. Wouldn't it be nicer if it simply read "X days from now"?
+คอลัมน์วันครบกำหนดแสดงวันที่ในรูปแบบที่เข้าใจง่ายสำหรับคอมพิวเตอร์ (เรียกว่า ISO 8601) แต่ซับซ้อนเกินไปสำหรับมนุษย์ จะดีกว่านี้ไหมหากให้แสดงข้อความที่เข้าใจง่ายเช่น "อีก X วันนับจากนี้"?
 
-You could write code yourself that converted an ISO 8601 date into a human-friendly string, but fortunately, there's a faster way.
+เราอาจเขียนโค้ดให้แปลงวันที่ ISO 8601 ให้อยู่ในรูปแบบสตริงที่เข้าใจง่ายสำหรับมนุษย์ด้วยตนเองก็ได้ แต่ยังมีวิธีที่เร็วกว่านี้
 
-The Humanizer package on NuGet solves this problem by providing methods that can "humanize" or rewrite almost anything: dates, times, durations, numbers, and so on. It's a fantastic and useful open-source project that's published under the permissive MIT license.
+แพคเกจ Humanizer บน NuGet ช่วยแก้ปัญหานี้ด้วยการให้บริการเมธอดที่สามารถทำให้ "เหมาะกับมนุษย์" หรือช่วยเขียนรูปแบบของเวลา วันที่ ระยะเวลา และอื่น ๆ ขึ้นมาใหม่ได้ โปรเจกต์ที่ยอดเยี่ยมและเป็นประโยชน์นี้ ถูกเผยแพร่ภายใต้ไลเซนส์โอเพนซอร์สที่ให้อิสระเปิดกว้างอย่าง MIT อีกด้วย
 
-To add it to your project, run this command in the terminal:
+ให้รันคำสั่งนี้ในเทอร์มินัลเพื่อติดตั้งแพคเกจลงในโปรเจกต์ของคุณ:
 
 ```
 dotnet add package Humanizer
 ```
 
-If you peek at the `AspNetCoreTodo.csproj` project file, you'll see a new `PackageReference` line that references `Humanizer`.
+หากลองดูในไฟล์โปรเจกต์ `AspNetCoreTodo.csproj` คุณจะพบบรรทัด `PackageReference` ถูกเพิ่มขึ้นมาใหม่โดยอ้างถึง `Humanizer`
 
-## Use Humanizer in the view
+## การใช้ Humanizer ภายใน view
 
-To use a package in your code, you usually need to add a `using` statement that imports the package at the top of the file.
+เพื่อใช้แพคเกจในโค้ด เรามักต้องเพิ่มคำสั่ง `using` เพื่อนำเข้าแพคเกจที่ตอนต้นของไฟล์
 
-Since Humanizer will be used to rewrite dates rendered in the view, you can use it directly in the view itself. First, add a `@using` statement at the top of the view:
+เนื่องจาก Humanizer ถูกนำมาใช้เขียนรูปแบบของวันที่ขึ้นมาใหม่ขณะสร้าง view เราจึงสามารถเรียกใช้ใน view ได้โดยตรง โดยขั้นแรกจะต้องเพิ่มคำสั่ง `@using` ที่ตอนต้นของ view:
 
 **Views/Todo/Index.cshtml**
 
@@ -37,18 +37,18 @@ Since Humanizer will be used to rewrite dates rendered in the view, you can use 
 // ...
 ```
 
-Then, update the line that writes the `DueAt` property to use Humanizer's `Humanize` method:
+จากนั้นให้แก้ไขบรรทัดที่แสดงคุณสมบัติ `DueAt` โดยเปลี่ยนไปใช้เมธอด `Humanize` ของแพคเกจ Humanizer:
 
 ```html
 <td>@item.DueAt.Humanize()</td>
 ```
 
-Now the dates are much more readable:
+ในตอนนี้ วันที่ต่าง ๆ สามารถอ่านได้ง่ายขึ้นมากแล้ว:
 
 ![Human-readable dates](friendly-dates.png)
 
-There are packages available on NuGet for everything from parsing XML to machine learning to posting to Twitter. ASP.NET Core itself, under the hood, is nothing more than a collection of NuGet packages that are added to your project.
+ใน NuGet มีแพคเกจสำหรับแทบทุกงานตั้งแต่การแจกแจง XML ไปจนถึงแมชชีนเลิร์นนิง แม้แต่การโพสต์ข้อความไปยังทวิตเตอร์ อันที่จริง ภายใต้ ASP.NET Core เองนั้นก็เป็นเพียงการรวมเอาแพคเกจ NuGet ต่าง ๆ ที่ถูกเพิ่มลงในโปรเจกต์ของคุณไว้ด้วยกันเท่านั้น
 
-> The project file created by `dotnet new mvc` includes a single reference to the `Microsoft.AspNetCore.All` package, which is a convenient "metapackage" that references all of the other ASP.NET Core packages you need for a typical project. That way, you don't need to have hundreds of package references in your project file.
+> ไฟล์โปรเจกต์ที่ถูกสร้างขึ้นด้วยคำสั่ง `dotnet new mvc` ได้รวมการอ้างอิงไปยังแพคเกจ `Microsoft.AspNetCore.All` ซึ่งเป็น "เมทาแพคเกจ" ที่มีการอ้างอิงไปยังแพคเกจต่าง ๆ ของ ASP.NET Core ที่ใช้บ่อยเอาไว้แล้ว ด้วยวิธีนี้คุณจึงไม่จำเป็นต้องอ้างอิงแพคเกจอีกนับร้อยไว้ในไฟล์โปรเจกต์ของคุณ
 
-In the next chapter, you'll use another set of NuGet packages (a system called Entity Framework Core) to write code that interacts with a database.
+ในบทถัดไป คุณจะได้ใช้แพคเกจ NuGet อีกชุดหนึ่ง (เป็นระบบที่เรียกว่า Entity Framework Core) เพื่อเขียนโค้ดสำหรับสื่อสารกับฐานข้อมูล
