@@ -1,4 +1,4 @@
-## การฉีด dependency
+## การทำ dependency injection
 ย้อนกลับไปที่ `TodoController` เพื่อเพิ่มโค้ดสำหรับทำงานกับ `ITodoItemService` ดังนี้:
 
 ```csharp
@@ -28,13 +28,13 @@ public class TodoController : Controller
 using AspNetCoreTodo.Services;
 ```
 
-บรรทัดแรกของคลาสเป็นการประกาศตัวแปรแบบ private เพื่อเก็บการอ้างอิงไปยัง `ITodoItemService` ซึ่งตัวแปรนี้ช่วยให้สามารถใช้บริการจากเมธอดแอคชัน `Index` ได้ในภายหลัง (คุณจะได้เห็นวิธีการในไม่กี่นาทีนี้)
+บรรทัดแรกของคลาสเป็นการประกาศตัวแปรแบบ private เพื่อเก็บการอ้างอิงไปยัง `ITodoItemService` ซึ่งตัวแปรนี้ช่วยให้สามารถใช้บริการจากเมธอดแอคชัน `Index` ได้ในภายหลัง (คุณจะได้เห็นวิธีการในอีกไม่กี่นาที)
 
 บรรทัด `public TodoController(ITodoItemService todoItemService)` เป็นการกำหนด **คอนสตรัคเตอร์ (constructor)** ให้กับคลาส โดยคอนสตรัคเตอร์คือเมธอดพิเศษที่จะถูกเรียกเมื่อต้องการสร้างอินสแตนซ์ของคลาสขึ้นมาใหม่ (ในกรณีนี้คือคลาส `TodoController`) การระบุพารามิเตอร์ `ITodoItemService` ให้กับคอนสตรัคเตอร์นั้นเป็นการประกาศว่าหากต้องการสร้าง `TodoController` คุณจะต้องป้อนวัตถุที่เข้ากันได้กับอินเตอร์เฟส `ITodoItemService` เท่านั้น
 
-> อินเตอร์เฟสเป็นสิ่งที่ยอดเยี่ยมมากเพราะสามารถช่วยให้แยกส่วนของตรรกะในแอปพลิเคชันของคุณออกมาได้ เนื่องจาก controller ต้องพึ่งพาหรือขึ้นอยู่กับอินเตอร์เฟส `ITodoItemService` โดยไม่ได้ระบุว่าต้องเป็นคลาสใด*โดยเฉพาะ* ดังนั้นจึงไม่จำเป็นต้องรู้ว่าคลาสที่ถูกป้อนเข้าไปคือคลาสใด ซึ่งอาจเป็นคลาส `FakeTodoItemService`, คลาสอื่นที่สื่อสารกับฐานข้อมูลจริง ๆ หรืออาจเป็นอย่างอื่นโดยสิ้นเชิง! ขอเพียงแค่ให้เข้ากันได้กับอินเตอร์เฟสที่กำหนดเท่านั้น controller ก็จะสามารถใช้คลาสดังกล่าวได้ จึงช่วยให้สามารถทดสอบส่วนต่าง ๆ ของแอปพลิเคชันแยกจากกันได้โดยง่าย โดยการทดสอบดเช่นนี้จะถูกกล่าวถึงโดยละเอียดอีกครั้งในบท *การทดสอบโดยอัตโนมัติ*
+> อินเตอร์เฟสเป็นสิ่งที่เยี่ยมมากเพราะช่วยให้สามารถแยกส่วนของตรรกะในแอปพลิเคชันของคุณออกมาได้ เนื่องจาก controller ต้องพึ่งพาหรือขึ้นอยู่กับอินเตอร์เฟส `ITodoItemService` โดยไม่ได้ระบุว่าต้องเป็นคลาสใด*โดยเฉพาะ* ดังนั้นจึงไม่จำเป็นต้องรู้ว่าคลาสที่ถูกป้อนเข้าไปคือคลาสใด ซึ่งอาจเป็นคลาส `FakeTodoItemService`, คลาสอื่นที่สื่อสารกับฐานข้อมูลจริง ๆ หรืออาจเป็นอย่างอื่นโดยสิ้นเชิง! ขอเพียงแค่ให้เข้ากันได้กับอินเตอร์เฟสที่กำหนดเท่านั้น controller ก็จะสามารถใช้คลาสดังกล่าวได้ จึงช่วยให้สามารถทดสอบส่วนต่าง ๆ ของแอปพลิเคชันแยกจากกันได้โดยง่าย โดยการทดสอบดเช่นนี้จะถูกกล่าวถึงโดยละเอียดอีกครั้งในบท *การทดสอบโดยอัตโนมัติ*
 
-Now you can finally use the `ITodoItemService` (via the private variable you declared) in your action method to get to-do items from the service layer:
+ในที่สุด ตอนนี้คุณก็สามารถใช้ `ITodoItemService` (ผ่านตัวแปร private ที่ได้ประกาศไว้แล้ว) ในเมธอดแอคชันของคุณเพื่อรับรายการสิ่งที่ต้องทำมาจากชั้นบริการได้:
 
 ```csharp
 public IActionResult Index()
@@ -45,13 +45,13 @@ public IActionResult Index()
 }
 ```
 
-Remember that the `GetIncompleteItemsAsync` method returned a `Task<TodoItem[]>`? Returning a `Task` means that the method won't necessarily have a result right away, but you can use the `await` keyword to make sure your code waits until the result is ready before continuing on.
+ยังจำได้ไหมว่าเมธอด `GetIncompleteItemsAsync` คืนค่ากลับมาเป็น `Task<TodoItem[]>`? การคืนค่า `Task` กลับมานี้หมายความว่าเมธอดยังไม่จำเป็นต้องมีผลลัพธ์ในทันที โดยสามารถใช้คำสำคัญ `await` เพื่อให้มั่นใจได้ว่าโค้ดของเราจะรอจนกว่าผลลัพธ์จะพร้อมใช้งานก่อนดำเนินการต่อไป
 
-The `Task` pattern is common when your code calls out to a database or an API service, because it won't be able to return a real result until the database (or network) responds. If you've used promises or callbacks in JavaScript or other languages, `Task` is the same idea: the promise that there will be a result - sometime in the future.
+รูปแบบ `Task` เช่นนี้นิยมใช้กันทั่วไปเมื่อโค้ดต้องเรียกใช้ฐานข้อมูลหรือบริการ API เนื่องจากจะยังไม่ได้ผลลัพธ์กลับมาทันทีจนกว่าจะได้รับการตอบสนองกลับมาจากฐานข้อมูล (หรือเครือข่าย) หากคุณเคยใช้ promise หรือ callback ในจาวาสคริปต์หรือภาษาอื่น ๆ แล้ว `Task` ก็เป็นแนวคิดเดียวกัน: คือคำสัญญาว่าจะมีผลลัพธ์กลับมาอย่างแน่นอน -  ณ เวลาใดเวลาหนึ่งในอนาคต
 
-> If you've had to deal with "callback hell" in older JavaScript code, you're in luck. Dealing with asynchronous code in .NET is much easier thanks to the magic of the `await` keyword! `await` lets your code pause on an async operation, and then pick up where it left off when the underlying database or network request finishes. In the meantime, your application isn't blocked, because it can process other requests as needed. This pattern is simple but takes a little getting used to, so don't worry if this doesn't make sense right away. Just keep following along!
+> หากคุณเคยยุ่งยากกับคอลล์แบคนรก "callback hell" ในโค้ดจาวาสคริปต์มาก่อนหน้านี้ คุณกำลังมีโชคแล้ว เพราะการจัดการกับโค้ดแบบอะซิงโครนัสใน .NET นั้นง่ายขึ้นมาก ต้องขอบคุณความมหัศจรรย์ของคำสำคัญ `await`! โดย `await` ช่วยให้โค้ดของคุณหยุดรอกระบวนการทำงานที่ไม่ได้ประสานเวลากันแล้วค่อยเริ่มทำงานต่อหลังจากคำสั่งฐานข้อมูลหรือเครือข่ายดำเนินการเสร็จ โดยในระหว่างนั้น แอปพลิเคชันของคุณก็ไม่ได้หยุดการทำงานแต่อย่างใด เพราะยังคงประมวลผลคำขออื่น ๆ ได้หากมีการเรียกเข้ามา ถึงแบบแผนนี้จะเรียบง่ายแต่ต้องใช้เวลาทำความคุ้นเคยสักพัก ดังนั้นโปรดอย่ากังวลไปหากยังไม่เข้าใจ ลองทำตามไปก่อนได้เลย!
 
-The only catch is that you need to update the `Index` method signature to return a `Task<IActionResult>` instead of just `IActionResult`, and mark it as `async`:
+เงื่อนไขเพียงอย่างเดียวคือคุณต้องเปลี่ยนลายเซ็นของเมธอด `Index` ให้คืนค่าเป็น `Task<IActionResult>` แทนที่จะเป็นแค่ `IActionResult` พร้อมทั้งกำหนดให้เป็น `async`:
 
 ```csharp
 public async Task<IActionResult> Index()
@@ -64,9 +64,9 @@ public async Task<IActionResult> Index()
 }
 ```
 
-You're almost there! You've made the `TodoController` depend on the `ITodoItemService` interface, but you haven't yet told ASP.NET Core that you want the `FakeTodoItemService` to be the actual service that's used under the hood. It might seem obvious right now since you only have one class that implements `ITodoItemService`, but later you'll have multiple classes that implement the same interface, so being explicit is necessary.
+เพียงเท่านี้ก็เกือบเสร็จแล้ว! ตอนนี้เราได้ทำให้ `TodoController` ต้องพึ่งพาอินเตอร์เฟส `ITodoItemService` แต่ยังไม่ได้กำหนดให้ ASP.NET Core ใช้ `FakeTodoItemService` มาทำหน้าที่บริการอยู่เบื้องหลัง แม้จะเห็นได้ชัดเจนในตอนนี้เนื่องจากเรามีเพียงคลาสเดียวที่อิมพลีเมนต์  `ITodoItemService` แต่หลังจากนี้เราจะมีคลาสอื่น ๆ ที่อิมพลีเมนต์อินเตอร์เฟสเดียวกันนี้เพิ่มขึ้นมา ดังนั้นจึงจำเป็นต้องระบุไว้ให้ชัดเจน
 
-Declaring (or "wiring up") which concrete class to use for each interface is done in the `ConfigureServices` method of the `Startup` class. Right now, it looks something like this:
+การประกาศ (หรือ "เชื่อมโยง") ว่าจะใช้คลาสรูปธรรม (concrete class) ใดสำหรับแต่ละอินเตอร์เฟสนั้นจะกระทำในเมธอด `ConfigureServices` ของคลาส `Startup` ซึ่งปัจจุบันมีลักษณะดังนี้:
 
 **Startup.cs**
 
@@ -79,16 +79,16 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-The job of the `ConfigureServices` method is adding things to the **service container**, or the collection of services that ASP.NET Core knows about. The `services.AddMvc` line adds the services that the internal ASP.NET Core systems need (as an experiment, try commenting out this line). Any other services you want to use in your application must be added to the service container here in `ConfigureServices`.
+หน้าที่ของเมธอด `ConfigureServices` คือการเพิ่มสิ่งต่าง ๆ เข้าไปยัง **service container** ซึ่งเป็นแหล่งรวบรวมบริการที่ ASP.NET Core รู้จักเอาไว้ บรรทัด `services.AddMvc` จะเพิ่มบริการที่จำเป็นต่อการทำงานสำหรับระบบภายในของ ASP.NET Core (ลองใส่หมายเหตุไว้หน้าบรรทัดนี้แล้วทดลองรันดู) บริการอื่น ๆ ที่คุณต้องการใช้ในแอปพลิเคชันจะต้องถูกเพิ่มเข้าไปยังที่เก็บรวบรวมบริการนี้ใน `ConfigureServices` เช่นกัน
 
-Add the following line anywhere inside the `ConfigureServices` method:
+เพิ่มบรรทัดต่อไปนี้ไว้ที่ใดก็ได้ในเมธอด `ConfigureServices`:
 
 ```csharp
 services.AddSingleton<ITodoItemService, FakeTodoItemService>();
 ```
 
-This line tells ASP.NET Core to use the `FakeTodoItemService` whenever the `ITodoItemService` interface is requested in a constructor (or anywhere else).
+บรรทัดนี้บอก ASP.NET Core ให้ใช้ `FakeTodoItemService` เมื่อใดก็ตามที่อินเตอร์เฟส `ITodoItemService` ถูกเรียกใช้ในคอนสตรัคเตอร์ (รวมทั้งที่อื่น ๆ ด้วย)
 
-`AddSingleton` adds your service to the service container as a **singleton**. This means that only one copy of the `FakeTodoItemService` is created, and it's reused whenever the service is requested. Later, when you write a different service class that talks to a database, you'll use a different approach (called **scoped**) instead. I'll explain why in the *Use a database* chapter.
+ข้อกำหนด `AddSingleton` จะเพิ่มบริการนั้น ๆ เข้าไปยังที่เก็บบริการในฐานะ **singleton** หมายความว่าจะมีสำเนาของ `FakeTodoItemService` เพียงสำเนาเดียวที่ถูกสร้างขึ้นมา และจะถูกใช้ซ้ำทุกครั้งที่บริการดังกล่าวถูกเรียกใช้ หลังจากนี้เมื่อเราเขียนคลาสบริการที่ต้องสื่อสารกับฐานข้อมูล เราจะใช้อีกแนวทางหนึ่ง (เรียกว่า **scoped**) แทนวิธีนี้ ซึ่งจะอธิบายเหตุผลต่อไปในบท *การใช้ฐานข้อมูล*
 
-That's it! When a request comes in and is routed to the `TodoController`, ASP.NET Core will look at the available services and automatically supply the `FakeTodoItemService` when the controller asks for an `ITodoItemService`. Because the services are "injected" from the service container, this pattern is called **dependency injection**.
+ถึงตอนนี้ก็เรียบร้อยแล้ว! เมื่อมีคำขอเข้ามาและถูกส่งต่อไปให้ `TodoController` แล้ว ASP.NET Core จะดูจากบริการต่าง ๆ ที่มีให้ใช้แล้วจึงป้อน `FakeTodoItemService` ให้โดยอัตโนมัติเมื่อ controller เรียกหา `ITodoItemService` และเนื่องจากบริการต่าง ๆ "ถูกฉีด" หรือป้อนเข้าไปให้จากที่จัดเก็บบริการ วิธีการเช่นนี้จึงถูกเรียกว่าการฉีดสิ่งที่ต้องใช้หรือ **dependency injection** นั่นเอง
