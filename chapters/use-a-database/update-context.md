@@ -1,6 +1,6 @@
-## Update the context
+## ปรับแก้บริบท
 
-There's not a whole lot going on in the database context yet:
+ในตอนนี้ยังไม่มีอะไรน่าสนใจในบริบทฐานข้อมูลมากนัก:
 
 **Data/ApplicationDbContext.cs**
 
@@ -22,7 +22,7 @@ public class ApplicationDbContext
 }
 ```
 
-Add a `DbSet` property to the `ApplicationDbContext`, right below the constructor:
+อันดับแรก ให้เพิ่มคุณสมบัติ `DbSet` เข้าไปยัง `ApplicationDbContext` ที่ด้านล่างของคอนสตรัคเตอร์:
 
 ```csharp
 public ApplicationDbContext(
@@ -36,10 +36,10 @@ public DbSet<TodoItem> Items { get; set; }
 // ...
 ```
 
-A `DbSet` represents a table or collection in the database. By creating a `DbSet<TodoItem>` property called `Items`, you're telling Entity Framework Core that you want to store `TodoItem` entities in a table called `Items`.
+เนื่องจาก `DbSet` ใช้แทนตารางหรือชุดข้อมูลในฐานข้อมูล การกำหนดคุณสมบัติ `DbSet<TodoItem>` แล้วตั้งชื่อว่า `Items` นั้น จึงเป็นการบอก Entity Framework Core ว่าเราต้องการเก็บเอนทิตี `TodoItem` ไว้ในตารางชื่อ `Items` นั่นเอง
 
-You've updated the context class, but now there's one small problem: the context and database are now out of sync, because there isn't actually an `Items` table in the database. (Just updating the code of the context class doesn't change the database itself.)
+ในตอนนี้ เราได้ปรับแก้คลาสบริบทเรียบร้อยแล้ว แต่ยังมีปัญหาเล็ก ๆ อีกปัญหาหนึ่ง: บริบทกับฐานข้อมูลยังไม่สอดคล้องกัน เนื่องจากยังไม่มีตาราง `Items` ในฐานข้อมูล (การปรับแก้โค้ดของคลาสบริบทไม่ได้ส่งผลให้เกิดการเปลี่ยนแปลงใด ๆ ขึ้นกับตัวฐานข้อมูล)
 
-In order to update the database to reflect the change you just made to the context, you need to create a **migration**.
+เพื่อปรับแก้ฐานข้อมูลให้สอดคล้องกับความเปลี่ยนแปลงที่ได้กระทำไว้กับบริบท เราจำเป็นต้องสร้าง **การย้ายข้อมูล (migration)**
 
-> If you already have an existing database, search the web for "scaffold-dbcontext existing database" and read Microsoft's documentation on using the `Scaffold-DbContext` tool to reverse-engineer your database structure into the proper `DbContext` and model classes automatically.
+> หากคุณมีฐานข้อมูลอยู่แล้ว ให้ลองค้นหา "scaffold-dbcontext existing database" จากบนเว็บ แล้วอ่านเอกสารของไมโครซอฟต์เกี่ยวกับการใช้เครื่องมือ `Scaffold-DbContext` เพื่อทำวิศวกรรมย้อนรอยโครงสร้างฐานข้อมูลของคุณให้กลายเป็น `DbContext` และคลาส model ต่าง ๆ ได้โดยอัตโนมัติ
