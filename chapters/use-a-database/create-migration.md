@@ -1,26 +1,25 @@
-## Create a migration
+## สร้างการโยกย้ายข้อมูล
 
-Migrations keep track of changes to the database structure over time. They make it possible to undo (roll back) a set of changes, or create a second database with the same structure as the first. With migrations, you have a full history of modifications like adding or removing columns (and entire tables).
+การโยกย้ายข้อมูล (migration) ช่วยติดตามการเปลี่ยนแปลงโครงสร้างของฐานข้อมูลตามช่วงเวลา และช่วยให้สามารถยกเลิกหรือย้อนคืน (roll back) การเปลี่ยนแปลงดังกล่าว หรือใช้สร้างฐานข้อมูลขึ้นมาใหม่โดยใช้โครงสร้างเดียวกันกับฐานข้อมูลแรกได้ ด้วยการโยกย้ายข้อมูลเช่นนี้ เราจึงมีประวัติของการเปลี่ยนแปลงต่าง ๆ ทั้งหมด เช่นการเพิ่มหรือลบคอลัมน์ (หรือทั้งตาราง) เก็บไว้
 
-In the previous chapter, you added an `Items` set to the context. Since the context now includes a set (or table) that doesn't exist in the database, you need to create a migration to update the database:
+ในบทที่แล้ว เราได้เพิ่มชุดของ `Items` เข้าไปในบริบท แต่เนื่องจากในขณะนี้บริบทของเรามีชุดของข้อมูล (หรือตาราง) ที่ยังไม่มีในฐานข้อมูล เราจึงจำเป็นต้องสร้างการโยกย้ายข้อมูลเพื่อปรับแก้ฐานข้อมูลให้ถูกต้อง:
 
 ```
 dotnet ef migrations add AddItems
 ```
 
-This creates a new migration called `AddItems` by examining any changes you've made to the context.
+คำสั่งนี้จะสร้างการโยกย้ายข้อมูลขึ้นมาใหม่ในชื่อ `AddItems` โดยพิจารณาจากความเปลี่ยนแปลงใด ๆ ที่ได้กระทำไว้กับบริบทก่อนหน้านี้
 
-> If you get an error like `No executable found matching command "dotnet-ef"`, make sure you're in the right directory. These commands must be run from the project root directory (where the `Program.cs` file is).
+> หากเกิดข้อผิดพลาดเช่น `No executable found matching command "dotnet-ef"`  แล้ว โปรดตรวจสอบว่าคุณอยู่ในไดเรกทอรีที่ถูกต้อง เนื่องจากคำสั่งเช่นนี้จะต้องรันที่ไดเรกทอรีรากเท่านั้น (ซึ่งเป็นที่อยู่ของไฟล์ `Program.cs`)
 
-If you open up the `Data/Migrations` directory, you'll see a few files:
+หากคุณเปิดไปที่ไดเรกทอรี `Data/Migrations` จะพบว่ามีไฟล์อยู่หลายไฟล์:
 
 ![Multiple migrations](migrations.png)
 
-The first migration file (with a name like `00_CreateIdentitySchema.cs`) was created and applied for you way back when you ran `dotnet new`. Your new `AddItem` migration is prefixed with a timestamp when you create it.
+ไฟล์แรกของการโยกย้าย (ที่มีชื่อเช่น `00_CreateIdentitySchema.cs`) ถูกสร้างขึ้นมาและถูกเรียกใช้ตั้งแต่เมื่อครั้งรันคำสั่ง `dotnet new` ส่วนชื่อของการโยกย้าย `AddItem` ที่ถูกสร้างขึ้นมาใหม่จะถูกนำหน้าด้วยเวลาที่สร้าง 
+> คุณสามารถเรียกดูรายการโยกย้ายทั้งหมดได้ด้วยคำสั่ง `dotnet ef migrations list`
 
-> You can see a list of migrations with `dotnet ef migrations list`.
-
-If you open your migration file, you'll see two methods called `Up` and `Down`:
+หากเปิดดูในไฟล์การโยกย้าย คุณจะพบสองเมธอดชื่อ `Up` และ `Down`:
 
 **Data/Migrations/<date>_AddItems.cs**
 
@@ -57,33 +56,33 @@ protected override void Down(MigrationBuilder migrationBuilder)
 }
 ```
 
-The `Up` method runs when you apply the migration to the database. Since you added a `DbSet<TodoItem>` to the database context, Entity Framework Core will create an `Items` table (with columns that match a `TodoItem`) when you apply the migration.
+เมธอด `Up` จะรันเมื่อการโยกย้ายนั้น ๆ ถูกนำไปใช้กับฐานข้อมูล และเนื่องจากคุณได้เพิ่ม `DbSet<TodoItem>` เข้าไปยังบริบทฐานข้อมูลไว้แล้ว ดังนั้น Entity Framework Core จะสร้างตาราง `Items` (โดยมีคอลัมน์ที่สอดคล้องกับ `TodoItem`) เมื่อคุณดำเนินการโยกย้ายข้อมูล
 
-The `Down` method does the opposite: if you need to undo (roll back) the migration, the `Items` table will be dropped.
+เมธอด `Down` จะทำงานในทางตรงกันข้าม: หากคุณจำเป็นต้องยกเลิก (ย้อนคืน) การโยกย้ายข้อมูลแล้ว ตาราง `Items` ก็จะถูกลบทิ้งไป
 
-### Workaround for SQLite limitations
+### วิธีแก้ปัญหาจากข้อจำกัดของ SQLite
 
-There are some limitations of SQLite that get in the way if you try to run the migration as-is. Until this problem is fixed, use this workaround:
+ใน SQLite มีข้อจำกัดบางประการที่อาจทำให้เกิดปัญหาได้หากคุณพยายามทำการโยกย้ายข้อมูลด้วยโค้ดที่เป็นอยู่ตอนนี้ จนกว่าจนกว่าข้อจำกัดดังกล่าวจะได้รับการแก้ไข เราสามารถแก้ปัญหาเบื้องต้นได้ดังนี้:
 
-* Comment out or remove the `migrationBuilder.AddForeignKey` lines in the `Up` method.
-* Comment out or remove any `migrationBuilder.DropForeignKey` lines in the `Down` method.
+* ใส่หมายเหตุหรือลบบรรทัดที่มี `migrationBuilder.AddForeignKey` ในเมธอด `Up`
+* ใส่หมายเหตุหรือลบบรรทัดใด ๆ ที่มี `migrationBuilder.DropForeignKey` ในเมธอด `Down`
 
-If you use a full-fledged SQL database, like SQL Server or MySQL, this won't be an issue and you won't need to do this (admittedly hackish) workaround.
+หากคุณใช้ฐานข้อมูล SQL เต็มรูปแบบเช่น SQL Server หรือ MySQL ก็จะไม่มีปัญหาใด ๆ และไม่จำเป็นต้องใช้วิธีแก้ปัญหา (ที่ต้องยอมรับว่าออกจะเป็นการแฮกไปสักหน่อย) เช่นนี้
 
-### Apply the migration
+### ดำเนินการโยกย้ายข้อมูล
 
-The final step after creating one (or more) migrations is to actually apply them to the database:
+ขั้นตอนสุดท้ายหลังจากที่ได้สร้างการโยกย้ายข้อมูล (ซึ่งอาจมีมากกว่าหนึ่งการโยกย้ายก็ได้) คือการนำไปใช้กับฐานข้อมูล:
 
 ```
 dotnet ef database update
 ```
 
-This command will cause Entity Framework Core to create the `Items` table in the database.
+คำสั่งนี้จะทำให้ Entity Framework Core สร้างตาราง `Items` ขึ้นในฐานข้อมูล
 
-> If you want to roll back the database, you can provide the name of the *previous* migration:
+> หากต้องการย้อนคืน (roll back) สถานะของฐานข้อมูล คุณสามารถระบุชื่อของการโยกย้าย *ก่อนหน้า* :
 > `dotnet ef database update CreateIdentitySchema`
-> This will run the `Down` methods of any migrations newer than the migration you specify.
+> ซึ่งจะเป็นการรันเมธอด `Down` ของทุก ๆ การโยกย้ายที่ใหม่กว่าการโยกย้ายที่คุณระบุ
 
-> If you need to completely erase the database and start over, run `dotnet ef database drop` followed by `dotnet ef database update` to re-scaffold the database and bring it up to the current migration.
+> หากคุณต้องการลบฐานข้อมูลออกทั้งหมดเพื่อเริ่มต้นใหม่ ให้รันคำสั่ง `dotnet ef database drop` แล้วตามด้วย `dotnet ef database update` เพื่อขึ้นโครงร่างของฐานข้อมูลขึ้นมาใหม่พร้อมทั้งทำให้อยู่ในสถานะเดียวกันกับการโยกย้ายล่าสุด
 
-That's it! Both the database and the context are ready to go. Next, you'll use the context in your service layer.
+เรียบร้อยแล้ว! ตอนนี้ทั้งฐานข้อมูลและบริบทก็พร้อมใช้งานแล้ว อันดับถัดไป คุณจะได้นำบริบทไปใช้ในชั้นบริการของคุณ
