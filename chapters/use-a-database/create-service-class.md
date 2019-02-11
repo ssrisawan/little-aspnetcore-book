@@ -1,8 +1,8 @@
-## Create a new service class
+## สร้างคลาสบริการ
 
-Back in the *MVC basics* chapter, you created a `FakeTodoItemService` that contained hard-coded to-do items. Now that you have a database context, you can create a new service class that will use Entity Framework Core to get the real items from the database.
+ในบท *พื้นฐานของ MVC* เราได้สร้าง `FakeTodoItemService` ที่ได้กำหนดรายการสิ่งที่ต้องทำไว้โดยตรงในโค้ด แต่ในตอนนี้เนื่องจากเรามีบริบทฐานข้อมูลแล้ว เราสามารถสร้างคลาสบริการขึ้นมาใหม่ซึ่งจะใช้ Entity Framework Core เพื่อรับรายการต่าง ๆ มาจากฐานข้อมูลจริง
 
-Delete the `FakeTodoItemService.cs` file, and create a new file:
+ให้ลบไฟล์ `FakeTodoItemService.cs` แล้วสร้างไฟล์ขึ้นมาใหม่ดังนี้:
 
 **Services/TodoItemService.cs**
 
@@ -39,23 +39,23 @@ namespace AspNetCoreTodo.Services
 
 You'll notice the same dependency injection pattern here that you saw in the *MVC basics* chapter, except this time it's the `ApplicationDbContext` that's getting injected. The `ApplicationDbContext` is already being added to the service container in the `ConfigureServices` method, so it's available for injection here.
 
-Let's take a closer look at the code of the `GetIncompleteItemsAsync` method. First, it uses the `Items` property of the context to access all the to-do items in the `DbSet`:
+เรามาดูที่โค้ดของเมธอด `GetIncompleteItemsAsync` ให้ใกล้ชิดกันขึ้นอีกหน่อย อันดับแรก เมธอดนี้ใช้คุณสมบัติ `Items` ของบริบทเพื่อเข้าถึงรายการสิ่งที่ต้องทำทั้งหมดใน `DbSet`:
 
 ```csharp
 var items = await _context.Items
 ```
 
-Then, the `Where` method is used to filter only the items that are not complete:
+จากนั้น เมธอด `Where` จะถูกใช้เพื่อกรองเฉพาะรายการที่ยังไม่แล้วเสร็จขึ้นมา:
 
 ```csharp
 .Where(x => x.IsDone == false)
 ```
 
-The `Where` method is a feature of C# called LINQ (**l**anguage **in**tegrated **q**uery), which takes inspiration from functional programming and makes it easy to express database queries in code. Under the hood, Entity Framework Core translates the `Where` method into a statement like `SELECT * FROM Items WHERE IsDone = 0`, or an equivalent query document in a NoSQL database.
+เมธอด `Where` นี้เป็นความสามารถของ C# ที่เรียกว่า LINQ (**l**anguage **in**tegrated **q**uery) ซึ่งได้รับแรงบันดาลใจมาจากการเขียนโปรแกรมเชิงฟังก์ชัน (functional programming) และทำให้สามารถแสดงถึงการคิวรีฐานข้อมูลไว้ในโค้ดได้โดยง่าย ในที่นี้ Entity Framework Core จะดำเนินการอยู่เบื้องหลัง เพื่อแปลเมธอด `Where` ให้อยู่ในรูปคำสั่งเช่น `SELECT * FROM Items WHERE IsDone = 0` หรือให้เป็นเอกสารคิวรีที่ทำหน้าที่เช่นเดียวกันในฐานข้อมูล NoSQL
 
-Finally, the `ToArrayAsync` method tells Entity Framework Core to get all the entities that matched the filter and return them as an array. The `ToArrayAsync` method is asynchronous (it returns a `Task`), so it must be `await`ed to get its value.
+ท้ายที่สุด เมธอด `ToArrayAsync` จะบอก Entity Framework Core ให้รับเอนทิตีทั้งหมดที่สอดคล้องกับตัวกรองและคืนค่ากลับมาเป็นอาร์เรย์ โดยเมธอด `ToArrayAsync` นี้ทำงานแบบไม่ประสานจังหวะ (คืนค่าเป็น `Task`) ดังนั้นจึงจำเป็นต้องกำหนดให้รอหรือ  `await` เพื่อรับค่าดังกล่าว
 
-To make the method a little shorter, you can remove the intermediate `items` variable and just return the result of the query directly (which does the same thing):
+เพื่อให้เมธอดสั้นลงได้อีกเล้กน้อย คุณสามารถลบตัวแปร `items` ที่ถูกใช้เป็นตัวกลางเก็บข้อมูลออกได้ แล้วให้คืนค่าผลลัพธ์ของการคิวรีโดยตรง (ซึ่งจะให้ผลเหมือนกัน):
 
 ```csharp
 public async Task<TodoItem[]> GetIncompleteItemsAsync()
