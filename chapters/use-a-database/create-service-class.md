@@ -37,7 +37,7 @@ namespace AspNetCoreTodo.Services
 }
 ```
 
-You'll notice the same dependency injection pattern here that you saw in the *MVC basics* chapter, except this time it's the `ApplicationDbContext` that's getting injected. The `ApplicationDbContext` is already being added to the service container in the `ConfigureServices` method, so it's available for injection here.
+สังเกตได้ว่าคุณเคยเห็นรูปแบบของการทำ dependency injection มาแล้วในบท *พื้นฐานของ MVC* เพียงแต่ในครั้งนี้สิ่งที่ถูกฉีดเข้าไปกลับกลายเป็น `ApplicationDbContext` แทน โดย `ApplicationDbContext` นี้ได้ถูกเพิ่มเข้าไปในคอนเทนเนอร์บริการเรียบร้อยแล้วในเมธอด `ConfigureServices` ดังนั้นจึงพร้อมสำหรับการฉีดเข้าไปในที่นี้
 
 เรามาดูที่โค้ดของเมธอด `GetIncompleteItemsAsync` ให้ใกล้ชิดกันขึ้นอีกหน่อย อันดับแรก เมธอดนี้ใช้คุณสมบัติ `Items` ของบริบทเพื่อเข้าถึงรายการสิ่งที่ต้องทำทั้งหมดใน `DbSet`:
 
@@ -66,22 +66,22 @@ public async Task<TodoItem[]> GetIncompleteItemsAsync()
 }
 ```
 
-### Update the service container
+### อัพเดตคอนเทนเนอร์บริการ
 
-Because you deleted the `FakeTodoItemService` class, you'll need to update the line in `ConfigureServices` that is wiring up the `ITodoItemService` interface:
+เนื่องจากคลาส `FakeTodoItemService` ถูกลบไปแล้ว เราจึงจำเป็นต้องอัพเดตบรรทัดใน `ConfigureServices` ที่เชื่อมโยงอินเตอร์เฟส `ITodoItemService` ให้เป็นดังนี้:
 
 ```csharp
 services.AddScoped<ITodoItemService, TodoItemService>();
 ```
 
-`AddScoped` adds your service to the service container using the **scoped** lifecycle. This means that a new instance of the `TodoItemService` class will be created during each web request. This is required for service classes that interact with a database.
+`AddScoped` เพิ่มบริการของเราลงในคอนเทนเนอร์บริการให้มีวงจรชีวิตแบบ **scoped** นั่นหมายความว่าอินสแตนซ์ใหม่ของคลาส `TodoItemService` จะถูกสร้างขึ้นมาระหว่างการร้องขอเว็บในแต่ละครั้ง ซึ่งวิธีนี้เป็นสิ่งจำเป็นสำหรับคลาสบริการต่าง ๆ ที่ต้องสื่อสารกับฐานข้อมูล
 
-> Adding a service class that interacts with Entity Framework Core (and your database) with the singleton lifecycle (or other lifecycles) can cause problems, because of how Entity Framework Core manages database connections per request under the hood. To avoid that, always use the scoped lifecycle for services that interact with Entity Framework Core.
+> การเพิ่มคลาสบริการที่ต้องสื่อสารกับ Entity Framework Core (และฐานข้อมูลของคุณ) ด้วยวงจรชีวิตแบบ singleton (หรือแบบอื่น ๆ) อาจทำให้เกิดปัญหาได้ เนื่องจากวิธีที่ Entity Framework Core ใช้จัดการการเชื่อมต่อกับฐานข้อมูลอยู่ในเบื้องหลังสำหรับแต่ละการร้องขอ เพื่อหลีกเลี่ยงปัญหาดังกลา่ว ขอให้ใช้วงจรชีวิตแบบ scoped ทุกครั้งสำหรับบริการที่ต้องสื่อสารกับ Entity Framework Core
 
-The `TodoController` that depends on an injected `ITodoItemService` will be blissfully unaware of the change in services classes, but under the hood it'll be using Entity Framework Core and talking to a real database!
+`TodoController` ที่ต้องพึ่งพา `ITodoItemService` ที่ถูกฉีดเข้ามาจะไม่ได้รับรู้ถึงการเปลี่ยนแปลงในคลาสบริการนี้เลย แต่ในเบื้องหลังแล้วจะเป็นการเปลี่ยนไปใช้ Entity Framework Core และได้สื่อสารกับฐานข้อมูลจริง!
 
-### Test it out
+### มาทดสอบกัน
 
-Start up the application and navigate to `http://localhost:5000/todo`. The fake items are gone, and your application is making real queries to the database. There doesn't happen to be any saved to-do items, so it's blank for now.
+ให้เริ่มการทำงานของแอปพลิเคชันแล้วเปิดไปที่ `http://localhost:5000/todo` ในตอนนี้ รายการปลอม ๆ จะหายไปแล้ว แต่แอปพลิเคชันของเราได้คิวรีข้อมูลไปยังฐานข้อมูลจริง ๆ แต่เนื่องจากยังไม่มีข้อมูลสิ่งที่ต้องทำใด ๆ ถูกบันทึกเอาไว้ รายการของเราจึงยังว่างเปล่าอยู่ในตอนนี้
 
-In the next chapter, you'll add more features to the application, starting with the ability to create new to-do items.
+ในบทต่อไป เราจะได้เพิ่มศักยภาพให้กับแอปพลิเคชันของเรา โดยเริ่มจากการเพิ่มความสามารถในการสร้างรายการสิ่งที่ต้องทำขึ้นมา
