@@ -15,7 +15,7 @@
 * [การเพิ่มแพคเกจภายนอก](chapters/add-external-packages/README.md)
 * [การใช้ฐานข้อมูล](chapters/use-a-database/README.md)
     * [เชื่อมต่อกับฐานข้อมูล](chapters/use-a-database/connect-to-a-database.md)
-    * [ปรับแก้บริบท](chapters/use-a-database/update-context.md)
+    * [อัพเดตบริบท](chapters/use-a-database/update-context.md)
     * [Create a migration](chapters/use-a-database/create-migration.md)
     * [Create a new service class](chapters/use-a-database/create-service-class.md)
 * [Add more features](chapters/add-more-features/README.md)
