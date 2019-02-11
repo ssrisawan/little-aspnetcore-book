@@ -11,7 +11,7 @@
     * [การเพิ่มคลาสบริการ (service class)](chapters/mvc-basics/add-service-class.md)
     * [การทำ dependency injection](chapters/mvc-basics/use-dependency-injection.md)
     * [ทำ controller ให้แล้วเสร็จ](chapters/mvc-basics/finish-controller.md)
-    * [ปรับแต่งเลย์เอาต์](chapters/mvc-basics/update-the-layout.md)
+    * [อัพเดตเลย์เอาต์](chapters/mvc-basics/update-the-layout.md)
 * [การเพิ่มแพคเกจภายนอก](chapters/add-external-packages/README.md)
 * [การใช้ฐานข้อมูล](chapters/use-a-database/README.md)
     * [เชื่อมต่อกับฐานข้อมูล](chapters/use-a-database/connect-to-a-database.md)
