@@ -1,18 +1,18 @@
-## Add new to-do items
+## เพิ่มรายการสิ่งที่ต้องทำ
 
-The user will add new to-do items with a simple form below the list:
+ผู้ใช้จะสามารถเพิ่มสิ่งที่ต้องทำขึ้นมาใหม่ได้โดยใช้ฟอร์มง่าย ๆ ใต้รายการสิ่งที่ต้องทำที่มีอยู่:
 
 ![Final form](final-form.png)
 
-Adding this feature requires a few steps:
+การเพิ่มความสามารถเช่นนี้จำเป็นต้องใช้หลายขั้นตอน ได้แก่:
 
-* Adding a form to the view
-* Creating a new action on the controller to handle the form
-* Adding code to the service layer to update the database
+* เพิ่มฟอร์มเข้าไปใน view
+* สร้างแอคชันใหม่ให้กับ controller เพื่อรองรับฟอร์มดังกล่าว
+* เพิ่มโค้ดไปยังชั้นบริการเพื่ออัพเดตฐานข้อมูล
 
-### Add a form
+### เพิ่มฟอร์มใหม่
 
-The `Views/Todo/Index.cshtml` view has a placeholder for the Add Item form:
+ใน view `Views/Todo/Index.cshtml` มีการจองพื้นที่ไว้สำหรับฟอร์มสำหรับเพิ่มรายการไว้แล้ว:
 
 ```html
 <div class="panel-footer add-item-form">
@@ -20,9 +20,9 @@ The `Views/Todo/Index.cshtml` view has a placeholder for the Add Item form:
 </div>
 ```
 
-To keep things separate and organized, you'll create the form as a **partial view**. A partial view is a small piece of a larger view that lives in a separate file.
+เพื่อเป็นการแยกส่วนงานต่าง ๆ ออกจากกัน เราจะสร้าง view ขึ้นมาเฉพาะส่วนหรือ **partial view** โดยเป็นไฟล์ที่แยกออกมาและทำหน้าที่เป็นส่วนหนึ่งของ view ที่มีขนาดใหญ่กว่า
 
-Create an `AddItemPartial.cshtml` view:
+สร้าง view `AddItemPartial.cshtml`:
 
 **Views/Todo/AddItemPartial.cshtml**
 
@@ -36,15 +36,15 @@ Create an `AddItemPartial.cshtml` view:
 </form>
 ```
 
-The `asp-action` tag helper can generate a URL for the form, just like when you use it on an `<a>` element. In this case, the `asp-action` helper gets replaced with the real path to the `AddItem` route you'll create:
+ตัวช่วยแท็ก `asp-action` สามารถสร้าง URL ขึ้นมาสำหรับฟอร์ม เช่นเดียวกับการใช้ส่วนย่อย `<a>` ในกรณีนี้ ตัวช่วย `asp-action` จะถูกแทนที่ด้วยเส้นทางที่แท้จริงไปยัง `AddItem` ที่กำลังจะถูกสร้างขึ้น:
 
 ```html
 <form action="/Todo/AddItem" method="POST">
 ```
 
-Adding an `asp-` tag helper to the `<form>` element also adds a hidden field to the form containing a verification token. This verification token can be used to prevent cross-site request forgery (CSRF) attacks. You'll verify the token when you write the action.
+การเพิ่มตัวช่วยแท็ก `asp-` ไปยังส่วนย่อย `<form>` ยังช่วยเพิ่มฟิลด์ซ่อนสำหรับเก็บโทเคนเพื่อการตรวจสอบ (verification token) เข้าไปยังฟอร์มด้วย โทเคนเพื่อการตรวจสอบนี้สามารถนำมาใช้เพื่อป้องกันการโจมตีด้วยการปลอมแปลงคำร้องขอแบบข้ามไซต์หรือ cross-site request forgery (CSRF) ได้ โดยเราจะได้ตรวจสอบโทเคนนี้ในขณะที่เขียนแอคชัน
 
-That takes care of creating the partial view. Now, reference it from the main Todo view:
+นั่นคือทั้งหมดที่ต้องทำเพื่อสร้าง view เฉพาะส่วนหรือ partial view ซึ่งตอนนี้กำลังจะถูกอ้างถึงจากใน view Todo หลักของเรา:
 
 **Views/Todo/Index.cshtml**
 
@@ -54,11 +54,11 @@ That takes care of creating the partial view. Now, reference it from the main To
 </div>
 ```
 
-### Add an action
+### เพิ่มแอคชัน
 
-When a user clicks Add on the form you just created, their browser will construct a POST request to `/Todo/AddItem` on your application. That won't work right now, because there isn't any action that can handle the `/Todo/AddItem` route. If you try it now, ASP.NET Core will return a `404 Not Found` error.
+เมื่อผู้ใช้คลิก Add บนฟอร์มที่เราเพิ่งสร้างขึ้นมา เบราว์เซอร์จะสร้างคำขอ POST ไปยัง `/Todo/AddItem` ในแอปพลิเคชันของเรา ซึ่งไม่สามารถใช้งานได้ในตอนนี้เนื่องจากยังไม่มีแอคชันที่สามารถดำเนินการกับเส้นทาง `/Todo/AddItem` ได้ หากคุณลองคลิกตอนนี้ ASP.NET Core จะแสดงข้อผิดพลาด `404 Not Found` ขึ้นมา
 
-You'll need to create a new action called `AddItem` on the `TodoController`:
+เราจำเป็นต้องสร้างแอคชันในชื่อ `AddItem` ไว้บน `TodoController`:
 
 ```csharp
 [ValidateAntiForgeryToken]
