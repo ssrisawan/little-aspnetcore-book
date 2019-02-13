@@ -6,12 +6,12 @@ Adding items to your to-do list is great, but eventually you'll need to get thin
 <input type="checkbox" class="done-checkbox">
 ```
 
-Clicking the checkbox doesn't do anything (yet). Just like the last chapter, you'll add this behavior using forms and actions. In this case, you'll also need a tiny bit of JavaScript code.
+การคลิกที่กล่องเลือกยังไม่ทำให้เกิดอะไรขึ้น (ในตอนนี้) และเช่นเดียวกับในบทที่แล้ว เราจะเพิ่มกิจกรรมนี้โดยใช้ฟอร์มและแอคชัน นอกจากนี้ เรายังจะได้เพิ่มโค้ดจาวาสคริปต์อีกเล็กน้อยด้วย
 
 
-### Add form elements to the view
+### เพิ่มองค์ประกอบของฟอร์มเข้าไปใน view
 
-First, update the view and wrap each checkbox with a `<form>` element. Then, add a hidden element containing the item's ID:
+อันดับแรก ให้อัพเดต view โดยให้ครอบกล่องข้อความด้วยองค์ประกอบ `<form>` จากนั้น ให้เพิ่มองค์ประกอบที่มีค่า ID ของรายการดังกล่าวโดยซ่อนเอาไว้:
 
 **Views/Todo/Index.cshtml**
 
@@ -24,7 +24,7 @@ First, update the view and wrap each checkbox with a `<form>` element. Then, add
 </td>
 ```
 
-When the `foreach` loop runs in the view and prints a row for each to-do item, a copy of this form will exist in each row. The hidden input containing the to-do item's ID makes it possible for your controller code to tell which box was checked. (Without it, you'd be able to tell that *some* box was checked, but not which one.)
+เมื่อลูป `foreach` ทำงานใน view เพื่อแสดงรายการสิ่งที่ต้องทำ ก็จะเกิดสำเนาของฟอร์มนี้ขึ้นมาในแต่ละแถว The hidden input containing the to-do item's ID makes it possible for your controller code to tell which box was checked. (ไม่เช่นนั้น เราจะทำได้เพียงบอกว่ามี *บาง* กล่องถูกเลือกไว้เท่านั้น แต่ไม่สามารถบอกได้ว่ากล่องใดบ้างที่ถูกเลือก)
 
 If you run your application right now, the checkboxes still won't do anything, because there's no submit button to tell the browser to create a POST request with the form's data. You could add a submit button under each checkbox, but that would be a silly user experience. Ideally, clicking the checkbox should automatically submit the form. You can achieve that by adding some JavaScript.
 
