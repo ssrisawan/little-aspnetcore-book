@@ -1,6 +1,6 @@
 ## เพิ่มรายการสิ่งที่ต้องทำ
 
-ผู้ใช้จะสามารถเพิ่มสิ่งที่ต้องทำขึ้นมาใหม่ได้โดยใช้ฟอร์มง่าย ๆ ใต้รายการสิ่งที่ต้องทำที่มีอยู่:
+เราจะทำให้ผู้ใช้สามารถเพิ่มสิ่งที่ต้องทำขึ้นมาใหม่ได้ โดยการวางฟอร์มง่าย ๆ ไว้ใต้รายการสิ่งที่ต้องทำ:
 
 ![Final form](final-form.png)
 
@@ -12,7 +12,7 @@
 
 ### เพิ่มฟอร์มใหม่
 
-ใน view `Views/Todo/Index.cshtml` มีการจองพื้นที่ไว้สำหรับฟอร์มสำหรับเพิ่มรายการไว้แล้ว:
+ใน view `Views/Todo/Index.cshtml` ได้จองพื้นที่ไว้สำหรับฟอร์มสำหรับเพิ่มรายการไว้แล้ว:
 
 ```html
 <div class="panel-footer add-item-form">
@@ -22,7 +22,7 @@
 
 เพื่อเป็นการแยกส่วนงานต่าง ๆ ออกจากกัน เราจะสร้าง view ขึ้นมาเฉพาะส่วนหรือ **partial view** โดยเป็นไฟล์ที่แยกออกมาและทำหน้าที่เป็นส่วนหนึ่งของ view ที่มีขนาดใหญ่กว่า
 
-สร้าง view `AddItemPartial.cshtml`:
+สร้าง view ในชื่อ `AddItemPartial.cshtml`:
 
 **Views/Todo/AddItemPartial.cshtml**
 
@@ -36,15 +36,15 @@
 </form>
 ```
 
-ตัวช่วยแท็ก `asp-action` สามารถสร้าง URL ขึ้นมาสำหรับฟอร์ม เช่นเดียวกับการใช้ส่วนย่อย `<a>` ในกรณีนี้ ตัวช่วย `asp-action` จะถูกแทนที่ด้วยเส้นทางที่แท้จริงไปยัง `AddItem` ที่กำลังจะถูกสร้างขึ้น:
+ตัวช่วยแท็ก `asp-action` สามารถสร้าง URL ในฟอร์ม เช่นเดียวกับการใช้ส่วนย่อย `<a>` ในกรณีนี้ ตัวช่วย `asp-action` จะถูกแทนที่ด้วยเส้นทางที่แท้จริงไปยัง `AddItem` ที่กำลังจะถูกสร้างขึ้น:
 
 ```html
 <form action="/Todo/AddItem" method="POST">
 ```
 
-การเพิ่มตัวช่วยแท็ก `asp-` ไปยังส่วนย่อย `<form>` ยังช่วยเพิ่มฟิลด์ซ่อนสำหรับเก็บโทเคนเพื่อการตรวจสอบ (verification token) เข้าไปยังฟอร์มด้วย โทเคนเพื่อการตรวจสอบนี้สามารถนำมาใช้เพื่อป้องกันการโจมตีด้วยการปลอมแปลงคำร้องขอแบบข้ามไซต์หรือ cross-site request forgery (CSRF) ได้ โดยเราจะได้ตรวจสอบโทเคนนี้ในขณะที่เขียนแอคชัน
+การเพิ่มตัวช่วยแท็ก `asp-` ไปยังส่วนย่อย `<form>` เป็นการเพิ่มฟิลด์ซ่อนสำหรับเก็บโทเคนเพื่อการตรวจสอบ (verification token) เข้าไปยังฟอร์มอีกด้วย โทเคนเพื่อการตรวจสอบนี้สามารถนำมาใช้เพื่อป้องกันการโจมตีด้วยการปลอมแปลงคำร้องขอข้ามไซต์หรือ cross-site request forgery (CSRF) ได้ โดยเราจะได้ตรวจสอบโทเคนนี้ในขณะที่เขียนแอคชัน
 
-นั่นคือทั้งหมดที่ต้องทำเพื่อสร้าง view เฉพาะส่วนหรือ partial view ซึ่งตอนนี้กำลังจะถูกอ้างถึงจากใน view Todo หลักของเรา:
+นั่นคือทั้งหมดที่ต้องทำเพื่อสร้าง view เฉพาะส่วนหรือ partial view ซึ่งตอนนี้กำลังจะถูกอ้างถึงจากใน view หลัก Todo ของเรา:
 
 **Views/Todo/Index.cshtml**
 
@@ -56,9 +56,9 @@
 
 ### เพิ่มแอคชัน
 
-เมื่อผู้ใช้คลิก Add บนฟอร์มที่เราเพิ่งสร้างขึ้นมา เบราว์เซอร์จะสร้างคำขอ POST ไปยัง `/Todo/AddItem` ในแอปพลิเคชันของเรา ซึ่งไม่สามารถใช้งานได้ในตอนนี้เนื่องจากยังไม่มีแอคชันที่สามารถดำเนินการกับเส้นทาง `/Todo/AddItem` ได้ หากคุณลองคลิกตอนนี้ ASP.NET Core จะแสดงข้อผิดพลาด `404 Not Found` ขึ้นมา
+เมื่อผู้ใช้คลิก Add บนฟอร์มที่เพิ่งสร้างขึ้นมานี้ เบราว์เซอร์จะส่งคำขอ POST ไปยัง `/Todo/AddItem` ในแอปพลิเคชันของเรา ซึ่งจะยังไม่สามารถทำงานได้ในตอนนี้เนื่องจากไม่มีแอคชันที่สามารถดำเนินการกับเส้นทาง `/Todo/AddItem` ได้ หากคุณลองคลิกตอนนี้ ASP.NET Core จะแสดงข้อผิดพลาด `404 Not Found` ขึ้นมา
 
-เราจำเป็นต้องสร้างแอคชันในชื่อ `AddItem` ไว้บน `TodoController`:
+เราจึงต้องสร้างแอคชันในชื่อ `AddItem` ไว้บน `TodoController`:
 
 ```csharp
 [ValidateAntiForgeryToken]
@@ -79,23 +79,23 @@ public async Task<IActionResult> AddItem(TodoItem newItem)
 }
 ```
 
-Notice how the new `AddItem` action accepts a `TodoItem` parameter? This is the same `TodoItem` model you created in the _MVC basics_ chapter to store information about a to-do item. When it's used here as an action parameter, ASP.NET Core will automatically perform a process called **model binding**.
+เห็นวิธีที่แอคชัน `AddItem` รับค่าพารามิเตอร์ `TodoItem` นั่นไหม? นี่คือ model `TodoItem` เดียวกันที่เราสร้างขึ้นมาในบท _พื้นฐานของ MVC_ เพื่อใช้เก็บข้อมูลสิ่งที่ต้องทำ เมื่อถูกนำมาใช้ในที่นี้เป็นพารามิเตอร์ของแอคชัน แล้ว ASP.NET Core จะทำกระบวนการที่เรียกว่าการจับคู่โมเดลหรือ **model binding** ให้โดยอัตโนมัติ
 
-Model binding looks at the data in a request and tries to intelligently match the incoming fields with properties on the model. In other words, when the user submits this form and their browser POSTs to this action, ASP.NET Core will grab the information from the form and place it in the `newItem` variable.
+การจับคู่โมเดลจะพิจารณาข้อมูลในคำขอและพยายามจับคู่ฟิลด์ที่รับเข้ามาเข้ากับคุณสมบัติของโมเดลที่สอดคล้องกันอย่างชาญฉลาด อาจกล่าวได้อีกอย่างว่าเมื่อผู้ใช้ส่งฟอร์มและเบราว์เซอร์ POST มาที่แอคชันนี้ ASP.NET Core จะรับค่าต่าง ๆ มาจากฟอร์มมาใส่ไว้ในตัวแปร `newItem`
 
-The `[ValidateAntiForgeryToken]` attribute before the action tells ASP.NET Core that it should look for (and verify) the hidden verification token that was added to the form by the `asp-action` tag helper. This is an important security measure to prevent cross-site request forgery (CSRF) attacks, where your users could be tricked into submitting data from a malicious site. The verification token ensures that your application is actually the one that rendered and submitted the form.
+คุณลักษณะ `[ValidateAntiForgeryToken]` ที่วางไว้ก่อนแอคชันจะบอกให้ ASP.NET Core รู้ว่าควรมองหา (และตรวจสอบ) โทเคนเพื่อการตรวจสอบที่ซ่อนอยู่ ซึ่งถูกเพิ่มเข้ามาในฟอร์มโดยตัวช่วยแท็ก `asp-action` นี่เป็นมาตรการด้านความปลอดภัยที่สำคัญสำหรับป้องกันการโจมตีด้วยการปลอมแปลงคำร้องขอข้ามไซต์หรือ cross-site request forgery (CSRF) ซึ่งผู้ใช้อาจถูกล่อลวงให้ส่งข้อมูลจากไซต์ที่ไม่หวังดีเข้ามาได้ โดยโทเคนเพื่อการตรวจสอบนี้ช่วยให้มั่นใจได้ว่าแอปพลิเคชันของเราเป็นผู้ที่สร้างและส่งฟอร์มนี้จริง ๆ
 
-Take a look at the `AddItemPartial.cshtml` view once more. The `@model TodoItem` line at the top of the file tells ASP.NET Core that the view should expect to be paired with the `TodoItem` model. This makes it possible to use `asp-for="Title"` on the `<input>` tag to let ASP.NET Core know that this input element is for the `Title` property.
+ไปดูที่ view `AddItemPartial.cshtml` กันอีกครั้ง บรรทัด `@model TodoItem` ที่ตอนต้นของไฟล์บอก ASP.NET Core ว่า view ดังกล่าวถูกคาดหวังว่าจะต้องถูกจับคู่กับ model `TodoItem` ซึ่งทำให้สามารถใช้ `asp-for="Title"` ในแท็ก `<input>` เพื่อบอก ASP.NET Core ให้รู้ว่าส่วนย่อย input นี้เป็นของคุณสมบัติ `Title`
 
-Because of the `@model` line, the partial view will expect to be passed a `TodoItem` object when it's rendered. Passing it a `new TodoItem` via `Html.PartialAsync` initializes the form with an empty item. (Try appending `{ Title = "hello" }` and see what happens!)
+เนื่องจากมีบรรทัด `@model` อยู่ view เฉพาะส่วนนี้จึงคาดหวังว่าจะได้รับวัตถุ `TodoItem` เข้ามาขณะที่ view กัำลังถูกสร้างขึ้น การส่ง `new TodoItem` ผ่าน `Html.PartialAsync` เช่นนี้ จะทำให้ได้ฟอร์มที่มีรายการว่างขึ้นมา (ลองเพิ่ม `{ Title = "hello" }` เข้าไป และดูว่าเกิดอะไรขึ้น!)
 
-During model binding, any model properties that can't be matched up with fields in the request are ignored. Since the form only includes a `Title` input element, you can expect that the other properties on `TodoItem` (the `IsDone` flag, the `DueAt` date) will be empty or contain default values.
+ระหว่างการจับคู่โมเดล คุณสมบัติใด ๆ ของโมเดลที่ไม่สามารถจับคู่กับฟิลด์ในคำขอได้จะถูกละไว้ และเนื่องจากฟอร์มนี้มีเพียงส่วนย่อย input `Title` เพียงอย่างเดียว เราจึงคาดได้ว่าคุณสมบัติอื่น ๆ ของ `TodoItem` (แฟลก `IsDone` แวะวันที่ `DueAt`) จะถูกปล่อยว่างไว้หรือคงสถานะเป็นค่าตั้งค้นที่ถูกกำหนดไว้
 
-> Instead of reusing the `TodoItem` model, another approach would be to create a separate model (like `NewTodoItem`) that's only used for this action and only has the specific properties (Title) you need for adding a new to-do item. Model binding is still used, but this way you've separated the model that's used for storing a to-do item in the database from the model that's used for binding incoming request data. This is sometimes called a **binding model** or a **data transfer object** (DTO). This pattern is common in larger, more complex projects.
+> แทนที่จะใช้โมเดล `TodoItem` ซ้ำ อีกแนวทางหนึ่งคือสร้างโมเดลขึ้นมาใหม่ (เช่น `NewTodoItem`) ที่ถูกใช้สำหรับแอคชันนี้เพียงอย่างเดียวและมีเพียงคุณสมบัติเท่าที่จำเป็นต้องใช้ (Title) เพื่อสร้างสิ่งที่ต้องทำขึ้นมาใหม่เท่านั้น การจับคู่โมเดลยังคงถูกเรียกใช้ แต่ด้วยวิธีนี้เราจะได้แยกโมเดลที่ถูกใช้เพื่อเก็บข้อมูลรายการสิ่งที่ต้องทำลงในฐานข้อมูลออกจากโมเดลที่ใช้จับคู่กับข้อมูลที่มาจากคำขอผ่านเว็บ วิธีเช่นนี้อาจเรียกได้ว่าเป็น **โมเดลเพื่อการจับคู่ (binding model)** หรือเป็น **วัตถุเพื่อการส่งผ่านข้อมูล (data transfer object)** (DTO) ซึ่งเป็นแบบแผนที่นิยมใช้กันในโปรเจกต์ที่มีขนาดใหญ่และมีความซับซ้อนสูง
 
-After binding the request data to the model, ASP.NET Core also performs **model validation**. Validation checks whether the data bound to the model from the incoming request makes sense or is valid. You can add attributes to the model to tell ASP.NET Core how it should be validated.
+หลังจากจับคู่ข้อมูลคำขอเข้ากับโมเดลแล้ว ASP.NET Core จะทำการ **ตรวจสอบโมเดล (model validation)** ซึ่งจะตรวจสอบว่าข้อมูลที่ถูกจับคู่เข้ากับโมเดลนั้นใช้ได้หรือสมเหตุสมผลหรือไม่ เราสามารถเพิ่มข้อกำหนดต่าง ๆ เข้าไปในโมเดลได้ เพื่อบอก ASP.NET Core ว่าควรดำเนินการตรวจสอบอย่างไร
 
-The `[Required]` attribute on the `Title` property tells ASP.NET Core's model validator to consider the title invalid if it is missing or blank. Take a look at the code of the `AddItem` action: the first block checks whether the `ModelState` (the model validation result) is valid. It's customary to do this validation check right at the beginning of the action:
+ข้อกำหนด `[Required]` ในคุณสมบัติ `Title` บอกส่วนที่ดำเนินการตรวจสอบของ ASP.NET Core ให้พิจารณาว่าหัวข้อหรือ title นี้ไม่สามารถใช้ได้หากถูกปล่อยให้ว่างไว้หรือไม่ได้ส่งมาด้วย ลองดูที่โค้ดของแอคชัน `AddItem`: บล็อกแรกสุดจะตรวจสอบว่า `ModelState` (ผลของการตรวจสอบโมเดล) นั้นใช้ได้หรือไม่ ในทางปฏิบัติแล้ว การตรวจสอบนี้จะถูกกระทำที่จุดเริ่มต้นของแอคชัน:
 
 ```csharp
 if (!ModelState.IsValid)
@@ -104,9 +104,9 @@ if (!ModelState.IsValid)
 }
 ```
 
-If the `ModelState` is invalid for any reason, the browser will be redirected to the `/Todo/Index` route, which refreshes the page.
+ถ้า `ModelState` เป็นเท็จไม่ว่าด้วยเหตุผลใด ๆ เบราว์เซอร์จะถูกกำหนดให้เปลี่ยนไปเปิดเส้นทาง `/Todo/Index` แทน ซึ่งจะโหลดหน้าดังกล่าวขึ้นมาใหม่อีกครั้ง
 
-Next, the controller calls into the service layer to do the actual database operation of saving the new to-do item:
+อันดับต่อไป controller จะเรียกไปยังชั้นบริการให้ดำเนินการบันทึกรายการสิ่งที่ต้องทำใหม่นี้ลงในฐานข้อมูลจริง ๆ:
 
 ```csharp
 var successful = await _todoItemService.AddItemAsync(newItem);
@@ -116,15 +116,15 @@ if (!successful)
 }
 ```
 
-The `AddItemAsync` method will return `true` or `false` depending on whether the item was successfully added to the database. If it fails for some reason, the action will return an HTTP `400 Bad Request` error along with an object that contains an error message.
+เมธอด `AddItemAsync` จะคืนค่าเป็น `true` หรือ `false` ขึ้นอยู่กับว่ารายการดังกล่าวสามารถเพิ่มเข้าไปยังฐานข้อมูลได้สำเร็จหรือไม่ หากไม่สำเร็จด้วยเหตุผลใด ๆ แอคชันนี้จะคืนค่าผิดพลาด HTTP `400 Bad Request` ไปพร้อมกับวัตถุที่มีข้อความแสดงความผิดพลาด
 
-Finally, if everything completed without errors, the action redirects the browser to the `/Todo/Index` route, which refreshes the page and displays the new, updated list of to-do items to the user.
+ท้ายที่สุด หากทุกอย่างดำเนินการสำเร็จโดยไม่มีข้อผิดพลาด แอคชันจะเปลี่ยนเส้นทางให้เบราว์เซอร์เปิดไปยัง `/Todo/Index` ซึ่งจะโหลดหน้าซ้ำอีกครั้ง พร้อมทั้งแสดงรายการสิ่งที่ต้องทำที่ถูกอัพเดตแล้วให้กับผู้ใช้
 
-### Add a service method
+### เพิ่มเมธอดบริการ
 
-If you're using a code editor that understands C#, you'll see red squiggely lines under `AddItemAsync` because the method doesn't exist yet.
+หากคุณใช้โปรแกรมแก้ไขโค้ดที่เข้าใจภาษา C# คุณจะเห็นเส้นหยักสีแดงใต้ `AddItemAsync` เนื่องจากยังไม่มีเมธอดดังกล่าวอยู่จริง
 
-As a last step, you need to add a method to the service layer. First, add it to the interface definition in `ITodoItemService`:
+ดังนั้นในขั้นตอนนี้เราจำเป็นต้องเพิ่มเมธอดเข้าไปในชั้นบริการ  อันดับแรก ให้เพิ่มเข้าไปยังส่วนของการกำหนดอินเตอร์เฟสใน `ITodoItemService`:
 
 ```csharp
 public interface ITodoItemService
@@ -135,7 +135,7 @@ public interface ITodoItemService
 }
 ```
 
-Then, the actual implementation in `TodoItemService`:
+จากนั้น ให้เขียนส่วนของการนำไปปฏิบัติไว้ใน `TodoItemService`:
 
 ```csharp
 public async Task<bool> AddItemAsync(TodoItem newItem)
@@ -151,10 +151,10 @@ public async Task<bool> AddItemAsync(TodoItem newItem)
 }
 ```
 
-The `newItem.Title` property has already been set by ASP.NET Core's model binder, so this method only needs to assign an ID and set the default values for the other properties. Then, the new item is added to the database context. It isn't actually saved until you call `SaveChangesAsync()`. If the save operation was successful, `SaveChangesAsync()` will return 1.
+เนื่องจากคุณสมบัติ `newItem.Title` ถูกกำหนดไว้จากการจับคู่โมเดลที่กระทำโดย ASP.NET Core แล้ว ดังนั้นเมธอดนี้จึงต้องทำเพียงแค่การกำหนดค่า ID และค่าตั้งต้นสำหรับคุณสมบัติอื่น ๆ จากนั้น รายการใหม่นี้จะถูกเพิ่มไปยังบริบทฐานข้อมูล แต่จะยังไม่ถูกบันทึกจริง ๆ จนกล่าวจะเรียก `SaveChangesAsync()` หากการบันทึกกระทำได้สำเร็จ `SaveChangesAsync()` จะคืนค่าเป็น 1
 
-### Try it out
+### มาทดสอบกัน
 
-Run the application and add some items to your to-do list with the form. Since the items are being stored in the database, they'll still be there even after you stop and start the application again.
+ให้รันแอปพลิเคชันแล้วเพิ่มรายการสิ่งที่ต้องทำสองถึงสามรายการโดยใช้ฟอร์มที่สร้างขึ้น และเนื่องจากสิ่งที่ต้องทำดังกล่าวถูกจัดเก็บลงในฐานข้อมูล รายการทั้งหมดนี้จึงจะคงอยู่แม้แอปพลิเคชันจะถูกปิดและเปิดใหม่ก็ตาม
 
-> As an extra challenge, try adding a date picker using HTML and JavaScript, and let the user choose an (optional) date for the `DueAt` property. Then, use that date instead of always making new tasks that are due in 3 days.
+> ลองท้าทายตนเองเพิ่มเติมด้วยการเพิ่มปฏิทิน (date picker) โดยใช้ HTML และจาวาสคริปต์ และให้ผู้ใช้เลือกวันที่ (หรือจะไม่เลือกก็ได้) สำหรับคุณสมบัติ `DueAt` จากนั้น ให้ใช้วันที่ดังกล่าวแทนที่จะกำหนดให้งานใหม่ทุกงานครบกำหนดใน 3 วัน
