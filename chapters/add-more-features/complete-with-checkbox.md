@@ -1,6 +1,6 @@
-## Complete items with a checkbox
+## การระบุว่างานเสร็จแล้วโดยใช้กล่องเลือก
 
-Adding items to your to-do list is great, but eventually you'll need to get things done, too. In the `Views/Todo/Index.cshtml` view, a checkbox is rendered for each to-do item:
+ตอนนี้เราสามารถเพิ่มสิ่งที่ต้องทำเข้าไปยังรายการของเราได้แล้ว แต่ในที่สุดเราคงต้องการระบุให้ได้ว่างานใดทำเสร็จแล้วบ้าง ใน view  `Views/Todo/Index.cshtml` จะมีกล่องเลือกถูกสร้างขึ้นสำหรับแต่ละรายการสิ่งที่ต้องทำ:
 
 ```html
 <input type="checkbox" class="done-checkbox">
@@ -24,14 +24,14 @@ Adding items to your to-do list is great, but eventually you'll need to get thin
 </td>
 ```
 
-เมื่อลูป `foreach` ทำงานใน view เพื่อแสดงรายการสิ่งที่ต้องทำ ก็จะเกิดสำเนาของฟอร์มนี้ขึ้นมาในแต่ละแถว The hidden input containing the to-do item's ID makes it possible for your controller code to tell which box was checked. (ไม่เช่นนั้น เราจะทำได้เพียงบอกว่ามี *บาง* กล่องถูกเลือกไว้เท่านั้น แต่ไม่สามารถบอกได้ว่ากล่องใดบ้างที่ถูกเลือก)
+เมื่อลูป `foreach` ทำงานใน view เพื่อแสดงรายการสิ่งที่ต้องทำ ก็จะเกิดสำเนาของฟอร์มนี้ขึ้นมาในแต่ละแถว โดยมีอินพุตที่เป็น ID ของรายการสิ่งที่ต้องทำที่ถูกซ่อนไว้รวมอยู่ด้วย ทำให้โค้ดของ controller สามารถบอกได้ว่ากล่องเลือกกล่องใดถูกคลิกเลือก (ไม่เช่นนั้น เราจะทำได้เพียงบอกว่ามี *บาง* กล่องถูกเลือกไว้เท่านั้น แต่ไม่สามารถบอกได้ว่ากล่องใดบเป็นกล่องที่ถูกเลือก)
 
-If you run your application right now, the checkboxes still won't do anything, because there's no submit button to tell the browser to create a POST request with the form's data. You could add a submit button under each checkbox, but that would be a silly user experience. Ideally, clicking the checkbox should automatically submit the form. You can achieve that by adding some JavaScript.
+หากเรารันแอปพลิเคชันในตอนนี้ กล่องเลือกเหล่านี้จะยังไม่ทำให้เกิดผลใด ๆ เนื่องจากยังไม่มีป่ม submit เพื่อให้เบราว์เซอร์สร้างคำขอ POST จากข้อมูลในฟอร์ม เราสามารถเพิ่มปุ่ม submit ลงไปใต้กล่องเลือกแต่ละกล่องก็ได้ แต่คงเป็นประสบการณ์ใช้งานที่ไม่ดีนักสำหรับผู้ใช้ ทางที่ดีแล้ว การคลิกที่กล่องเลือกควรเป็นการส่งฟอร์มโดยอัตโนมัติ ซึ่งเราสามารถทำได้โดยใช้จาวาสคริปต์
 
 
-### Add JavaScript code
+### เพิ่มโค้ดจาวาสคริปต์
 
-Find the `site.js` file in the `wwwroot/js` directory and add this code: 
+มองหาไฟล์ `site.js` ในไดเรกทอรี `wwwroot/js` แล้วเพิ่มโค้ดดังนี้: 
 
 **wwwroot/js/site.js**
 
@@ -55,19 +55,19 @@ function markCompleted(checkbox) {
 }
 ```
 
-This code first uses jQuery (a JavaScript helper library) to attach some code to the `click` even of all the checkboxes on the page with the CSS class `done-checkbox`. When a checkbox is clicked, the `markCompleted()` function is run.
+อันดับแรก เราจะใช้ jQuery (ซึ่งเป็นไลบรารีตัวหนึ่งของจาวาสคริปต์) เพื่อเพิ่มโค้ดเข้าไปยังเหตุการณ์ `click` ของกล่องเลือกทั้งหมดบนหน้าจอที่ใช้คลาส CSS `done-checkbox` เมื่อกล่องเลือกถูกคลิกแล้ว ฟังก์ชัน `markCompleted()` ก็จะทำงาน
 
-The `markCompleted()` function does a few things:
-* Adds the `disabled` attribute to the checkbox so it can't be clicked again
-* Adds the `done` CSS class to the parent row that contains the checkbox, which changes the way the row looks based on the CSS rules in `style.css`
-* Submits the form
+ฟังก์ชัน `markCompleted()` จะดำเนินการหลายอย่างดังนี้:
+* เพิ่มคุณสมบัติ `disabled` ให้กล่องเลือกเพื่อไม่ให้สามารถคลิกซ้ำได้
+* เพิ่มคลาส CSS `done` เข้าไปยังแถวที่วางกล่องเลือกนั้นไว้ เพื่อเปลี่ยนรูปแบบการแสดงผลของแถวนั้น ๆ ตามกฎ CSS ที่กำหนดไว้ใน `style.css`
+* ส่งฟอร์ม
 
-That takes care of the view and frontend code. Now it's time to add a new action!
+นั่นคือทั้งหมดที่ต้องทำสำหรับ view และโค้ดที่ทำงานอยู่เบื้องหน้า ตอนนี้ก็ถึงเวลาเพิ่มแอคชันใหม่กันแล้ว!
 
 
-### Add an action to the controller
+### เพิ่มแอคชันเข้าไปยัง controller
 
-As you've probably guessed, you need to add an action called `MarkDone` in the `TodoController`:
+ดังที่คุณน่าจะคาดเดาเอาไว้แล้ว ในอันดับต่อไป เราต้องเพิ่มแอคชันชื่อ `MarkDone` เข้าไปใน `TodoController`:
 
 ```csharp
 [ValidateAntiForgeryToken]
@@ -88,11 +88,11 @@ public async Task<IActionResult> MarkDone(Guid id)
 }
 ```
 
-Let's step through each line of this action method. First, the method accepts a `Guid` parameter called `id` in the method signature. Unlike the `AddItem` action, which used a model and model binding/validation, the `id` parameter is very simple. If the incoming request data includes a field called `id`, ASP.NET Core will try to parse it as a guid. This works because the hidden element you added to the checkbox form is named `id`.
+เรามาไล่ดูแต่ละบรรทัดในเมธอดแอคชันนี้กัน อันดับแรก เมธอดนี้จะรับพารามิเตอร์ `Guid` ชื่อ `id` ในลายเซ็นของเมธอด ซึ่งแตกต่างจากแอคชัน `AddItem` ที่ใช้โมเดลและทำการจับคู่/ตรวจสอบโมเดล โดยพารามิเตอร์ `id` นี้เป็นเพียงค่าง่าย ๆ ไม่ซับซ้อน หากคำขอที่เรียกเข้ามามีฟิลด์ชื่อ `id` แล้ว ASP.NET Core จะพยายามใช้ค่านั้นเป็น guid ซึ่งในที่นี้สามารถทำงานได้เนื่องจากองค์ประกอบที่เราซ่อนไว้ในฟอร์มกล่องเลือกของเรามีชื่อว่า `id`
 
-Since you aren't using model binding, there's no `ModelState` to check for validity. Instead, you can check the guid value directly to make sure it's valid. If for some reason the `id` parameter in the request was missing or couldn't be parsed as a guid, `id` will have a value of `Guid.Empty`. If that's the case, the action tells the browser to redirect to `/Todo/Index` and refresh the page.
+และเนื่องจากเราไม่ได้ใช้การจับคู่โมเดล จึงไม่มี `ModelState` ให้ตรวจสอบว่าใช้ได้หรือไม่ ดังนั้น เราจึงต้องตรวจสอบค่า guid ดังกล่าวด้วยตนเองเพื่อให้มั่นใจว่าค่าดังกล่าวสามารถใช้งานได้ หากเกิดปัญหาใด ๆ ที่ทำให้ค่าพารามิเตอร์ `id` จากการร้องขอตกหล่นไปหรือไม่สามารถนำมาใช้เป็น guid ได้ จะทำให้ `id` มีค่าเป็น `Guid.Empty` หากเกิดกรณีเช่นนี้ แอคชันจะบอกเบราว์เซอร์ให้เปลี่ยนเส้นทางไปยัง `/Todo/Index` และเรียกหน้านี้ซ้ำอีกครั้ง
 
-Next, the controller needs to call the service layer to update the database. This will be handled by a new method called `MarkDoneAsync` on the `ITodoItemService` interface, which will return true or false depending on whether the update succeeded:
+อันดับต่อมา controller จำเป็นต้องเรียกใช้ชั้นบริการให้อัพเดตฐานข้อมูล ขั้นตอนนี้จะดำเนินการโดยเมธอดใหม่ที่ชื่อ `MarkDoneAsync` ในอินเตอร์เฟส `ITodoItemService` ซึ่งจะคืนค่าเป็นจริงหรือเท็จขึ้นอยู่กับว่าการอัพเดตนั้นสำเร็จหรือไม่:
 
 ```csharp
 var successful = await _todoItemService.MarkDoneAsync(id);
@@ -102,13 +102,13 @@ if (!successful)
 }
 ```
 
-Finally, if everything looks good, the browser is redirected to the `/Todo/Index` action and the page is refreshed.
+ท้ายที่สุดแล้ว หากทุกอย่างเรียกร้อยดี เบราว์เซอร์จะถูกส่งต่อไปที่แอคชัน `/Todo/Index` แล้วหน้าดังกล่าวจะถูกโหลดซ้ำอีกครั้ง
 
-With the view and controller updated, all that's left is adding the missing service method.
+หลังจากที่เราได้แก้ไขทั้ง view และ controller เรียบร้อยแล้ว ก็เหลือแค่การเพิ่มเมธอดบริการที่ยังไม่ได้เขียนขึ้นมาเท่านั้น
 
-### Add a service method
+### เพิ่มเมธอดบริการ
 
-First, add `MarkDoneAsync` to the interface definition:
+อันดับแรก ให้เพิ่ม `MarkDoneAsync` เข้าไปยังส่วนของการกำหนดอินเตอร์เฟส:
 
 **Services/ITodoItemService.cs**
 
@@ -116,7 +116,7 @@ First, add `MarkDoneAsync` to the interface definition:
 Task<bool> MarkDoneAsync(Guid id);
 ```
 
-Then, add the concrete implementation to the `TodoItemService`:
+จากนั้น ให้เพิ่มส่วนของการทำงานจริงเข้าไปยัง `TodoItemService`:
 
 **Services/TodoItemService.cs**
 
@@ -136,18 +136,18 @@ public async Task<bool> MarkDoneAsync(Guid id)
 }
 ```
 
-This method uses Entity Framework Core and `Where()` to find an item by ID in the database. The `SingleOrDefaultAsync()` method will either return the item or `null` if it couldn't be found.
+เมธอดนี้ใช้ Entity Framework Core และ `Where()` เพื่อค้นหารายการสิ่งที่ต้องทำจากฐานข้อมูลด้วย ID และเมธอด `SingleOrDefaultAsync()` จะคืนค่าเป็นรายการดังกล่าวหรือเป็น `null` หากไม่พบรายการนั้น ๆ
 
-Once you're sure that `item` isn't null, it's a simple matter of setting the `IsDone` property:
+หลังจากที่เราตรวจสอบแล้วว่า `item` ไม่ได้เป็นค่า null ก็เหลือเพียงแค่กำหนดค่าให้กับคุณสมบัติ `IsDone` เท่านั้น:
 
 ```csharp
 item.IsDone = true;
 ```
 
-Changing the property only affects the local copy of the item until `SaveChangesAsync()` is called to persist the change back to the database. `SaveChangesAsync()` returns a number that indicates how many entities were updated during the save operation. In this case, it'll either be 1 (the item was updated) or 0 (something went wrong).
+การเปลี่ยนแปลงคุณสมบัตินี้นี้ยังมีผลเฉพาะกับรายการที่อยู่ในเครื่องเท่านั้น จนกว่า `SaveChangesAsync()` จะถูกเรียกใช้เพื่อส่งค่าของการเปลี่ยนแปลงดังกล่าวกลับไปยังฐานข้อมูล โดย `SaveChangesAsync()` จะคืนค่าเป็นตัวเลขที่ระบุว่ามีกี่เอนทิตีที่ได้รับการอัพเดตระหว่างกระบวนการบันทึกข้อมูลดังกล่าว แต่ในที่นี้จะคืนค่าเพียง 1 (รายการได้รับการอัพเดต) หรือ 0 (เกิดความผิดพลาดบางอย่าง) เท่านั้น
 
-### Try it out
+### มาทดสอบกัน
 
-Run the application and try checking some items off the list. Refresh the page and they'll disappear completely, because of the `Where()` filter in the `GetIncompleteItemsAsync()` method.
+ให้รันแอปพลิเคชันแล้วลองคลิกเลือกบางรายการจากบนหน้าจอดู จากนั้นให้โหลดหน้าซ้ำซึ่งจะพบว่ารายการที่ถูกเลือกไปเหล่านั้นหายไปจากบนหน้าจอ สาเหตุที่เป็นเช่นนี้เนื่องจากฟิลเตอร์ `Where()` ในเมธอด `GetIncompleteItemsAsync()` นั่นเอง
 
-Right now, the application contains a single, shared to-do list. It'd be even more useful if it kept track of individual to-do lists for each user. In the next chapter, you'll add login and security features to the project.
+ในตอนนี้ แอปพลิเคชันของเรามีเพียงรายการสิ่งที่ต้องทำที่ใช้ร่วมกันสำหรับทุกคนที่เข้ามาใช้แอปพลิเคชัน คงจะเป็นประโยชน์กว่านี้หากสามารถเก็บสิ่งที่ต้องทำของผู้ใช้แต่ละคนแยกจากกันได้ ในบทต่อไป เราจะได้เพิ่มความสามารถของการล็อกอินและการรักษาความปลอดภัยให้โปรเจกต์ของเรา
