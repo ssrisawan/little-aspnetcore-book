@@ -20,7 +20,7 @@
     * [สร้างคลาสบริการ](chapters/use-a-database/create-service-class.md)
 * [เพิ่มความสามารถให้กับระบบ](chapters/add-more-features/README.md)
     * [เพิ่มรายการสิ่งที่ต้องทำ](chapters/add-more-features/add-todo-items.md)
-    * [Complete items with a checkbox](chapters/add-more-features/complete-with-checkbox.md)
+    * [ใช้กล่องเลือกเพื่อระบุว่างานเสร็จแล้ว](chapters/add-more-features/complete-with-checkbox.md)
 * [Security and identity](chapters/security-and-identity/README.md)
     * [Require authentication](chapters/security-and-identity/require-authentication.md)
     * [Using identity in the application](chapters/security-and-identity/using-identity-in-the-application.md)
