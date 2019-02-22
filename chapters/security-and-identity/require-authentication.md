@@ -1,8 +1,8 @@
 ## บังคับใช้การพิสูจน์ตัวจริง
 
-Often you'll want to require the user to log in before they can access certain parts of your application. For example, it makes sense to show the home page to everyone (whether you're logged in or not), but only show your to-do list after you've logged in.
+โดยทั่วไป เรามักต้องการให้ผู้ใช้ต้องล็อกอินเข้าระบบก่อนที่จะสามารถเข้าถึงบางส่วนของแอปพลิเคชันของเราได้ ตัวอย่างเช่นการเปิดให้ทุกคนเข้าถึงหน้าแรกของแอปพลิเคชันได้ (ไม่ว่าจะล็อกอินแล้วหรือยังก็ตาม) แต่จะเปิดให้เข้าถึงรายการสิ่งที่ต้องทำของผู้ใช้ได้หลังจากล็อกอินแล้วเท่านั้น
 
-You can use the `[Authorize]` attribute in ASP.NET Core to require a logged-in user for a particular action, or an entire controller. To require authentication for all actions of the `TodoController`, add the attribute above the first line of the controller:
+เราสามารถใช้คุณลักษณะ `[Authorize]` ใน ASP.NET Core เพื่อกำหนดให้ผู้ใช้ที่ล็อกอินแล้วเท่านั้นจึงจะมีสิทธิดำเนินการบางอย่างหรืออาจบังคับใช้กับทั้ง controller ก็ได้ ในการกำหนดให้ทุกแอคชันของ controller `TodoController` ต้องผ่านการพิสูจน์ตัวจริง ให้เพิ่มคุณลักษณะดังกล่าวไว้ก่อนบรรทัดแรกของ controller:
 
 **Controllers/TodoController.cs**
 
@@ -14,12 +14,12 @@ public class TodoController : Controller
 }
 ```
 
-Add this `using` statement at the top of the file:
+ให้เพิ่มคำสั่ง `using` ต่อไปนี้ไว้ที่ตอนต้นของไฟล์:
 
 ```csharp
 using Microsoft.AspNetCore.Authorization;
 ```
 
-Try running the application and accessing `/todo` without being logged in. You'll be redirected to the login page automatically.
+ลองรันแอปพลิเคชันแล้วเปิดไปที่ `/todo` โดยไม่ต้องล็อกอิน จะพบว่าเราถูกพาไปยังหน้าล็อกอินโดยอัตโนมัติ
 
-> The `[Authorize]` attribute is actually doing an authentication check here, not an authorization check (despite the name of the attribute). Later, you'll use the attribute to check **both** authentication and authorization.
+> ในที่นี้ คุณลักษณะ `[Authorize]` ทำหน้าที่พิสูจน์ตัวจริงเท่านั้น ยังไม่เกิดการกำหนดสิทธิ (authorization) ใด ๆ แม้ว่าคุณลักษณะนี้มีชื่อเดียวกันกับการกำหนดสิทธิก็ตาม แต่เราจะได้ใช้คุณลักษณะนี้เพื่อดำเนินการทั้ง **พิสูจน์ตัวจริงและกำหนดสิทธิ** ในภายหลัง
