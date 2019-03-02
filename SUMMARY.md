@@ -24,7 +24,7 @@
 * [อัตลักษณ์และการรักษาความปลอดภัย](chapters/security-and-identity/README.md)
     * [บังคับใช้การพิสูจน์ตัวจริง](chapters/security-and-identity/require-authentication.md)
     * [การใช้อัตลักษณ์ในแอปพลิเคชัน](chapters/security-and-identity/using-identity-in-the-application.md)
-    * [Authorization with roles](chapters/security-and-identity/authorization-with-roles.md)
+    * [กำหนดสิทธิด้วยบทบาท](chapters/security-and-identity/authorization-with-roles.md)
     * [More resources](chapters/security-and-identity/more-resources.md)
 * [การทดสอบโดยอัตโนมัติ](chapters/automated-testing/README.md)
     * [Unit testing](chapters/automated-testing/unit-testing.md)

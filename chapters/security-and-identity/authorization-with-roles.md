@@ -1,12 +1,12 @@
-## Authorization with roles
+## กำหนดสิทธิด้วยบทบาท
 
-Roles are a common approach to handling authorization and permissions in a web application. For example, it's common to create an Administrator role that gives admin users more permissions or power than normal users.
+บทบาท (Role) เป็นแนวทางที่ใช้กันทั่วไปเพื่อรองรับการกำหนดสิทธิและการอนุญาตในเว็บแอปพลิเคชัน ตัวอย่างเช่นการนิยมสร้างบทบาทผู้ดูแลระบบ (Administrator) ที่ให้ผู้ใช้แอดมินให้มีสิทธิหรืออำนาจเหนือกว่าผู้ใช้ทั่วไป
 
-In this project, you'll add a Manage Users page that only administrators can see. If normal users try to access it, they'll see an error.
+ในโปรเจกต์นี้ เราจะเพิ่มหน้าจัดการผู้ใช้ที่สามารถเห็นได้โดยผู้ดูแลระบบเท่านั้น หากผู้ใช้ทั่วไปพยายามเข้าถึงหน้านี้ก็จะพบกับข้อความแสดงความผิดพลาด
 
-### Add a Manage Users page
+### เพิ่มหน้าสำหรับจัดการผู้ใช้
 
-First, create a new controller:
+อันดับแรก สร้าง controller ขึ้นมาใหม่:
 
 **Controllers/ManageUsersController.cs**
 
@@ -55,9 +55,9 @@ namespace AspNetCoreTodo.Controllers
 }
 ```
 
-Setting the `Roles` property on the `[Authorize]` attribute will ensure that the user must be logged in **and** assigned the Administrator role in order to view the page.
+กำหนดคุณสมบัติ `Roles` ในคุณลักษณะ `[Authorize]` เพื่อให้แน่ใจว่าผู้ใช้จะต้องล็อกอินไว้แล้ว  **และ** ได้รับมอบหมายบทบาทผู้ดูแลระบบไว้จึงจะสามารถเรียกใช้หน้านี้ได้
 
-Next, create a view model:
+อันดับต่อไปให้สร้าง view model:
 
 **Models/ManageUsersViewModel.cs**
 
@@ -75,7 +75,7 @@ namespace AspNetCoreTodo.Models
 }
 ```
 
-Finally, create a `Views/ManageUsers` folder and a view for the `Index` action:
+ท้ายที่สุด สร้างโฟลเดอร์ `Views/ManageUsers` และ view สำหรับแอคชัน `Index`:
 
 **Views/ManageUsers/Index.cshtml**
 
@@ -127,20 +127,20 @@ Finally, create a `Views/ManageUsers` folder and a view for the `Index` action:
 </table>
 ```
 
-Start up the application and try to access the `/ManageUsers` route while logged in as a normal user. You'll see this access denied page:
+เริ่มแอปพลิเคชันแล้วไปที่เส้นทาง `/ManageUsers` ขณะล็อกอินเข้าระบบเป็นผู้ใช้ทั่วไป จะพบกับหน้าปฏิเสธการเข้าถึงดังนี้:
 
 ![Access denied error](access-denied.png)
 
-That's because users aren't assigned the Administrator role automatically.
+นั่นเป็นเพราะผู้ใช้ต่าง ๆ ไม่ได้รับมอบหมายบทบาทผู้ดูแลระบบโดยอัตโนมัติ
 
 
-### Create a test administrator account
+### สร้างบัญชีผู้ดูแลระบบเพื่อทำการทดสอบ
 
-For obvious security reasons, it isn't possible for anyone to register a new administrator account themselves. In fact, the Administrator role doesn't even exist in the database yet!
+ด้วยเหตุผลด้านความปลอดภัย จะไม่มีใครลงทะเบียนสร้างบัญชีใหม่เป็นผู้ดูแลระบบด้วยตนเองได้ อันที่จริง บทบาทผู้ดูแลระบบยังไม่มีในฐานข้อมูลด้วยซ้ำ!
 
-You can add the Administrator role plus a test administrator account to the database the first time the application starts up. Adding first-time data to the database is called initializing or **seeding** the database.
+เราสามารถเพิ่มบทบาทผู้ดูแลระบบรวมทั้งบัญชีผู้ดูแลระบบเพื่อทำการทดสอบเข้าไปยังฐานข้อมูลตั้งแต่เริ่มรันแอปพลิเคชันเป็นครั้งแรก การเพิ่มข้อมูลในการรันครั้งแรกเข้าไปยังฐานข้อมูลเช่นนี้เรียกว่าการกำหนดค่าตั้งต้น (initialize) หรือ **การซีด (seeding)** ฐานข้อมูล
 
-Create a new class in the root of the project called `SeedData`:
+สร้างคลาสใหม่ในชื่อ `SeedData` ไว้ในไดเรกทอรีรากของโปรเจกต์:
 
 **SeedData.cs**
 
@@ -172,10 +172,10 @@ namespace AspNetCoreTodo
 }
 ```
 
-The `InitializeAsync()` method uses an `IServiceProvider` (the collection of services that is set up in the `Startup.ConfigureServices()` method) to get the `RoleManager` and `UserManager` from ASP.NET Core Identity.
+เมธอด `InitializeAsync()` ใช้ `IServiceProvider` (ชุดของบริการต่าง ๆ ที่ถูกกำหนดไว้ในเมธอด `Startup.ConfigureServices()`) เพื่อรับค่า `RoleManager` และ `UserManager` จากระบบอัตลักษณ์ของ ASP.NET Core
 
 
-Add two more methods below the `InitializeAsync()` method. First, the `EnsureRolesAsync()` method:
+เพิ่มสองเมธอดด้านล่างนี้ไว้ใต้เมธอด `InitializeAsync()` โดยเมธอดแรกคือ `EnsureRolesAsync()`:
 
 ```csharp
 private static async Task EnsureRolesAsync(
@@ -191,7 +191,7 @@ private static async Task EnsureRolesAsync(
 }
 ```
 
-This method checks to see if an `Administrator` role exists in the database. If not, it creates one. Instead of repeatedly typing the string `"Administrator"`, create a small class called `Constants` to hold the value:
+เมธอดนี้ตรวจสอบว่ามีบทบาท `Administrator` ในฐานข้อมูลแล้วหรือไม่ หากยังไม่มีก็จะสร้างขึ้นมาให้ แทนที่จะต้องพิมพ์ `"Administrator"` บ่อยครั้ง ให้สร้างคลาสเล็ก ๆ ชื่อ `Constants` เพื่อเก็บค่านั้น:
 
 **Constants.cs**
 
@@ -205,9 +205,9 @@ namespace AspNetCoreTodo
 }
 ```
 
-> If you want, you can update the `ManageUsersController` to use this constant value as well.
+> ถ้าต้องการ คุณสามารถอัพเดต `ManageUsersController` เพื่อใช้ค่าคงที่นี้ได้เช่นกัน
 
-Next, write the `EnsureTestAdminAsync()` method:
+อันดับต่อไปคือเมธอด `EnsureTestAdminAsync()`:
 
 **SeedData.cs**
 
@@ -233,9 +233,9 @@ private static async Task EnsureTestAdminAsync(
 }
 ```
 
-If there isn't already a user with the username `admin@todo.local` in the database, this method will create one and assign a temporary password. After you log in for the first time, you should change the account's password to something secure!
+หากยังไม่มีผู้ใช้ที่มีชื่อผู้ใช้เป็น `admin@todo.local` ในฐานข้อมูล เมธอดนี้จะสร้างบัญชีนี้ขึ้นมาพร้อมกำหนดรหัสผ่านชั่วคราวให้ หลังจากล็อกอินเป็นครั้งแรกแล้วควรเปลี่ยนรหัสผ่านสำหรับบัญชีนี้เป็นอย่างอื่นที่ปลอดภัยกว่าทันที!
 
-Next, you need to tell your application to run this logic when it starts up. Modify `Program.cs` and update `Main()` to call a new method, `InitializeDatabase()`:
+อันดับต่อไป เราต้องกำหนดให้แอปพลิเคชันรันกลไกนี้ขณะเริ่มการทำงาน ให้แก้ไข `Program.cs` และอัพเดต `Main()` ให้เรียกใช้เมธอดใหม่ `InitializeDatabase()`:
 
 **Program.cs**
 
@@ -248,7 +248,7 @@ public static void Main(string[] args)
 }
 ```
 
-Then, add the new method to the class below `Main()`:
+จากนั้น ให้เพิ่มเมธอดใหม่เข้าไปในคลาสโดยวางไว้ใต้ `Main()`:
 
 ```csharp
 private static void InitializeDatabase(IWebHost host)
@@ -271,25 +271,25 @@ private static void InitializeDatabase(IWebHost host)
 }
 ```
 
-Add this `using` statement to the top of the file:
+เพิ่มคำสั่ง `using` นี้ไว้ตอนต้นของไฟล์:
 
 ```csharp
 using Microsoft.Extensions.DependencyInjection;
 ```
 
-This method gets the service collection that `SeedData.InitializeAsync()` needs and then runs the method to seed the database. If something goes wrong, an error is logged.
+เมธอดนี้จะรับชุดของบริการที่ `SeedData.InitializeAsync()` จำเป็นต้องใช้ แล้วจึงรันเมธอดเพื่อซีดฐานข้อมูล หากเกิดข้อผิดพลาดใด ๆ บันทึกความผิดพลาดดังกล่าวจะถูกจัดเก็บไว้
 
-> Because `InitializeAsync()` returns a `Task`, the `Wait()` method must be used to make sure it finishes before the application starts up. You'd normally use `await` for this, but for technical reasons you can't use `await` in the `Program` class. This is a rare exception. You should use `await` everywhere else!
+> เนื่องจาก `InitializeAsync()` จะคืนค่า `Task` จึงต้องใช้เมธอด `Wait()` เพื่อให้แน่ใจว่าต้องดำเนินการให้แล้วเสร็จก่อนเริ่มแอปพลิเคชัน โดยทั่วไปเรามักใช้ `await` เพื่อดำเนินการนี้ แต่ด้วยเหตุผลทางเทคนิคเราไม่สามารถใช้ `await` ในคลาส `Program` ได้ นี่เป็นข้อยกเว้นที่พบไม่บ่อยนัก คุณควรใช้ `await` ในสถานการณ์อื่นทั้งหมด!
 
-When you start the application next, the `admin@todo.local` account will be created and assigned the Administrator role. Try logging in with this account, and navigating to `http://localhost:5000/ManageUsers`. You'll see a list of all users registered for the application.
+หลังจากเริ่มแอปพลิเคชันในครั้งต่อไป บัญชี `admin@todo.local` จะถูกสร้างขึ้นและกำหนดให้มีบทบาทเป็นผู้ดูแลระบบ ลองล็อกอินด้วยบัญชีนี้แล้วเปิดไปที่ `http://localhost:5000/ManageUsers` ก็จะพบรายชื่อผู้ใช้ทั้งหมดที่ลงทะเบียนไว้ในแอปพลิเคชัน
 
-> As an extra challenge, try adding more administration features to this page. For example, you could add a button that gives an administrator the ability to delete a user account.
+> เพื่อเพิ่มความท้าทาย ลองใส่คุณสมบัติด้านการดูแลระบบเพิ่มเติมลงในหน้านี้ ตัวอย่างเช่นคุณอาจเพิ่มปุ่มเพื่อให้ผู้ดูแลระบบสามารถลบบัญชีผู้ใช้ได้
 
-### Check for authorization in a view
+### ตรวจสอบการกำหนดสิทธิใน view
 
-The `[Authorize]` attribute makes it easy to perform an authorization check in a controller or action method, but what if you need to check authorization in a view? For example, it would be nice to display a "Manage users" link in the navigation bar if the logged-in user is an administrator.
+คุณลักษณะ `[Authorize]` ช่วยให้สามารถตรวจสอบการกำหนดสิทธิใน controller หรือในเมธอดแอคชันได้โดยง่าย แล้วถ้าต้องการตรวจสอบสิทธิใน view ล่ะ? ตัวอย่างเช่น หากสามารถแสดงลิงก์เพื่อจัดการผู้ใช้ "Manage users" ในแถบนำทางหากผู้ใช้ที่ล็อกอินอยู่เป็นผู้ดูแลระบบได้ก็คงจะดี
 
-You can inject the `UserManager` directly into a view to do these types of authorization checks. To keep your views clean and organized, create a new partial view that will add an item to the navbar in the layout:
+เราสามารถฉีด `UserManager` เข้าไปใน view ได้โดยตรงเพื่อทำการตรวจสอบสิทธิ เพื่อให้ view ของเราไม่รกและเป็นระเบียบเรียบร้อย เราจะสร้าง view เฉพาะส่วนขึ้นมาใหม่ให้เพิ่มรายการลงใน navbar ในเลย์เอาต์:
 
 **Views/Shared/_AdminActionsPartial.cshtml**
 
@@ -323,11 +323,11 @@ You can inject the `UserManager` directly into a view to do these types of autho
 }
 ```
 
-> It's conventional to name shared partial views starting with an `_` underscore, but it's not required.
+> การตั้งชื่อ view เฉพาะส่วนสำหรับใช้งานร่วมกันนั้นนิยมเริ่มด้วยเส้นใต้หรือ `_` แต่ไม่ได้กำหนดไว้เป็นข้อบังคับ
 
-This partial view first uses the `SignInManager` to quickly determine whether the user is logged in. If they aren't, the rest of the view code can be skipped. If there **is** a logged-in user, the `UserManager` is used to look up their details and perform an authorization check with `IsInRoleAsync()`. If all checks succeed and the user is an adminstrator, a **Manage users** link is added to the navbar.
+view เฉพาะส่วนแรกนี้ใช้ `SignInManager` เพื่อตรวจสอบว่าหากผู้ใช้ยังไม่ได้ล็อกอิน ก็สามารถข้ามโค้ดที่เหลือของ view ไปได้ แต่ถ้า **มี** ผู้ใช้ล็อกอินแล้ว `UserManager` จะถูกใช้เพื่อเรียกดูรายละเอียดและตรวจสอบสิทธิด้วย `IsInRoleAsync()` หากการตรวจสอบทั้งหมดได้สำเร็จและผู้ใช้เป็นผู้ดูแลระบบ ลิงก์ **Manage users** จะถูกเพิ่มเข้าไปยัง navbar
 
-To include this partial in the main layout, edit `_Layout.cshtml` and add it in the navbar section:
+เพื่อเพิ่ม view เฉพาะส่วนนี้เข้าไปยังเลย์เอาต์หลัก ให้แก้ไข `_Layout.cshtml` แล้วเพิ่มไปยังส่วนของ navbar:
 
 **Views/Shared/_Layout.cshtml**
 
@@ -341,7 +341,7 @@ To include this partial in the main layout, edit `_Layout.cshtml` and add it in 
 </div>
 ```
 
-When you log in with an administrator account, you'll now see a new item on the top right:
+เมื่อเราล็อกอินด้วยบัญชีผู้ดูแลระบบแล้ว เราจะพบรายการใหม่ปรากฎขึ้นที่ด้านบนขวาดังนี้:
 
 ![Manage Users link](manage-users.png)
 
