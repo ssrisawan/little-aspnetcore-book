@@ -1,15 +1,15 @@
-## More resources
+## ทรัพยากรเพิ่มเติม
 
-ASP.NET Core Identity helps you add security and identity features like login and registration to your application. The `dotnet new` templates give you pre-built views and controllers that handle these common scenarios so you can get up and running quickly.
+ระบบอัตลักษณ์ของ ASP.NET Core ช่วยให้เราเพิ่มคุณสมบัติด้านการรักษาความปลอดภัยและด้านอัตลักษณ์เช่นการล็อกอินและการลงทะเบียนลงในแอปพลิเคชันของเราได้ เทมเพลต `dotnet new` ได้จัดเตรียม view และ controller ที่พร้อมใช้งานไว้รองรับสถานการณ์ที่มักพบได้ทั่วไป ทำให้เราสามารถเริ่มงานได้อย่างรวดเร็ว
 
-There's much more that ASP.NET Core Identity can do, such as password reset and social login. The documentation available at http://docs.asp.net is a fantastic resource for learning how to add these features.
+ระบบอัตลักษณ์ของ ASP.NET Core ยังสามารถทำอะไรเพิ่มเติมได้อีกมาก เช่นการรีเซตรหัสผ่านและการล็อกอินด้วยบัญชีสื่อสังคมออนไลน์ ซึ่งเอกสารและคู่มือที่ http://docs.asp.net เป็นทรัพยากรที่ช่วยอธิบายวิธีที่ต้องใช้เพื่อเพิ่มคุณสมบัติเหล่านี้ได้เป็นอย่างดี
 
-### Alternatives to ASP.NET Core Identity
+### ทางเลือกอื่นนอกจากระบบอัตลักษณ์ของ ASP.NET Core
 
-ASP.NET Core Identity isn't the only way to add identity functionality. Another approach is to use a cloud-hosted identity service like Azure Active Directory B2C or Okta to handle identity for your application. You can think of these options as part of a progression:
+ระบบอัตลักษณ์ของ ASP.NET Core ไม่ใช่วิธีเดียวที่สามารถใช้เพื่อเพิ่มความสามารถด้านการจัดการอัตลักษณ์ได้ วิธีอื่น ๆ เช่นการใช้บริการจัดการอัตลักษณ์บนคลาวด์ เช่น Azure Active Directory B2C หรือ Okta เพื่อจัดการอัตลักษณ์สำหรับแอปพลิเคชัน ซึ่งอาจคิดได้ว่าเป็นการพัฒนาเพิ่มเติมตามลำดับก็ได้:
 
-* **Do-it-yourself security**: Not recommended, unless you are a security expert!
-* **ASP.NET Core Identity**: You get a lot of code for free with the templates, which makes it pretty easy to get started. You'll still need to write some code for more advanced scenarios, and maintain a database to store user information.
-* **Cloud-hosted identity services**. The service handles both simple and advanced scenarios (multi-factor authentication, account recovery, federation), and significantly reduces the amount of code you need to write and maintain in your application. Plus, sensitive user data isn't stored in your own database.
+* **การรักษาความปลอดภัยด้วยตนเอง**: ไม่แนะนำ นอกจากว่าคุณเป็นผู้เชี่ยวชาญด้านความปลอดภัย!
+* **ระบบอัตลักษณ์ของ ASP.NET Core**:  เราได้โค้ดจำนวนมากมาฟรี ๆ พร้อมกับเทมเพลต ทำให้เราเริ่มทำงานได้อย่างง่ายดาย แต่เรายังต้องเขียนโค้ดบางส่วนด้วยตนเองสำหรับการทำงานขั้นสูงต่าง ๆ และจัดการฐานข้อมูลสำหรับเก็บข้อมูลผู้ใช้
+* **บริการจัดการอัตลักษณ์บนคลาวด์** บริการนี้รองรับทั้งการใช้งานทั่วไปและการทำงานขั้นสูง (การพิสูจน์ตัวตนแบบหลายปัจจัย การกู้คืนบัญชีผู้ใช้ การใช้งานร่วมกัน) และช่วยลดจำนวนโค้ดที่ต้องเขียนและจัดการในแอปพลิเคชันของเราลงได้อย่างมาก นอกจากนี้ ข้อมูลที่มีความละเอียดอ่อนของผู้ใช้ยังไม่ได้ถูกจัดเก็บไว้ในฐานข้อมูลของเราเองอีกด้วย
 
-For this project, ASP.NET Core Identity is a great fit. For more complex projects, I'd recommend doing some research and experimenting with both options to understand which is best for your use case.
+สำหรับโปรเจกต์นี้ ระบบอัตลักษณ์ของ ASP.NET Core ทำงานได้ตรงตามที่เราต้องการ สำหรับโปรเจกต์ที่มีความซับซ้อนกว่านี้ ขอแนะนำให้ค้นคว้าและทดลองวิธีการอื่น ๆ เพิ่มเติมเพื่อให้เข้าใจว่าวิธีใดที่เหมาะสมสำหรับสถานการณ์ของคุณมากที่สุด
