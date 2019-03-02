@@ -1,8 +1,8 @@
-## Using identity in the application
+## การใช้อัตลักษณ์ในแอปพลิเคชัน
 
-The to-do list items themselves are still shared between all users, because the stored to-do entities aren't tied to a particular user. Now that the `[Authorize]` attribute ensures that you must be logged in to see the to-do view, you can filter the database query based on who is logged in.
+ในตอนนี้ ผู้ใช้ทั้งหมดใช้รายการสิ่งที่ต้องทำร่วมกันเนื่องจากแต่ละรายการที่จัดเก็บไว้ไม่ได้ผูกกับผู้ใช้รายใดรายหนึ่งโดยเฉพาะ แต่เนื่องจากคุณลักษณะ `[Authorize]` กำหนดให้ต้องล็อกอินก่อนจึงจะเห็นรายการสิ่งที่ต้องทำ เราจึงสามารถกรองคิวรีฐานข้อมูลตามผู้ใช้ที่ล็อกอินเข้าระบบได้
 
-First, inject a `UserManager<ApplicationUser>` into the `TodoController`:
+อันดับแรก ฉีด `UserManager<ApplicationUser>` เข้าไปยัง `TodoController`:
 
 **Controllers/TodoController.cs**
 
@@ -24,13 +24,13 @@ public class TodoController : Controller
 }
 ```
 
-You'll need to add a new `using` statement at the top:
+เราต้องเพิ่มคำสั่ง `using` ไว้ตอนต้นของโค้ด:
 
 ```csharp
 using Microsoft.AspNetCore.Identity;
 ```
 
-The `UserManager` class is part of ASP.NET Core Identity. You can use it to get the current user in the `Index` action:
+คลาส `UserManager` เป็นส่วนหนึ่งของระบบอัตลักษณ์ใน ASP.NET Core ซึ่งเราสามารถใช้เพื่อรับค่าผู้ใช้ปัจจุบันในแอคชัน `Index` ได้:
 
 ```csharp
 public async Task<IActionResult> Index()
@@ -50,21 +50,21 @@ public async Task<IActionResult> Index()
 }
 ```
 
-The new code at the top of the action method uses the `UserManager` to look up the current user from the `User` property available in the action:
+โค้ดใหม่ที่ตอนต้นของเมธอดแอคชันนี้ใช้ `UserManager` เพื่อเรียกดูผู้ใช้ปัจจุบันจากคุณสมบัติ `User` ที่อยู่ในแอคชัน:
 
 ```csharp
 var currentUser = await _userManager.GetUserAsync(User);
 ```
 
-If there is a logged-in user, the `User` property contains a lightweight object with some (but not all) of the user's information. The `UserManager` uses this to look up the full user details in the database via the `GetUserAsync()` method.
+หากมีผู้ใช้ล็อกอินอยู่ คุณสมบัติ `User` จะมีวัตถุขนาดเบา (lightweight object) ที่มีข้อมูลบางส่วนของผู้ใช้ ซึ่ง `UserManager` จะใช้เพื่อเรียกดูรายละเอียดทั้งหมดของผู้ใช้ขึ้นมาจากฐานข้อมูลผ่านเมธอด `GetUserAsync()`
 
-The value of `currentUser` should never be null, because the `[Authorize]` attribute is present on the controller. However, it's a good idea to do a sanity check, just in case. You can use the `Challenge()` method to force the user to log in again if their information is missing:
+ค่าของ `currentUser` ไม่ควรเป็นค่าว่าง (null) ได้ เนื่องจากคุณสมบัติ `[Authorize]` ถูกใช้อยู่กับ controller อย่างไรก็ตาม เราควรตรวจสอบเพื่อป้องกันไว้ก่อนอยู่เสมอด้วยการใช้เมธอด `Challenge()` เพื่อบังคับให้ผู้ใช้ต้องล็อกอินอีกครั้งหากข้อมูลของผู้ใช้มีไม่ครบ:
 
 ```csharp
 if (currentUser == null) return Challenge();
 ```
 
-Since you're now passing an `ApplicationUser` parameter to `GetIncompleteItemsAsync()`, you'll need to update the `ITodoItemService` interface:
+เนื่องจากเราจะส่งพารามิเตอร์ `ApplicationUser` ให้กับ `GetIncompleteItemsAsync()` เราจึงจำเป็นต้องอัพเดตอินเตอร์เฟส `ITodoItemService`:
 
 **Services/ITodoItemService.cs**
 
@@ -78,7 +78,7 @@ public interface ITodoItemService
 }
 ```
 
-Since you changed the `ITodoItemService` interface, you also need to update the signature of the `GetIncompleteItemsAsync()` method in the `TodoItemService`:
+เนื่องจากเราได้แก้ไขอินเตอร์เฟส `ITodoItemService` เราจึงจำเป็นต้องอัพเดตลายเซ็นของเมธอด `GetIncompleteItemsAsync()` ใน `TodoItemService` ด้วย:
 
 **Services/TodoItemService**
 
@@ -87,11 +87,11 @@ public async Task<TodoItem[]> GetIncompleteItemsAsync(
     ApplicationUser user)
 ```
 
-The next step is to update the database query and add a filter to show only the items created by the current user. Before you can do that, you need to add a new property to the database.
+ขั้นตอนต่อไปคือการอัพเดตคิวรีฐานข้อมูลและเพิ่มตัวกรองเพื่อให้แสดงเฉพาะรายการที่ถูกสร้างโดยผู้ใช้ปัจจุบัน ซึ่งก่อนจะทำเช่นนั้นได้ เราต้องเพิ่มคุณสมบัติใหม่เข้าไปในฐานข้อมูล
 
-### Update the database
+### อัพเดตฐานข้อมูล
 
-You'll need to add a new property to the `TodoItem` entity model so each item can "remember" the user that owns it:
+เราจำเป็นต้องเพิ่มคุณสมบัติใหม่เข้าไปในโมเดลเอนทิตี `TodoItem` เพื่อให้แต่ละรายการสามารถ "จำ" ผู้ใช้ที่เป็นเจ้าของได้:
 
 **Models/TodoItem.cs**
 
@@ -99,23 +99,23 @@ You'll need to add a new property to the `TodoItem` entity model so each item ca
 public string UserId { get; set; }
 ```
 
-Since you updated the entity model used by the database context, you also need to migrate the database. Create a new migration using `dotnet ef` in the terminal:
+เนื่องจากเราได้อัพเดตโมเดลเอนทิตีที่ถูกใช้โดยบริบทฐานข้อมูลแล้ว เราจึงจำเป็นต้องโยกย้ายฐานข้อมูลดโดยใช้คำสั่ง `dotnet ef` ในเทอร์มินัล:
 
 ```
 dotnet ef migrations add AddItemUserId
 ```
 
-This creates a new migration called `AddItemUserId` which will add a new column to the `Items` table, mirroring the change you made to the `TodoItem` model.
+คำสั่งนี้จะสร้างการโยกย้ายใหม่ในชื่อ `AddItemUserId` ซึ่งจะเพิ่มคอลัมน์ใหม่ในตาราง `Items` ให้สอดคล้องกับความเปลี่ยนแปลงที่เราทำไว้กับโมเดล `TodoItem`
 
-Use `dotnet ef` again to apply it to the database:
+รัน `dotnet ef` อีกครั้งเพื่อนำไปใช้กับฐานข้อมูล:
 
 ```
 dotnet ef database update
 ```
 
-### Update the service class
+### อัพเดตคลาสบริการ
 
-With the database and the database context updated, you can now update the `GetIncompleteItemsAsync()` method in the `TodoItemService` and add another clause to the `Where` statement:
+หลังจากได้ปอัพเดตฐานข้อมูลและบริบทของฐานข้อมูลเรียบร้อยแล้ว เราสามารถอัพเดตเมธอด `GetIncompleteItemsAsync()` ใน `TodoItemService` และเพิ่มอีกวรรคหนึ่งเข้าไปยังคำสั่ง `Where`:
 
 **Services/TodoItemService.cs**
 
@@ -129,13 +129,13 @@ public async Task<TodoItem[]> GetIncompleteItemsAsync(
 }
 ```
 
-If you run the application and register or log in, you'll see an empty to-do list once again. Unfortunately, any items you try to add disappear into the ether, because you haven't updated the `AddItem` action to be user-aware yet.
+หลังจากรันแอปพลิเคชันแล้วลงทะเบียนหรือล็อกอินแล้ว เราจะพบรายการสิ่งที่ต้องทำที่ว่างเปล่าอีกครั้ง แต่โชคร้ายที่รายการใด ๆ ที่เคยเพิ่มไว้ก่อนหน้านี้จะหายไปกลายเป็นอากาศธาตุ เนื่องจากเรายังไม่ได้อัพเดตแอคชัน `AddItem` ให้รับรู้ถึงการกำหนดผู้ใช้
 
-### Update the AddItem and MarkDone actions
+### อัพเดตแอคชัน AddItem และ MarkDone
 
-You'll need to use the `UserManager` to get the current user in the `AddItem` and `MarkDone` action methods, just like you did in `Index`.
+เราจำเป็นต้องใช้ `UserManager` เพื่อรับค่าผู้ใช้ปัจจุบันในเมธอดแอคชัน `AddItem` และ `MarkDone` เหมือนกับที่ทำไว้กับ `Index`
 
-Here are both updated methods:
+ทั้งสองเมธอดที่ถูกอัพเดตไว้จะเป็นดังนี้:
 
 **Controllers/TodoController.cs**
 
@@ -185,7 +185,7 @@ public async Task<IActionResult> MarkDone(Guid id)
 }
 ```
 
-Both service methods must now accept an `ApplicationUser` parameter. Update the interface definition in `ITodoItemService`:
+ในตอนนี้ เมธอดบริการทั้งสองจะต้องรับค่าพารามิเตอร์ `ApplicationUser` ให้อัพเดตข้อกำหนดของอินเตอร์เฟสใน `ITodoItemService` ดังนี้:
 
 ```csharp
 Task<bool> AddItemAsync(TodoItem newItem, ApplicationUser user);
@@ -193,7 +193,7 @@ Task<bool> AddItemAsync(TodoItem newItem, ApplicationUser user);
 Task<bool> MarkDoneAsync(Guid id, ApplicationUser user);
 ```
 
-And finally, update the service method implementations in the `TodoItemService`. In `AddItemAsync` method, set the `UserId` property when you construct a `new TodoItem`:
+และท้ายที่สุด ให้อัพเดตการทำงานของเมธอดบริการ `TodoItemService` ในเมธอด `AddItemAsync` ให้กำหนดคุณสมบัติ `UserId` ขณะสร้าง `new TodoItem`:
 
 ```csharp
 public async Task<bool> AddItemAsync(
@@ -208,7 +208,7 @@ public async Task<bool> AddItemAsync(
 }
 ```
 
-The `Where` clause in the `MarkDoneAsync` method also needs to check for the user's ID, so a rogue user can't complete someone else's items by guessing their IDs:
+ประโยค `Where` ในเมธอด `MarkDoneAsync` ยังจำเป็นต้องตรวจสอบ ID ของผู้ใช้ เพื่อไม่ให้ผู้ไม่หวังดีสามารถกำหนดว่างานของผู้ใช้รายอื่นเสร็จแล้วได้จากการเดา ID ของผู้ใช้เหล่านั้น:
 
 ```csharp
 public async Task<bool> MarkDoneAsync(
@@ -222,4 +222,4 @@ public async Task<bool> MarkDoneAsync(
 }
 ```
 
-All done! Try using the application with two different user accounts. The to-do items stay private for each account.
+เรียบร้อยแล้ว! ลองใช้แอปพลิเคชันกับสองผู้ใช้ที่แตกต่างกันดู จะพบว่ารายการสิ่งที่ต้องทำถูกจำกัดไว้เป็นส่วนตัวสำหรับแต่ละผู้ใช้เท่านั้น
