@@ -1,4 +1,4 @@
 # การทดสอบโดยอัตโนมัติ
-Writing tests is an important part of building any application. Testing your code helps you find and avoid bugs, and makes it easier to refactor your code later without breaking functionality or introducing new problems.
+การเขียนการทดสอบเป็นหนึ่งในส่วนสำคัญของการสร้างแอปพลิเคชัน การทดสอบโค้ดช่วยให้เราสามารถค้นพบและหลีกเลี่ยงการเกิดบั๊ก รวมทั้งทำให้สามารถรีแฟคเตอร์โค้ดของเราได้ในภายหลังโดยไม่ทำให้ฟังก์ชันการทำงานเสียหายหรือก่อให้เกิดปัญหาใหม่ขึ้น
 
-In this chapter you'll learn how to write both **unit tests** and **integration tests** that exercise your ASP.NET Core application. Unit tests are small tests that make sure a single method or chunk of logic works properly. Integration tests (sometimes called **functional** tests) are larger tests that simulate real-world scenarios and test multiple layers or parts of your application.
+ในบทนี้ เราจะมาเรียนรู้เกี่ยวกับการเขียนทั้ง **การทดสอบหน่วยย่อย (unit tests)** และ **การทดสอบทั้งระบบ (integration tests)** ที่จะกระทำกับแอปพลิเคชัน ASP.NET Core ของเรา การทดสอบหน่วยย่อยเป็นการทดสอบเล็ก ๆ ที่ทำให้มั่นใจได้ว่าเมธอดใด ๆ หรือชิ้นส่วนของตรรกะทำงานได้อย่างถูกต้อง ขณะที่การทดสอบทั้งระบบซึ่งบางครั้งเรียกว่า **การทดสอบการทำงาน (functional test)** เป็นการทดสอบที่มีขนาดใหญ่กว่าที่จำลองสถานการณ์ในการทำงานจริงและทำการทดสอบองค์ประกอบต่าง ๆ ของแอปพลิเคชันในหลายระดับ
