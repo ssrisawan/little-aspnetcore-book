@@ -1,26 +1,26 @@
-## Unit testing
+## การทดสอบหน่วยย่อย (Unit testing)
 
-Unit tests are small, short tests that check the behavior of a single method or class. When the code you're testing relies on other methods or classes, unit tests rely on **mocking** those other classes so that the test only focuses on one thing at a time.
+การทดสอบหน่วยย่อยเป็นการทดสอบขนาดเล็กที่กระทำในช่วงสั้น ๆ เพื่อทดสอบพฤติกรรมของหนึ่งเมธอดหรือหนึ่งคลาส หากโค้ดของเราต้องพึ่งพาเมธอดหรือคลาสอื่น ๆ แล้ว การทดสอบหน่วยย่อยจะ **จำลอง (mocking)** คลาสเหล่านั้นขึ้นมาเพื่อให้การทดสอบมุ่งกระทำไปที่ ส่วนใดส่วนหนึ่งในแต่ละการทดสอบเท่านั้น
 
-For example, the `TodoController` class has two dependencies: an `ITodoItemService` and the `UserManager`. The `TodoItemService`, in turn, depends on the `ApplicationDbContext`. (The idea that you can draw a line from `TodoController` > `TodoItemService` > `ApplicationDbContext` is called a **dependency graph**).
+ตัวอย่างเช่นคลาส `TodoController` มีสองความขึ้นต่อกัน: `ITodoItemService` และ `UserManager` ขณะที่ `TodoItemService` ยังขึ้นอยู่กับ `ApplicationDbContext` อีกด้วย (เส้นเชื่อมที่ลากจาก `TodoController` > `TodoItemService` > `ApplicationDbContext` เรียกได้ว่าเป็น **กราฟแสดงความขึ้นต่อกัน (dependency graph)**)
 
-When the application runs normally, the ASP.NET Core service container and dependency injection system injects each of those objects into the dependency graph when the `TodoController` or the `TodoItemService` is created.
+หากแอปพลิเคชันรันตามปกติ คอนเทนเนอร์บริการและระบบ dependency injection จะฉีดวัตถุเหล่านี้แต่ละตัวเข้าไปในกราฟแสดงความขึ้นต่อกันขณะที่ `TodoController` หรือ `TodoItemService` ถูกสร้างขึ้น
 
-When you write a unit test, on the other hand, you have to handle the dependency graph yourself. It's typical to provide test-only or "mocked" versions of those dependencies. This means you can isolate just the logic in the class or method you are testing. (This is important! If you're testing a service, you don't want to **also** be accidentally writing to your database.)
+แต่ในทางกลับกัน ขณะที่เราเขียนการทดสอบหน่วยย่อยนั้น เราต้องทำงานกับกราฟแสดงความขึ้นต่อกันด้วยตนเอง โดยทั่วไปจะใช้สิ่งขึ้นต่อกันในเวอร์ชันเพื่อการทดสอบหรือเวอร์ชันที่ถูกจำลองขึ้นมาเท่านั้น ทำให้เราสามารถแยกเฉพาะตรรกะในคลาสหรือเมธอดที่เรากำลังทดสอบอยู่ออกมาได้ (นี่เป็นเรื่องสำคัญ! หากคุณกำลังทดสอบบริการใด ๆ คุณคงไม่ต้องการ **เขียน** ลงในฐานข้อมูลโดยไม่ได้ตั้งใจ)
 
-### Create a test project
+### สร้างโปรเจกต์เพื่อการทดสอบ
 
-It's a best practice to create a separate project for your tests, so they are kept separate from your application code. The new test project should live in a directory that's next to (not inside) your main project's directory.
+การสร้างโปรเจกต์แยกออกมาเพื่อการทดสอบโดยเฉพาะเป็นแนวปฏิบัติที่ดี เพราะสามารถแยกส่วนออกมาจากโค้ดของแอปพลิเคชันของเราได้ โปรเจกต์ทดสอบที่สร้างขึ้นมาใหม่นี้ควรถูกจัดเก็บไว้ในระดับเดียวกันกับ (ไม่ใช่ภายใต้) ไดเรกทอรีหลักของโปรเจกต์
 
-If you're currently in your project directory, `cd` up one level. (This root directory will also be called `AspNetCoreTodo`). Then use this command to scaffold a new test project:
+หากตอนนี้คุณอยู่ในไดเรกทอรีของโปรเจกต์ ให้ `cd` ย้อนขึ้นไปหนึ่งระดับ (ไดเรกทอรีในระดับรากนี้ก็ถูกตั้งชื่อไว้ว่า `AspNetCoreTodo` เช่นกัน) จากนั้นให้ใช้คำสั่งนี้เพื่อขึ้นโครงโปรเจกต์เพื่อการทดสอบ:
 
 ```
 dotnet new xunit -o AspNetCoreTodo.UnitTests
 ```
 
-xUnit.NET is a popular test framework for .NET code that can be used to write both unit and integration tests. Like everything else, it's a set of NuGet packages that can be installed in any project. The `dotnet new xunit` template already includes everything you need.
+xUnit.NET เป็นเฟรมเวิร์กเพื่อการทดสอบที่นิยมใช้สำหรับโค้ด .NET และสามารถนำมาใช้เพื่อเขียนได้ทั้งการทดสอบหน่วยย่อยและการทดสอบทั้งระบบ โดยอยู่ในรูปแบบของแพคเกจ NuGet เช่นเดียวกับส่วนอื่น ๆ ที่สามารถติดตั้งลงในโปรเจกต์ใดก็ได้ และเทมเพลต `dotnet new xunit` ได้รวมเอาทุกอย่างที่จำเป็นต้องใช้ไว้ให้แล้ว
 
-Your directory structure should now look like this:
+ในตอนนี้ โครงสร้างไดเรกทอรีของเราควรอยู่ในรูปแบบดังนี้:
 
 ```
 AspNetCoreTodo/
@@ -33,19 +33,19 @@ AspNetCoreTodo/
         AspNetCoreTodo.UnitTests.csproj
 ```
 
-Since the test project will use the classes defined in your main project, you'll need to add a reference to the `AspNetCoreTodo` project:
+เนื่องจากโปรเจกต์ทดสอบจะใช้คลาสต่าง ๆ ที่ถูกเขียนไว้ในโปรเจกต์หลัก เราจึงจำเป็นต้องเพิ่มการอ้างอิงไปยังโปรเจกต์ `AspNetCoreTodo`:
 
 ```
 dotnet add reference ../AspNetCoreTodo/AspNetCoreTodo.csproj
 ```
 
-Delete the `UnitTest1.cs` file that's automatically created. You're ready to write your first test.
+ให้ลบไฟล์ `UnitTest1.cs` ที่ถูกสร้างขึ้นมาโดยอัตโนมัติ ในตอนนี้เราก็พร้อมที่จะเขียนการทดสอบแรกแล้ว
 
-> If you're using Visual Studio Code, you may need to close and reopen the Visual Studio Code window to get code completion working in the new project.
+> หากคุณใช้ Visual Studio Code คุณอาจต้องปิดและเปิดหน้าต่างของ Visual Studio Code อีกครั้งเพื่อให้การเติมโค้ด (code completion) ทำงานได้ในโปรเจกต์ใหม่
 
-### Write a service test
+### เขียนการทดสอบบริการ
 
-Take a look at the logic in the `AddItemAsync()` method of the `TodoItemService`:
+ลองดูที่ตรรกะในเมธอด `AddItemAsync()` ของ `TodoItemService`:
 
 ```csharp
 public async Task<bool> AddItemAsync(
@@ -63,18 +63,18 @@ public async Task<bool> AddItemAsync(
 }
 ```
 
-This method makes a number of decisions or assumptions about the new item (in other words, performs business logic on the new item) before it actually saves it to the database:
+เมธอดนี้ตัดสินใจหรือทำตามเงื่อนไขต่าง ๆ หลายประการเกี่ยวกับรายการที่สร้างขึ้นมาใหม่ (หรืออีกนัยหนึ่งคือดำเนินการตามตรรกะธุรกิจกับรายการใหม่) ก่อนที่จะบันทึกลงในฐานข้อมูลจริง:
 
-* The `UserId` property should be set to the user's ID
-* New items should always be incomplete (`IsDone = false`)
-* The title of the new item should be copied from `newItem.Title`
-* New items should always be due 3 days from now
+* คุณสมบัติ `UserId` ควรได้รับการกำหนดค่าให้เป็น ID ของผู้ใช้
+* รายการที่สร้างขึ้นใหม่ควรมีสถานะเป็นยังไม่แล้วเสร็จอยู่เสมอ (`IsDone = false`)
+* ชื่อเรื่องของรายการใหม่ควรถูกคัดลอกมาจาก `newItem.Title`
+* รายการที่สร้างขึ้นใหม่ควรมีวันครบกำหนดเป็น 3 วันนับจากวันนี้เสมอ
 
-Imagine if you or someone else refactored the `AddItemAsync()` method and forgot about part of this business logic. The behavior of your application could change without you realizing it! You can prevent this by writing a test that double-checks that this business logic hasn't changed (even if the method's internal implementation changes).
+ลองจินตนาการว่าหากคุณหรือใครสักคนได้รีแฟคเตอร์เมธอด `AddItemAsync()` แล้วลืมเกี่ยวกับส่วนของตรรกะทางธุรกิจนี้ ก็อาจทำให้พฤติกรรมของแอปพลิเคชันเปลี่ยนไปโดยไม่ได้คาดคิด! เราสามารถป้องกันเหตุการณ์เช่นนี้ได้โดยเขียนการทดสอบให้ตรวจสอบซ้ำอีกครั้งว่าตรรกะทางธุรกิจนี้ไม่ได้ถูกเปลี่ยนแปลงไป (แม้ว่าส่วนของการทำงานภายในของเมธอดจะถูกแก้ไขก็ตาม)
 
-> It might seem unlikely now that you could introduce a change in business logic without realizing it, but it becomes much harder to keep track of decisions and assumptions in a large, complex project. The larger your project is, the more important it is to have automated checks that make sure nothing has changed!
+> ถึงแม้ว่าการเปลี่ยนแปลงตรรกะทางธุรกิจโดยไม่คาดคิดนั้นดูไม่น่าจะเกิดขึ้นได้ แต่การคอยจดจำว่าได้ตัดสินใจหรือทำตามเงื่อนไขอะไรไปในโปรเจกต์ขนาดใหญ่ที่มีความซับซ้อนสูงนั้นอาจยากขึ้นมาก ยิ่งโปรเจกต์มีขนาดใหญ่ขึ้นก็ยิ่งจำเป็นต้องมีระบบตรวจสอบอัตโนมัติเพื่อให้แน่ใจว่าไม่มีสิ่งใดถูกเปลี่ยนแปลงไป!
 
-To write a unit test that will verify the logic in the `TodoItemService`, create a new class in your test project:
+เพื่อเขียนการทดสอบหน่วยย่อยให้ยืนยันตรรกะใน `TodoItemService` เราต้องสร้างคลาสใหม่ขึ้นในโปรเจกต์ทดสอบ:
 
 **AspNetCoreTodo.UnitTests/TodoItemServiceShould.cs**
 
@@ -100,13 +100,13 @@ namespace AspNetCoreTodo.UnitTests
 }
 ```
 
-> There are many different ways of naming and organizing tests, all with different pros and cons. I like postfixing my test classes with `Should` to create a readable sentence with the test method name, but feel free to use your own style!
+> มีหลายวิธีที่สามารถนำมาใช้ตั้งชื่อและจัดโครงสร้างในการทดสอบได้โดยแต่ละวิธีก็มีทั้งข้อดีและข้อเสีย แต่ผู้เขียนนิยมนำหน้าชื่อคลาสต่าง ๆ สำหรับการทดสอบด้วย `Should` เพื่อให้เป็นประโยคที่อ่านแล้วสอดคล้องกับชื่อของเมธอดทดสอบ แต่คุณจะใช้แนวทางอย่างไรก็ได้ตามต้องการ!
 
-The `[Fact]` attribute comes from the xUnit.NET package, and it marks this method as a test method.
+คุณลักษณะ `[Fact]` มาจากแพคเกจ xUnit.NET และสามารถใช้เพื่อระบุว่าเมธอดนี้เป็นเมธอดทดสอบได้
 
-The `TodoItemService` requires an `ApplicationDbContext`, which is normally connected to your database. You won't want to use that for tests. Instead, you can use Entity Framework Core's in-memory database provider in your test code. Since the entire database exists in memory, it's wiped out every time the test is restarted. And, since it's a proper Entity Framework Core provider, the `TodoItemService` won't know the difference!
+`TodoItemService` จำเป็นต้องใช้ `ApplicationDbContext` ซึ่งปกติแล้วจะเชื่อมต่ออยู่กับฐานข้อมูล แต่เราไม่ต้องการนำมาใช้ในการทดสอบเช่นนี้ ทั้งนี้ เราสามารถใช้ผู้ให้บริการฐานข้อมูลแบบอยู่ในหน่วยความจำของ Entity Framework Core ในโค้ดของเราแทนได้ เนื่องจากฐานข้อมูลทั้งหมดอยู่ในหน่วยความจำ จึงจะถูกล้างออกทั้งหมดทุกครั้งที่การทดสอบสิ้นสุดและเริ่มใหม่อีกครั้ง และเนื่องจากผู้ให้บริการนี้เป็นส่วนหนึ่งของ Entity Framework Core ดังนั้น `TodoItemService` จึงไม่สามารถบอกความแตกต่างได้!
 
-Use a `DbContextOptionsBuilder` to configure the in-memory database provider, and then make a call to `AddItemAsync()`:
+ใช้ `DbContextOptionsBuilder` เพื่อกำหนดค่าผู้ให้บริการฐานข้อมูลในหน่วยความจำ แล้วเรียกใช้ `AddItemAsync()`:
 
 ```csharp
 var options = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -130,9 +130,9 @@ using (var context = new ApplicationDbContext(options))
 }
 ```
 
-The last line creates a new to-do item called `Testing?`, and tells the service to save it to the (in-memory) database.
+บรรทัดสุดท้ายจะสร้างรายการสิ่งที่ต้องทำในชื่อ  `Testing?` แล้วจึงบอกกับบริการให้บันทึกลงในฐานข้อมูล (ในหน่วยความจำ)
 
-To verify that the business logic ran correctly, write some more code below the existing `using` block:
+เพื่อยืนยันว่าตรรกะทางธุรกิจทำงานได้อย่างถูกต้อง ให้เขียนโค้ดเพิ่มเติมไว้ใต้บล็อก `using` ดังนี้:
 
 ```csharp
 // Use a separate context to read data back from the "DB"
@@ -152,21 +152,21 @@ using (var context = new ApplicationDbContext(options))
 }
 ```
 
-The first assertion is a sanity check: there should never be more than one item saved to the in-memory database. Assuming that's true, the test retrieves the saved item with `FirstAsync` and then asserts that the properties are set to the expected values.
+การยืนยัน (assert) ครั้งแรกเป็นการตรวจสอบความถูกต้อง: เนื่องจากไม่ควรมีข้อมูลมากกว่าหนึ่งรายการถูกบันทึกไว้ในฐานข้อมูล หากเป็นจริง การทดสอบจะรับรายการที่ถูกบันทึกไว้ขึ้นมาด้วย `FirstAsync` แล้วจึงยืนยันว่าคุณสมบัติต่าง ๆ ถูกกำหนดไว้ด้วยค่าตามที่คาดการณ์ไว้
 
-> Both unit and integration tests typically follow the AAA (Arrange-Act-Assert) pattern: objects and data are set up first, then some action is performed, and finally the test checks (asserts) that the expected behavior occurred.
+> โดยทั่วไป ทั้งการทดสอบหน่วยย่อยแและการทดสอบทั้งระบบจะทำตามแบบแผน AAA (Arrange-Act-Assert): วัตถุต่าง ๆ และข้อมูลถูกกำหนดค่าเป็นอันดับแรก จากนั้นจึงดำเนินการบางอย่าง และท้ายที่สุดก็จะตรวจสอบหรือยืนยัน (assert) ว่าการทำงานที่ได้เป็นไปตามที่คาดการณ์ไว้
 
-Asserting a datetime value is a little tricky, since comparing two dates for equality will fail if even the millisecond components are different. Instead, the test checks that the `DueAt` value is less than a second away from the expected value.
+การยืนยันค่าวันที่และเวลา (datetime) ทำได้ยากกว่าเล็กน้อย เนื่องจากการเปรียบเทียบเวลาที่ต่างกันแม้เพียงมิลลิวินาทีก็จะมีผลเป็นไม่เท่ากันได้ ดังนั้น การทดสอบนี้จึงตรวจสอบว่าค่า `DueAt` ต้องต่างจากค่าที่คาดการณ์ไว้ไม่เกินหนึ่งวินาทีแทนที่จะต้องเท่ากัน
 
-### Run the test
+### รันการทดสอบ
 
-On the terminal, run this command (make sure you're still in the `AspNetCoreTodo.UnitTests` directory):
+ให้รันคำสั่งนี้ในเทอร์มินัล (โปรดตรวจสอบว่าคุณยังอยู่ในไดเรกทอรี `AspNetCoreTodo.UnitTests`):
 
 ```
 dotnet test
 ```
 
-The `test` command scans the current project for tests (marked with `[Fact]` attributes in this case), and runs all the tests it finds. You'll see output similar to:
+คำสั่ง `test` จะสแกนหาการทดสอบต่าง ๆ สำหรับโปรเจกต์ (ซึ่งในกรณีนี้ถูกระบุไว้ด้วยคุณลักษณะ `[Fact]`) แล้วจึงรันการทดสอบทั้งหมดที่พบ ซึ่งจะแสดงผลลัพธ์ที่มีลักษณะดังนี้:
 
 ```
 Starting test execution, please wait...
@@ -180,8 +180,8 @@ Test Run Successful.
 Test execution time: 1.9074 Seconds
 ```
 
-You now have one test providing test coverage of the `TodoItemService`. As an extra challenge, try writing unit tests that ensure:
+ในตอนนี้เราก็มีการทดสอบที่ครอบคลุม `TodoItemService` แล้ว เพื่อเพิ่มความท้าทาย ลองเขียนการทดสอบหน่วยย่อยเพิ่มเติมเพื่อยืนยันว่า:
 
-* The `MarkDoneAsync()` method returns false if it's passed an ID that doesn't exist
-* The `MarkDoneAsync()` method returns true when it makes a valid item as complete
-* The `GetIncompleteItemsAsync()` method returns only the items owned by a particular user
+* เมธอด `MarkDoneAsync()` คืนค่าเป็นเท็จ หากได้รับค่า ID ที่ไม่มีอยู่จริง
+* เมธอด `MarkDoneAsync()` คืนค่าเป็นจริงเมื่อได้กำหนดให้รายการหนึ่งมีสถานะเป็นเสร็จสมบูรณ์
+* เมธอด `GetIncompleteItemsAsync()` คืนค่าเฉพาะรายการต่าง ๆ ที่ผู้ใช้รายหนึ่ง ๆ เป็นเจ้าของเท่านั้น

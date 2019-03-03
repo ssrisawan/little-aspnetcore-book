@@ -1,4 +1,4 @@
-## Integration testing
+## การทดสอบทั้งระบบ (Integration testing)
 
 Compared to unit tests, integration tests are much larger in scope. exercise the whole application stack. Instead of isolating one class or method, integration tests ensure that all of the components of your application are working together properly: routing, controllers, services, database code, and so on.
 
