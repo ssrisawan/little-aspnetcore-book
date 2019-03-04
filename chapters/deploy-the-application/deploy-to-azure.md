@@ -1,17 +1,17 @@
-## Deploy to Azure
+## นำส่งขึ้นอาชัวร์
 
-Deploying your ASP.NET Core application to Azure only takes a few steps. You can do it through the Azure web portal, or on the command line using the Azure CLI. I'll cover the latter.
+การนำแอปพลิเคชัน ASP.NET Core ของเราขึ้นสู่อาชัวร์มีเพียงไม่กี่ขั้นตอนเท่านั้น เราสามารถทำได้ผ่านเว็บพอร์ทัลของอาชัวร์หรือผ่านบรรทัดคำสั่งด้วยอาชัวร์ CLI ซึ่งจะได้อธิบายต่อไปในภายหลัง
 
-### What you'll need
+### ต้องใช้อะไรบ้าง
 
-* Git (use `git --version` to make sure it's installed)
-* The Azure CLI (follow the install instructions at https://github.com/Azure/azure-cli)
-* An Azure subscription (the free subscription is fine)
-* A deployment configuration file in your project root
+* Git (ใช้คำสั่ง `git --version` เพื่อตรวจสอบว่าได้ติดตั้งเรียบร้อยแล้ว)
+* อาชัวร์ CLI (ทำตามขั้นตอนที่ https://github.com/Azure/azure-cli)
+* สถานะสมาชิกอาชัวร์ (สถานะแบบฟรีก็ใช้งานได้)
+* ไฟล์สำหรับกำหนดค่าการนำส่ง (deployment configuration file) ที่รากของโปรเจกต์
 
-### Create a deployment configuration file
+### สร้างไฟล์สำหรับกำหนดค่าการนำส่ง
 
-Since there are multiple projects in your directory structure (the web application, and two test projects), Azure won't know which one to publish. To fix this, create a file called `.deployment` at the very top of your directory structure:
+เนื่องจากมีหลายโปรเจกต์อยู่ในโครงสร้างไดเรกทอรีของเรา (เว็บแอปพลิเคชัน และโปรเจกต์ทดสอบสองโปรเจกต์) อาชัวร์จึงไม่สามารถรู้ได้ว่าต้องการใช้โปรเจกต์ใด เพื่อแก้ปัญหานี้ ให้สร้างไฟล์ชื่อ `.deployment` ที่ชั้นบนสุดของโครงสร้างไดเรกทอรีของเรา:
 
 **.deployment**
 
@@ -20,9 +20,9 @@ Since there are multiple projects in your directory structure (the web applicati
 project = AspNetCoreTodo/AspNetCoreTodo.csproj
 ```
 
-Make sure you save the file as `.deployment` with no other parts to the name. (On Windows, you may need to put quotes around the filename, like `".deployment"`, to prevent a `.txt` extension from being added.)
+ตรวจสอบให้แน่ใจว่าไฟล์ `.deployment` ที่ถูกบันทึกไว้ไม่มีส่วนขยายใด ๆ (บนวินโดวส์ อาจจำเป็นต้องใส่เครื่องหมายคำพูดครอบชื่อไฟล์ เช่น `".deployment"` เพื่อป้องกันไม่ให้ส่วนขยาย `.txt` ถูกเพิ่มไว้ท้ายไฟล์)
 
-If you `ls` or `dir` in your top-level directory, you should see these items:
+หากรัน `ls` หรือ `dir` ในไดเรกทอรีระดับบนสุด ควรปรากฎรายการดังต่อไปนี้:
 
 ```
 .deployment
@@ -31,42 +31,42 @@ AspNetCoreTodo.IntegrationTests
 AspNetCoreTodo.UnitTests
 ```
 
-### Set up the Azure resources
+### จัดเตรียมทรัพยากรของอาชัวร์
 
 
-If you just installed the Azure CLI for the first time, run
+หากเพิ่งติดตั้งอาชัวร์ CLI เป็นครั้งแรก ให้รันคำสั่งนี้
 
 ```
 az login
 ```
 
-and follow the prompts to log in on your machine. Then, create a new Resource Group for this application:
+แล้วทำตามขั้นตอนที่ปรากฎเพื่อล็อกอินเข้าไปยังเครื่องของคุณ จากนั้นให้สร้างกลุ่มของทรัพยากรสำหรับแอปพลิเคชันนี้:
 
 ```
 az group create -l westus -n AspNetCoreTodoGroup
 ```
 
-This creates a Resource Group in the West US region. If you're located far away from the western US, use `az account list-locations` to get a list of locations and find one closer to you.
+คำสั่งนี้จะสร้างกลุ่มของทรัพยากรขึ้นทางภาคตะวันตกของสหรัฐอเมริกา หากคุณอยู่ไกลจากพื้นที่ภาคตะวันตกของสหรัฐฯ ให้ใช้คำสั่ง `az account list-locations` เพื่อเรียกดูรายการสถานที่ที่มีให้ใช้งานได้ แล้วเลือกที่ใกล้กับคุณมาหนึ่งแห่ง
 
-Next, create an App Service plan in the group you just created:
+อันดับต่อมา ให้สร้างแผนสำหรับบริการของแอป (App Service plan) ในกลุ่มที่เพิ่งสร้างขึ้น:
 
 ```
 az appservice plan create -g AspNetCoreTodoGroup -n AspNetCoreTodoPlan --sku F1
 ```
 
-> F1 is the free app plan. If you want to use a custom domain name with your app, use the D1 ($10/month) plan or higher.
+> F1 เป็นแผนฟรีไม่มีค่าใช้จ่าย แต่ถ้าต้องการกำหนดโดเมนเนมสำหรับแอป ให้ใช้แผน D1 ($10/เดือน) หรือแผนที่สูงกว่า
 
-Now create a Web App in the App Service plan:
+จากนั้น สร้างเว็บแอปขึ้นในแผนสำหรับบริการของแอป:
 
 ```
 az webapp create -g AspNetCoreTodoGroup -p AspNetCoreTodoPlan -n MyTodoApp
 ```
 
-The name of the app (`MyTodoApp` above) must be globally unique in Azure. Once the app is created, it will have a default URL in the format: http://mytodoapp.azurewebsites.net
+ชื่อของแอป (จากด้านบนคือ `MyTodoApp`) จะต้องไม่ซ้ำกันบนอาชัวร์ หลังจากที่แอปถูกสร้างขึ้นแล้ว ก็จะได้ URL ตั้งต้นในรูปแบบดังนี้: http://mytodoapp.azurewebsites.net
 
-### Deploy your project files to Azure
+### นำส่งไฟล์โปรเจกต์ขึ้นบนอาชัวร์
 
-You can use Git to push your application files up to the Azure Web App. If your local directory isn't already tracked as a Git repo, run these commands to set it up:
+เราสามารถใช้ Git เพื่อส่งไฟล์แอปพลิเคชันของเราขึ้นไปยังอาชัวร์เว็บแอปได้ หากไดเรกทอรีในเครื่องโลคอลยังไม่ได้ทำเป็น Git repo เพื่อติดตามการเปลี่ยนแปลง ให้ใช้คำสั่งต่อไปนี้เพื่อเริ่มใช้งาน:
 
 ```
 git init
@@ -74,13 +74,13 @@ git add .
 git commit -m "First commit!"
 ```
 
-Next, create an Azure username and password for deployment:
+จากนั้น ให้สร้างชื่อผู้ใช้และรหัสผ่านของอาชัวร์เพื่อเตรียมการนำส่ง:
 
 ```
 az webapp deployment user set --user-name nate
 ```
 
-Follow the instructions to create a password. Then use `config-local-git` to spit out a Git URL:
+ให้ทำตามขั้นตอนเพื่อสร้างรหัสผ่าน จากนั้นให้ใช้ `config-local-git` เพื่อให้แสดง Git URL:
 
 ```
 az webapp deployment source config-local-git -g AspNetCoreTodoGroup -n MyTodoApp --out tsv
@@ -88,18 +88,18 @@ az webapp deployment source config-local-git -g AspNetCoreTodoGroup -n MyTodoApp
 https://nate@mytodoapp.scm.azurewebsites.net/MyTodoApp.git
 ```
 
-Copy the URL to the clipboard, and use it to add a Git remote to your local repository:
+คัดลอก URL ไปยังคลิปบอร์ด แล้วใช้เพื่อเพิ่ม Git remote ไปยัง repository บนเครื่องโลคอล:
 
 ```
 git remote add azure <paste>
 ```
 
-You only need to do these steps once. Now, whenever you want to push your application files to Azure, check them in with Git and run
+เราต้องทำตามขั้นตอนข้างต้นเพียงหนึ่งครั้ง จากนี้ไป เมื่อใดก็ตามที่ต้องการส่งไฟล์แอปพลิเชันของเราขึ้นไปยังอาชัวร์ ให้นำส่งด้วย Git ด้วยคำสั่ง
 
 ```
 git push azure master
 ```
 
-You'll see a stream of log messages as the application is deployed to Azure.
+เราจะเห็นข้อความล็อกปรากฎขึ้นเป็นสายขณะที่แอปพลิเคชันถูกนำส่งขึ้นบนอาชัวร์
 
-When it's complete, browse to http://yourappname.azurewebsites.net to check out the app!
+เมื่อทำงานเสร็จแล้ว ให้เปิดเบราว์เซอร์ไปที่ http://yourappname.azurewebsites.net เพื่อเรียกใช้แอป!
