@@ -1,22 +1,22 @@
 ## การทดสอบทั้งระบบ (Integration testing)
 
-Compared to unit tests, integration tests are much larger in scope. exercise the whole application stack. Instead of isolating one class or method, integration tests ensure that all of the components of your application are working together properly: routing, controllers, services, database code, and so on.
+เมื่อเปรียบเทียบกับการทดสอบหน่วยย่อยแล้ว การทดสอบทั้งระบบจะครอบคลุมด้านต่าง ๆ กว้างกว่ามาก เพราะเป็นการทำให้ทุกระดับชั้นของทั้งแอปพลิเคชันได้ทำงานไม่ได้เป็นแยกออกมาเพียงแค่คลาสหรือเมธอดหนึ่ง ๆ เท่านั้น การทดสอบทั้งระบบจึงช่วยให้มั่นใจได้ว่าส่วนประกอบในแอปพลิเคชันของเราทำงานร่วมกันได้อย่างถูกต้อง: การเลือกเส้นทาง, controllers, บริการต่าง ๆ, โค้ดของฐานข้อมูล, และอื่น ๆ อีกมาก
 
-Integration tests are slower and more involved than unit tests, so it's common for a project to have lots of small unit tests but only a handful of integration tests.
+การทดสอบทั้งระบบทำได้ช้ากว่าและซับซ้อนกว่าการทดสอบหน่วยย่อยมาก ดังนั้นเรามักพบว่าในแต่ละโปรเจกต์จะมีการทดสอบหน่วยย่อยบ่อยครั้งขณะที่การทดสอบทั้งระบบอาจถูกกระทำเพียงไม่กี่ครั้ง
 
-In order to test the whole stack (including controller routing), integration tests typically make HTTP calls to your application just like a web browser would.
+เพื่อเป็นการทดสอบระดับชั้นทั้งหมด (รวมทั้งการเลือกเส้นทาง controller) การทดสอบทัั้งระบบมักสร้างคำขอ HTTP ไปยังแอปพลิเคชันในลักษณะเดียวกันกับการเรียกด้วยเว็บเบราว์เซอร์
 
-To perform an integration test, you could start your application and manually make requests to http://localhost:5000. However, ASP.NET Core provides a better alternative: the `TestServer` class. This class can host your application for the duration of the test, and then stop it automatically when the test is complete.
+เพื่อทำการทดสอบทั้งระบบ เราสามารถเริ่มการทำงานของแอปพลิเคชันแล้วส่งคำขอไปยัง http://localhost:5000 ด้วยตนเองได้ อย่างไรก็ตาม ASP.NET Core มีทางเลือกที่ดีกว่า: คลาส `TestServer` ซึ่งคลาสนี้จะเป็นเซอร์ฟเวอร์ให้แอปพลิเคชันของเราตลอดช่วงเวลาของการทดสอบ และจะหยุดทำงานโดยอัตโนมัติหลังการทดสอบเสร็จสิ้น
 
-### Create a test project
+### สร้างโปรเจกต์เพื่อการทดสอบ
 
-If you're currently in your project directory, `cd` up one level to the root `AspNetCoreTodo` directory. Use this command to scaffold a new test project:
+หากยังอยู่ใต้ไดเรกทอรีของโปรเจกต์ ให้ `cd` ขึ้นไปหนึ่งระดับเพื่อไปที่ไดเรกทอรีราก `AspNetCoreTodo` แล้วใช้คำสั่งนี้เพื่อขึ้นโครงโปรเจกต์ขึ้นมาใหม่:
 
 ```
 dotnet new xunit -o AspNetCoreTodo.IntegrationTests
 ```
 
-Your directory structure should now look like this:
+ในตอนนี้ โครงสร้างไดเรกทอรีของเราควรอยู่ในรูปแบบดังนี้:
 
 ```
 AspNetCoreTodo/
@@ -32,25 +32,25 @@ AspNetCoreTodo/
         AspNetCoreTodo.IntegrationTests.csproj
 ```
 
-> If you prefer, you can keep your unit tests and integration tests in the same project. For large projects, it's common to split them up so it's easy to run them separately.
+> คุณอาจจัดเก็บทั้งการทดสอบหน่วยย่อยและการทดสอบทั้งระบบไว้ในไดเรกทอรีเดียวกันก็ได้ แต่สำหรับโปรเจกต์ขนาดใหญ่ มักจัดเก็บแยกกันไว้เพื่อให้ง่ายต่อการรันการทดสอบแยกจากกัน
 
-Since the test project will use the classes defined in your main project, you'll need to add a reference to the main project:
+เนื่องจากโปรเจกต์ทดสอบจะใช้คลาสต่าง ๆ ที่ถูกเขียนไว้ในโปรเจกต์หลัก เราจึงจำเป็นต้องเพิ่มการอ้างอิงไปยังโปรเจกต์หลัก:
 
 ```
 dotnet add reference ../AspNetCoreTodo/AspNetCoreTodo.csproj
 ```
 
-You'll also need to add the `Microsoft.AspNetCore.TestHost` NuGet package:
+เรายังจำเป็นต้องเพิ่มแพคเกจ NuGet `Microsoft.AspNetCore.TestHost` ด้วย:
 
 ```
 dotnet add package Microsoft.AspNetCore.TestHost
 ```
 
-Delete the `UnitTest1.cs` file that's created by `dotnet new`. You're ready to write an integration test.
+ให้ลบไฟล์ `UnitTest1.cs` ที่ถูกสร้างขึ้นด้วย `dotnet new` ให้ลบไฟล์ `UnitTest1.cs` ที่ถูกสร้างขึ้นมาโดยอัตโนมัติ ในตอนนี้เราก็พร้อมที่จะเขียนการทดสอบแบบทั้งระบบแล้ว
 
-### Write an integration test
+### เขียนการทดสอบทั้งระบบ
 
-There are a few things that need to be configured on the test server before each test. Instead of cluttering the test with this setup code, you can keep this setup in a separate class. Create a new class called `TestFixture`:
+มีบางอย่างที่จำเป็นต้องกำหนดค่าให้กับเซอร์ฟเวอร์สำหรับการทดสอบแต่ละครั้ง แทนที่จะใส่โค้ดสำหรับการตั้งค่านี้ให้รกรุงรังในการทดสอบ เราสามารถเก็บการตั้งค่านี้แยกไว้ในอีกคลาสหนึ่ง ให้สร้างคลาสใหม่ในชื่อ `TestFixture`:
 
 **AspNetCoreTodo.IntegrationTests/TestFixture.cs**
 
@@ -99,9 +99,9 @@ namespace AspNetCoreTodo.IntegrationTests
 }
 ```
 
-This class takes care of setting up a `TestServer`, and will help keep the tests themselves clean and tidy.
+คลาสนี้ช่วยจัดการเกี่ยวกับการตั้งค่า `TestServer` และช่วยคงความเป็นระเบียบเรียบร้อยให้กับการทดสอบ
 
-Now you're (really) ready to write an integration test. Create a new class called `TodoRouteShould`:
+ในตอนนี้เราก็พร้อมที่จะเขียนการทดสอบทั้งระบบ (จริง ๆ) แล้ว ให้สร้างคลาสใหม่ชื่อ `TodoRouteShould`:
 
 **AspNetCoreTodo.IntegrationTests/TodoRouteShould.cs**
 
@@ -146,13 +146,13 @@ namespace AspNetCoreTodo.IntegrationTests
 }
 ```
 
-This test makes an anonymous (not-logged-in) request to the `/todo` route and verifies that the browser is redirected to the login page.
+การทดสอบนี้จะสร้างคำขอแบบไม่ระบุผู้ใช้ (ไม่ได้ล็อกอิน) ไปยังเส้นทาง `/todo` และยืนยันว่าเบราว์เซอร์จะถูกเปลี่ยนเส้นทางใหม่ให้ไปยังหน้าล็อกอิน
 
-This scenario is a good candidate for an integration test, because it involves multiple components of the application: the routing system, the controller, the fact that the controller is marked with `[Authorize]`, and so on. It's also a good test because it ensures you won't ever accidentally remove the `[Authorize]` attribute and make the to-do view accessible to everyone.
+กรณีนี้เป็นตัวอย่างที่ดีสำหรับการทดสอบทั้งระบบ เนื่องจากจะต้องทำงานเกี่ยวพันกับหลายองค์ประกอบของแอปพลิเคชัน: ระบบเลือกเส้นทาง, controller และข้อเท็จจริงที่ว่า controller นั้น ๆ ถูกระบุให้เป็น `[Authorize]` และอื่น ๆ อีกมาก และนี่ยังเป็นการทดสอบที่ดีเนื่องจากจะช่วยให้มั่นใจได้ว่าเราจะไม่เผลอลบคุณลักษณะ `[Authorize]` โดยไม่ได้ตั้งใจซึ่งจะส่งผลให้ทุกคนสามารถเข้าถึง view สิ่งที่ต้องทำได้
 
-## Run the test
+## รันการทดสอบ
 
-Run the test in the terminal with `dotnet test`. If everything's working right, you'll see a success message:
+รันการทดสอบในเทอร์มินัลด้วย `dotnet test` หากทุกอย่างทำงานได้อย่างถูกต้อง เราจะพบกับข้อความแสดงความสำเร็จดังนี้:
 
 ```
 Starting test execution, please wait...
@@ -167,8 +167,8 @@ Test execution time: 2.0588 Seconds
 ```
 
 
-## Wrap up
+## สรุป
 
-Testing is a broad topic, and there's much more to learn. This chapter doesn't touch on UI testing or testing frontend (JavaScript) code, which probably deserve entire books of their own. You should, however, have the skills and base knowledge you need to learn more about testing and to practice writing tests for your own applications.
+การทดสอบเป็นเรื่องใหญ่และมีสิ่งที่ต้องเรียนรู้อีกมาก ในบทนี้ยังไม่ได้กล่าวถึงการทดสอบ UI หรือการทดสอบโค้ดส่วนหน้า (จาวาสคริปต์) ซึ่งคงต้องใช้หนังสืออีกเป็นเล่ม ๆ เพื่อให้ครอบคลุมประเด็นเหล่านี้ อย่างไรก็ตาม ในตอนนี้เราควรมีความรู้พื้นฐานและทักษะที่จำเป็นต่อการเรียนรู้เพิ่มเติมเกี่ยวกับการทดสอบและสามารถเขียนการทดสอบต่าง ๆ สำหรับแอปพลิเคชันของเราได้แล้ว
 
-The ASP.NET Core documentation (https://docs.asp.net) and Stack Overflow are great resources for learning more and finding answers when you get stuck.
+เอกสารของ ASP.NET Core (https://docs.asp.net) และ Stack Overflow เป็นแหล่งทรัพยากรชั้นดีสำหรับการเรียนรู้เพิ่มเติมและค้นหาคำตอบได้หากติดปัญหาใด ๆ
