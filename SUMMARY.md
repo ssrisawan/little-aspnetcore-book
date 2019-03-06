@@ -31,5 +31,5 @@
     * [การทดสอบทั้งระบบ (Integration testing)](chapters/automated-testing/integration-testing.md)
 * [การนำส่งแอปพลิเคชัน](chapters/deploy-the-application/README.md)
     * [นำส่งขึ้นอาชัวร์](chapters/deploy-the-application/deploy-to-azure.md)
-    * [Deploy with Docker](chapters/deploy-the-application/deploy-with-docker.md)
-* [Conclusion](chapters/conclusion/README.md)
+    * [นำส่งด้วยดอคเกอร์](chapters/deploy-the-application/deploy-with-docker.md)
+* [บทสรุป](chapters/conclusion/README.md)

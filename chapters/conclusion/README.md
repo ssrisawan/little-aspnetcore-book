@@ -1,53 +1,53 @@
-# Conclusion
+# บทสรุป
 
-Thanks for making it to the end of the Little ASP.NET Core Book! If this book was helpful (or not), I'd love to hear your thoughts. Send me your comments via Twitter: https://twitter.com/nbarbettini
+ขอบคุณที่อ่านมาถึงบทสุดท้ายของหนังสือ Little ASP.NET Core! หากหนังสือเล่มนี้มีประโยชน์ (หรือไม่ก็ตาม) ผู้แต่งยินดีรับฟังความคิดเห็นของคุณ โดยสามารถส่งความคิดเห็นมาได้ทางทวิตเตอร์ที่: https://twitter.com/nbarbettini
 
-## How to learn more
+## จะเรียนรู้เพิ่มเติมได้อย่างไร
 
-There's a lot more that ASP.NET Core can do that couldn't fit in this short book, including
+ASP.NET Core สามารถทำอะไรได้อีกมาก ซึ่งไม่สามารถกล่าวได้หมดในหนังสือเล่มนี้ เช่น
 
-* Building RESTful APIs and microservices
-* Using ASP.NET Core with single-page apps like Angular and React
-* Razor Pages
-* Bundling and minifying static assets
-* WebSockets and SignalR
+* การสร้าง RESTful API และไมโครเซอร์วิส
+* การใช้ ASP.NET Core กับแอปแบบหน้าเดียวเช่น Angular และ React
+* หน้าเว็บแบบ Razor
+* การจัดกลุ่มและลดขนาดทรัพยากรที่ไม่มีการเคลื่อนไหว
+* WebSockets และ SignalR
 
-There are a number of ways you can learn more:
+มีอีกหลายวิธีที่คุณสามารถเรียนรู้เพิ่มเติมได้:
 
-* **The ASP.NET Core documentation.** The official ASP.NET Core documentation at http://docs.asp.net contains a number of in-depth tutorials covering many of these topics. I'd highly recommend it!
+* **เอกสาร ASP.NET Core** เอกสารทางการของ ASP.NET Core อยู่ที่ http://docs.asp.net ซึ่งมีทั้งคำแนะนำและขั้นตอนเชิงลึกครอบคลุมหลาย ๆ ประเด็นเหล่านี้ ขอแนะนำเป็นอย่างยิ่ง!
 
-* **ASP.NET Core in Action.** This book by Andrew Lock is a comprehensive, deep dive into ASP.NET Core. You can get it from Amazon or a local bookstore.
+* **หนังสือ ASP.NET Core in Action** หนังสือโดย Andrew Lock เล่มนี้ลงรายละเอียดเชิงลึกไปใน ASP.NET Core คุณสามารถสั่งซ์้อได้จาก Amazon หรือร้านหนังสือใกล้บ้าน
 
-* **Courses on LinkedIn Learning and Pluralsight.** If you learn best from videos, there are fantastic courses available on Pluralsight and LinkedIn Learning (including some by yours truly). If you don't have an account and need a coupon, send me an email: nate@barbettini.com.
+* **บทเรียนต่าง ๆ บน LinkedIn Learning และ Pluralsight** หากคุณเรียนรู้ได้ดีจากวิดีโอ ก็มีคอร์สดี ๆ อีกมากบน Pluralsight และ LinkedIn Learning (รวมถึงบางบทเรียนโดยผู้แต่งด้วย) หากคุณยังไม่มีบัญชีผู้ใช้และอยากได้คูปองส่วนลด ส่งอีเมลมาได้ที่: nate@barbettini.com
 
-* **Nate's blog.** I also write about ASP.NET Core and more on my blog at https://www.recaffeinate.co.
+* **บล็อกของ Nate** ผู้แต่งได้เขียนเกี่ยวกับ ASP.NET Core และเรื่องอื่น ๆ อีกมากไว้บนบล็อกส่วนตัวที่ https://www.recaffeinate.co
 
-Happy coding!
+ขอให้สนุกกับการเขียนโค้ด!
 
-## About the author
+## เกี่ยวกับผู้แต่ง
 
-Hey, I'm Nate! I wrote the Little ASP.NET Core Book in a long, caffeine-fueled weekend because I love the .NET community and wanted to give back in my own little way. I hope it helped you learn something new!
+สวัสดี ผมชื่อ Nate! ผมเขียนหนังสือ Little ASP.NET Core ระหว่างสุดสัปดาห์ที่ขับเคลื่อนด้วยคาเฟอีนเพราะผมรักสังคม .NET และอยากคืนสิ่งดี ๆ ให้บ้างเล็กน้อยตามทางของผม หวังเป็นอย่างยิ่งว่าหนังสือเล่มนี้ได้ช่วยให้คุณเรียนรู้อะไรใหม่ ๆ ขึ้นมาบ้าง!
 
-You can stay in touch with me on Twitter ([@nbarbettini](https://twitter.com/nbarbettini)) or on my blog (https://www.recaffeinate.co). You can also reach me via email at nate@barbettini.com.
+คุณสามารถติดตามผมได้ทางทวิตเตอร์ ([@nbarbettini](https://twitter.com/nbarbettini)) หรือบนบล็อกของผม (https://www.recaffeinate.co) หรือคุณจะติดต่อผมทางอีเมลก็ได้ที่ nate@barbettini.com
 
-## Special thanks
+## ขอขอบคุณ
 
-To Jennifer, who always supports my crazy ideas.
+Jennifer ผู้คอยสนับสนุนไอเดียบ้า ๆ ของผมอยู่เสมอ
 
-To the following contributors who improved the Little ASP.NET Core Book:
+ผู้มีส่วนร่วมต่อไปนี้ที่ช่วยทำให้หนังสือ Little ASP.NET Core เล่มนี้ดียิ่งขึ้น:
 
 * 0xNF
 * Matt Welke [welkie]
 * Raman Zhylich [zhilich]
 
-To these amazing polyglot programmers who translated the Little ASP.NET Core Book:
+โปรแกรมเมอร์ที่พูดได้หลายภาษาต่อไปนี้ที่ช่วยแปลหนังสือ Little ASP.NET Core:
 
 * sahinyanlik (Turkish)
 * windsting, yuyi (Simplified Chinese)
 
-## Changelog
+## บันทึกการเปลี่ยนแปลง
 
-The full, detailed changelog is always available here:
+บันทึกการเปลี่ยนแปลงโดยละเอียดทั้งหมดสามารถดูได้ที่:
 
 https://github.com/nbarbettini/little-aspnetcore-book/releases
 
