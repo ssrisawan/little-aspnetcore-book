@@ -1,54 +1,54 @@
-## Deploy with Docker
+## นำส่งด้วยดอคเกอร์
 
-If you aren't using a platform like Azure, containerization technologies like Docker can make it easy to deploy web applications to your own servers. Instead of spending time configuring a server with the dependencies it needs to run your app, copying files, and restarting processes, you can simply create a Docker image that describes everything your app needs to run, and spin it up as a container on any Docker host.
+หากคุณไม่ได้ใช้แพลตฟอร์มเช่นอาชัวร์ ก็สามารถใช้เทคโนโลยคอนเทนเนอร์เช่นดอคเกอร์มาช่วยในการนำส่งเว็บแอปพลิเคชันขึ้นไปยังเครื่องเซอร์ฟเวอร์ของคุณเองได้ แทนที่จะต้องเสียเวลาตั้งค่าเซอร์ฟเวอร์พร้อมทั้งจัดเตรียมสิ่งต่าง ๆ ที่จำเป็นต่อการรันแอป คัดลอกไฟล์ที่ต้องใช้ รวมถึงการรีสตาร์ทโปรเซสต่าง ๆ คุณสามารถสร้างดอคเกอร์อิมเมจที่จัดเตรียมทุกอย่างที่จำเป็นต่อแอปพลิเคชันไว้ แล้วนำขึ้นไปทำงานเป็นคอนเทนเนอร์บนโฮสต์ใดก็ได้ที่รองรับดอคเกอร์
 
-Docker can make scaling your app across multiple servers easier, too. Once you have an image, using it to create 1 container is the same process as creating 100 containers.
+ดอคเกอร์ยังช่วยให้การสเกลแอปพลิเคชันไปทำงานข้ามหลายเซอร์ฟเวอร์ง่ายขึ้นอีกด้วย เมื่อมีอิมเมจพร้อมใช้งานแล้ว ไม่ว่าจะสร้างเพียง 1 คอนเทนเนอร์หรือ 100 คอนเทนเนอร์ ก็สามารถทำได้โดยใช้ขั้นตอนแบบเดียวกัน
 
-Before you start, you need the Docker CLI installed on your development machine. Search for "get docker for (mac/windows/linux)" and follow the instructions on the official Docker website. You can verify that it's installed correctly with
+ก่อนเริ่มการทำงาน เราต้องมี CLI ของดอคเกอร์ติดตั้งในเครื่องที่ใช้ในการพัฒนาเสียก่อน ให้ค้นหาด้วย "get docker for (mac/windows/linux)" แล้วทำตามขั้นตอนที่แสดงไว้บนเว็บไซต์ทางการของดอคเกอร์ เราสามารถตรวจสอบได้ว่าการติดตั้งเป็นไปอย่างถูกต้องหรือไม่ด้วยคำสั่ง
 
 ```
 docker version
 ```
 
-### Add a Dockerfile
+### เพิ่ม Dockerfile
 
-The first thing you'll need is a Dockerfile, which is like a recipe that tells Docker what your application needs to build and run.
+สิ่งแรกที่เราจำเป็นต้องใช้คือ Dockerfile ซึ่งเป็นดั่งสูตรที่บอกให้ดอคเกอร์รู้ว่าต้องใช้อะไรบ้างเพื่อสร้างและรันแอปพลิเคชันของเรา
 
-Create a file called `Dockerfile` (no extension) in the root, top-level `AspNetCoreTodo` folder. Open it in your favorite editor. Write the following line:
+ให้สร้างไฟล์ชื่อ `Dockerfile` (ไม่มีส่วนขยาย) ในโฟลเดอร์ `AspNetCoreTodo` ที่เป็นรากหรือระดับบนสุด จากนั้นให้เปิดในโปรแกรมแก้ไขข้อความที่คุณถนัดแล้วเขียนบรรทัดต่อไปนี้:
 
 ```dockerfile
 FROM microsoft/dotnet:2.0-sdk AS build
 ```
 
-This tells Docker to use the `microsoft/dotnet:2.0-sdk` image as a starting point. This image is published by Microsoft and contains the tools and dependencies you need to execute `dotnet build` and compile your application. By using this pre-built image as a starting point, Docker can optimize the image produced for your app and keep it small.
+ซึ่งจะบอกให้ดอคเกอร์ใช้อิมเมจ `microsoft/dotnet:2.0-sdk` เป็นจุดเริ่มต้น อิมเมจนี้เผยแพร่โดยไมโครซอฟต์และมีเครื่องมีอและสิ่งที่จำเป็นต้องใช้สำหรับการทำงานของ `dotnet build` และการคอมไพล์แอปพลิเคชัน การใช้อิมเมจพร้อมใช้เช่นนี้เป็นจุดเริ่มต้นช่วยให้ดอคเกอร์สามารถปรับเปลี่ยนอิมเมจให้เหมาะสมกับแอปของเรา รวมทั้งทำให้แอปมีขนาดเล็กได้
 
-Next, add this line:
+ลำดับต่อไป ให้เพิ่มบรรทัดนี้:
 
 ```dockerfile
 COPY AspNetCoreTodo/*.csproj ./app/AspNetCoreTodo/
 ```
 
-The `COPY` command copies the `.csproj` project file into the image at the path `/app/AspNetCoreTodo/`. Note that none of the actual code (`.cs` files) have been copied into the image yet. You'll see why in a minute.
+คำสั่ง `COPY` คัดลอกไฟล์โปรเจกต์ `.csproj` เข้าไปไว้ที่เส้นทาง `/app/AspNetCoreTodo/` ในอิมเมจ สังเกตว่ายังไม่มีไฟล์ของโค้ดใด ๆ (ไฟล์ `.cs`) ถูกคัดลอกไปยังอิมเมจเลย ซึ่งเราจะทราบเหตุผลในเร็ว ๆ นี้
 
 ```dockerfile
 WORKDIR /app/AspNetCoreTodo
 RUN dotnet restore
 ```
 
-`WORKDIR` is the Docker equivalent of `cd`. This means any commands executed next will run from inside the `/app/AspNetCoreTodo` directory that the `COPY` command created in the last step.
+`WORKDIR` เป็นคำสั่งดอคเกอร์ที่เปรียบได้กับ `cd` นั่นหมายความว่าคำสั่งใด ๆ ที่ทำหลังจากนั้นจะถูกกระทำจากภายใต้ไดเรกทอรี `/app/AspNetCoreTodo` ซึ่งถูกสร้างด้วยคำสั่ง `COPY` ในขั้นตอนที่แล้ว
 
-Running the `dotnet restore` command restores the NuGet packages that the application needs, defined in the `.csproj` file. By restoring packages inside the image **before** adding the rest of the code, Docker is able to cache the restored packages. Then, if you make code changes (but don't change the packages defined in the project file), rebuilding the Docker image will be super fast.
+การรันคำสั่ง `dotnet restore` จะเรียกคืนแพคเกจ NuGet ที่ต้องใช้ในแอปพลิเคชันและถูกกำหนดไว้ในไฟล์ `.csproj`ซึ่งการเรียกคืนแพคเกจในอิมเมจ **ก่อน** เพิ่มโค้ดส่วนที่เหลือเช่นนี้จะช่วยให้ดอคเกอร์แคชแพคเกจที่ถูกเรียกคืนเอาไว้ หลังจากนี้หากเราแก้ไขโค้ด (แต่ไม่ได้เปลี่ยนแพคเกจที่ถูกกำหนดไว้ในไฟล์โปรเจกต์) การสร้างอิมเมจของดอคเกอร์ขึ้นมาใหม่จะทำได้อย่างรวดเร็วมาก
 
-Now it's time to copy the rest of the code and compile the application:
+ตอนนี้ก็ถึงเวลาที่จะคัดลอกโค้ดที่เหลือและคอมไพล์แอปพลิเคชันแล้ว:
 
 ```dockerfile
 COPY AspNetCoreTodo/. ./AspNetCoreTodo/
 RUN dotnet publish -o out /p:PublishWithAspNetCoreTargetManifest="false"
 ```
 
-The `dotnet publish` command compiles the project, and the `-o out` flag puts the compiled files in a directory called `out`.
+คำสั่ง `dotnet publish` จะคอมไพล์โปรเจกต์และแฟลก `-o out` จะทำให้ไฟล์ที่ถูกคอมไพล์แล้วถูกนำไปไว้ในไดเรกทอรีที่ชื่อ `out`
 
-These compiled files will be used to run the application with the final few commands:
+ไฟล์ที่ถูกคอมไพล์ไว้เหล่านี้จะถูกใช้เพื่อรันแอปพลิเคชันด้วยคำสั่งต่อไปนี้:
 
 ```dockerfile
 FROM microsoft/dotnet:2.0-runtime AS runtime
@@ -58,11 +58,11 @@ COPY --from=build /app/AspNetCoreTodo/out ./
 ENTRYPOINT ["dotnet", "AspNetCoreTodo.dll"]
 ```
 
-The `FROM` command is used again to select a smaller image that only has the dependencies needed to run the application. The `ENV` command is used to set environment variables in the container, and the `ASPNETCORE_URLS` environment variable tells ASP.NET Core which network interface and port it should bind to (in this case, port 80).
+คำสั่ง `FROM` ถูกใช้อีกครั้งเพื่อเลือกอิมเมจที่มีขนาดเล็กที่มีเฉพาะสิ่งที่จำเป็นต่อการรันแอปพลิเคชัน คำสั่ง `ENV` ถูกใช้เพื่อกำหนดตัวแปรสภาพแวดล้อมในคอนเทนเนอร์ และตัวแปรสภาพแวดล้อม `ASPNETCORE_URLS` จะบอก ASP.NET Core ว่าควรเชื่อมเข้ากับอินเตอร์เฟสเครือข่ายและพอร์ตใด (ซึ่งในที่นี้คือพอร์ต 80)
 
-The `ENTRYPOINT` command lets Docker know that the container should be started as an executable by running `dotnet AspNetCoreTodo.dll`. This tells `dotnet` to start up your application from the compiled file created by `dotnet publish` earlier. (When you do `dotnet run` during development, you're accomplishing the same thing in one step.)
+คำสั่ง `ENTRYPOINT` บอกให้ดอคเกอร์รู้ว่าคอนเทนเนอร์ควรถูกเริ่มการทำงานด้วยการรัน `dotnet AspNetCoreTodo.dll` ซึ่งบอกให้ `dotnet` เริ่มแอปพลิเคชันของเราจากไฟล์ที่ถูกคอมไพล์ขึ้นมาก่อนหน้านี้โดย `dotnet publish`  (เราได้ทำสิ่งเดียวกันนี้ระหว่างการพัฒนาด้วยการสั่ง `dotnet run` เพียงขั้นตอนเดียว)
 
-The full Dockerfile looks like this:
+ไฟล์ Dockerfile ที่สมบูรณ์จะมีลักษณะดังนี้:
 
 **Dockerfile**
 
@@ -82,39 +82,39 @@ COPY --from=build /app/AspNetCoreTodo/out ./
 ENTRYPOINT ["dotnet", "AspNetCoreTodo.dll"]
 ```
 
-### Create an image
+### สร้างอิมเมจ
 
-Make sure the Dockerfile is saved, and then use `docker build` to create an image:
+ตรวจสอบให้แน่ใจว่า Dockerfile ถูกบันทึกไว้แล้ว จากนั้นให้ใช้คำสั่ง `docker build` เพื่อสร้างอิมเมจ:
 
 ```
 docker build -t aspnetcoretodo .
 ```
 
-Don't miss the trailing period! That tells Docker to look for a Dockerfile in the current directory.
+อย่าลืมว่าต้องมีจุดต่อท้าย! จุดนี้บอกให้ดอคเกอร์รู้ว่าต้องมองหา Dockerfile ในไดเรกทอรีปัจจุบัน
 
-Once the image is created, you can run `docker images` to to list all the images available on your local machine. To test it out in a container, run
+หลังจากอิมเมจถูกสร้างขึ้นแล้ว เราสามารถรัน `docker images` เพื่อแสดงรายการอิมเมจทั้งหมดในเครื่องของเราได้ เพื่อทดสอบการทำงานในคอนเทนเนอร์ ให้รัน
 
 ```
 docker run --name aspnetcoretodo_sample --rm -it -p 8080:80 aspnetcoretodo
 ```
 
-The `-it` flag tells Docker to run the container in interactive mode (outputting to the terminal, as opposed to running in the background). When you want to stop the container, press Control-C.
+แฟลก `-it` บอกดอคเกอร์ใหรันคอนเทนเนอร์ในโหมดโต้ตอบ (แสดงผลการรันบนเทอร์มินัลแทนที่จะรันอยู่เบื้องหลัง) เมื่อต้องการหยุดการทำงานของคอนเทนเนอร์ให้กด Control-C
 
-Remember the `ASPNETCORE_URLS` variable that told ASP.NET Core to listen on port 80? The `-p 8080:80` option tells Docker to map port 8080 on *your* machine to the *container's* port 80. Open up your browser and navigate to http://localhost:8080 to see the application running in the container!
+จำตัวแปร `ASPNETCORE_URLS` ที่บอกให้ ASP.NET Core คอยรับการเชื่อมต่อที่พอร์ต 80 ได้ไหม ตัวเลือก `-p 8080:80` บอกดอคเกอร์ให้จับคู่พอร์ต 8080 บน *เครื่องของเรา* เข้ากับพอร์ต 80 ของ *คอนเทนเนอร์* ให้เปิดเบราว์เซอร์ไปที่ http://localhost:8080 ก็จะพบแอปพลิเคชันของเราที่ทำงานอยู่บนคอนเทนเนอร์!
 
-### Set up Nginx
+### จัดเตรียม Nginx
 
-At the beginning of this chapter, I mentioned that you should use a reverse proxy like Nginx to proxy requests to Kestrel. You can use Docker for this, too.
+ดังที่ได้กล่าวแล้วเมื่อตอนต้นของบทนี้ว่าเราควรใช้รีเวิร์สพรอกซีเช่น Nginx เพื่อส่งต่อคำขอไปยังเคสเตรล เราสามารถใช้ดอคเกอร์เพื่อดำเนินการนี้ได้เช่นกัน
 
-The overall architecture will consist of two containers: an Nginx container listening on port 80, forwarding requests to the container you just built that hosts your application with Kestrel.
+โดยภาพรวมแล้ว สถาปัตยกรรมนี้จะประกอบด้วยสองคอนเทนเนอร์: คอนเทนเนอร์ Nginx คอยรับการเชื่อมต่อที่พอร์ต 80 แล้วส่งต่อคำขอไปยังคอนเทนเนอร์ที่เราเพิ่งสร้างขึ้นมาที่รันแอปพลิเคชันของเราอยู่บนเคสเตรล
 
-The Nginx container needs its own Dockerfile. To keep it from conflicting with the Dockerfile you just created, make a new directory in the web application root:
+คอนเทนเนอร์ Nginx ต้องใช้ Dockerfile ของตัวเอง ดังนั้นเพื่อหลีกเลี่ยงความสับสนที่อาจเกิดขึ้นกับ Dockerfile ที่เพิ่งถูกสร้างขึ้น ให้สร้างไดเรกทอรีใหม่ขึ้นมาที่รากของเว็บแอปพลิเคชัน:
 
 ```
 mkdir nginx
 ```
 
-Create a new Dockerfile and add these lines:
+สร้าง Dockerfile ขึ้นมาใหม่ แล้วเพิ่มบรรทัดต่อไปนี้:
 
 **nginx/Dockerfile**
 
@@ -123,7 +123,7 @@ FROM nginx
 COPY nginx.conf /etc/nginx/nginx.conf
 ```
 
-Next, create an `nginx.conf` file:
+จากนั้น ให้สร้างไฟล์ `nginx.conf`:
 
 **nginx/nginx.conf**
 
@@ -145,15 +145,15 @@ http {
 }
 ```
 
-This configuration file tells Nginx to proxy incoming requests to `http://kestrel:80`. (You'll see why `kestrel` works as a hostname in a moment.)
+ไฟล์โครงแบบนี้บอก Nginx ให้ส่งต่อคำขอไปยัง `http://kestrel:80` (อีกสักครู่ เราจะทราบว่าเหตุใด `kestrel` จึงใช้แทนชื่อโฮสต์ได้)
 
-> When you make deploy your application to a production environment, you should add the `server_name` directive and validate and restrict the host header to known good values. For more information, see:
+> ขณะนำส่งแอปพลิเคชันของเราขึ้นไปบนสภาพแวดล้อมที่ใช้งานจริงแล้ว เราควรเพิ่มคำชี้แจง `server_name`เพื่อตรวจสอบและจำกัดให้ใช้ได้เฉพาะโฮสต์เฮดเดอร์ที่กำหนดเท่านั้น รายละเอียดเพิ่มเติมสามารถดูได้ที่:
 
 > https://github.com/aspnet/Announcements/issues/295
 
-### Set up Docker Compose
+### จัดเตรียม Docker Compose
 
-There's one more file to create. Up in the root directory, create `docker-compose.yml`:
+ยังมีอีกไฟล์ที่จำเป็นต้องใช้ ให้ย้อนกลับไปยังไดเรกทอรีราก แล้วสร้าง `docker-compose.yml`:
 
 **docker-compose.yml**
 
@@ -170,18 +170,18 @@ kestrel:
         - "80"
 ```
 
-Docker Compose is a tool that helps you create and run multi-container applications. This configuration file defines two containers: `nginx` from the `./nginx/Dockerfile` recipe, and `kestrel` from the `./Dockerfile` recipe. The containers are explicitly linked together so they can communicate.
+Docker Compose เป็นเครื่องมือที่ช่วยให้เราสร้างและรันแอปพลิเคชันแบบหลายคอนเทนเนอร์ได้ ไฟล์โครงแบบนี้กำหนดสองคอนเทนเนอร์ขึ้นมา: `nginx` จากสูตรใน `./nginx/Dockerfile` และ `kestrel` จากสูตรใน `./Dockerfile` เนื่องจากทั้งสองคอนเทนเนอร์ถูกเชื่อมโยงกันไว้อย่างชัดเจนจึงสามารถสื่อสารกันได้
 
-You can try spinning up the entire multi-container application by running:
+เราสามารถเริ่มการทำงานของแอปพลิเคชันแบบหลายคอนเทนเนอร์ได้ด้วยการรัน:
 
 ```
 docker-compose up
 ```
 
-Try opening a browser and navigating to http://localhost (port 80, not 8080!). Nginx is listening on port 80 (the default HTTP port) and proxying requests to your ASP.NET Core application hosted by Kestrel.
+ลองเปิดเบราว์เซอร์แล้วไปที่ http://localhost (ที่พอร์ต 80 ไม่ใช่ 8080!) Nginx จะคอยรับการเชื่อมต่ออยู่ที่พอร์ต 80 (พอร์ตตั้งต้นของ HTTP) และส่งต่อคำขอไปยังแอปพลิเคชัน ASP.NET Core ของเราที่ทำงานอยู่บนเคสเตรล
 
-### Set up a Docker server
+### จัดเตรียมเซอร์ฟเวอร์ดอคเกอร์
 
-Specific setup instructions are outside the scope of this book, but any modern flavor of Linux (like Ubuntu) can be used to set up a Docker host. For example, you could create a virtual machine with Amazon EC2, and install the Docker service. You can search for "amazon ec2 set up docker" (for example) for instructions.
+ขั้นตอนการติดตั้งโดยเฉพาะอยู่นอกเหนือขอบเขตของหนังสือเล่มมนี้ แต่ลินุกซ์รุ่นใหม่ ๆ จากทุกค่าย (เช่น Ubuntu) สามารถนำมาใช้เป็นโฮสต์สำหรับดอคเกอร์ได้ ตัวอย่างเช่นเราสามารถสร้างเวอร์ชวลแมชชีนด้วย Amazon EC2 แล้วติดตั้งบริการดอคเกอร์ (ตัวอย่างเช่น) คุณอาจลองค้นหาขั้นตอนการทำงานดังกล่าวด้วย "amazon ec2 set up docker" ก็ได้
 
-I like using DigitalOcean because they've made it really easy to get started. DigitalOcean has both a pre-built Docker virtual machine, and in-depth tutorials for getting Docker up and running (search for "digitalocean docker").
+โดยส่วนตัวแล้ว ผู้เขียนนิยมใช้ DigitalOcean เนื่องจากสามารถเริ่มทำงานได้ง่ายมาก ๆ โดย DigitalOcean มีทั้งเวอร์ชวลแมชชีนสำหรับดอคเกอร์ที่ถูกสร้างไว้แล้วให้พร้อมใช้งาน รวมทั้งคู่มือและขั้นตอนโดยละเอียดสำหรับการทำงานด้วยดอคเกอร์ (ค้นหาด้วย "digitalocean docker")
